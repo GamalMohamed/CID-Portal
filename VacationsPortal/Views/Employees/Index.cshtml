@@ -1,0 +1,98 @@
+﻿@model IEnumerable<VacationsPortal.Models.EmployeesView>
+
+@{
+    ViewBag.Title = "Employees";
+}
+
+<h2>Employees</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table" id="tb">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BasedOut)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HiringDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VacationBalance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VacationsCarryOver)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DirectLine)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.Name != null)
+                    {
+                        @Html.ActionLink(item.Name, "Details", new { id = item.Id })
+                    }
+                </td>
+                <td>
+                    <a href="mailto:@item.Email">@item.Email</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BasedOut)
+                </td>
+                <td>
+                    @if (item.HiringDate != null)
+                    {
+                        @item.HiringDate.Value.ToShortDateString()
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VacationBalance)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VacationsCarryOver)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DirectLine)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+
+
+</table>
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/datatables")
+    <script>
+        $(document).ready(function () {
+            $("#tb").DataTable();
+        });
+    </script>
+
+}

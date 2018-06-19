@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8208a31c062849d48900bc2f2f4e24b8" Name="Diagram1" ZoomLevel="74">
+        <EntityTypeShape EntityType="CIDvNEXtModel.contact" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.Employee" Width="1.5" PointX="3" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.EmployeesVacationDay" Width="1.5" PointX="5.25" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.EmployeesWeekendDay" Width="1.5" PointX="5.25" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.EmployeeVacation" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.Role" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.Subsidary" Width="1.5" PointX="2.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.VacationBalanceBackUp" Width="1.5" PointX="7.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.VacationsHistory" Width="1.5" PointX="8.25" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.VacationsLog" Width="1.5" PointX="5.25" PointY="16.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.VacationStatusType" Width="1.5" PointX="6" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.VacationType" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.Workload" Width="1.5" PointX="0.75" PointY="13" IsExpanded="true" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Employees_contact" ManuallyRouted="false" />
+        <AssociationConnector Association="CIDvNEXtModel.DirectLineManagerRelation" ManuallyRouted="false" />
+        <AssociationConnector Association="CIDvNEXtModel.DottedLineManagerRelation" ManuallyRouted="false" />
+        <AssociationConnector Association="CIDvNEXtModel.EmployeeRolesRelation" ManuallyRouted="false" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Employees_Employees" ManuallyRouted="false" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Employees_Workloads" ManuallyRouted="false" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_EmployeesVacationDays_EmployeesVacationDays" ManuallyRouted="false" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_EmployeesWeekendDays_Employees" ManuallyRouted="false" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_VacationsHistory_Employees" ManuallyRouted="false" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_VacationsLog_Employees" ManuallyRouted="false" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_VacationsHistory_VacationStatusTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_VacationsHistory_VacationTypes" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.EmployeesView" Width="1.5" PointX="10.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

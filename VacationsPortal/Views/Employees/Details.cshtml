@@ -1,0 +1,112 @@
+﻿@model VacationsPortal.Models.EmployeesView
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Employee Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HiringDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HiringDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Role)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Role)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Workload)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Workload)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DirectLine)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DirectLine)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DottedLine)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DottedLine)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VacationBalance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VacationBalance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VacationsCarryOver)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VacationsCarryOver)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PassportNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PassportNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BasedOut)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BasedOut)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

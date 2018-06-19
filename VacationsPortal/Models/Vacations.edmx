@@ -1,0 +1,1014 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CIDvNEXtModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="contact">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PassportNumber" Type="nvarchar" MaxLength="150" />
+          <Property Name="BasedOut" Type="nvarchar" MaxLength="200" />
+          <Property Name="Nationality" Type="nvarchar" MaxLength="100" />
+          <Property Name="Email" Type="nvarchar" MaxLength="250" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="250" />
+          <Property Name="Birthday" Type="datetime" />
+          <Property Name="Personal Mail" Type="nvarchar" MaxLength="100" />
+          <Property Name="BaseCity" Type="int" />
+          <Property Name="FullName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="employeeId" Type="nvarchar" MaxLength="250" />
+          <Property Name="hiringDate" Type="datetime" />
+          <Property Name="directLine" Type="int" />
+          <Property Name="dottedLine" Type="int" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="Workload" Type="int" />
+          <Property Name="VacationBalance" Type="int" />
+          <Property Name="CasualLeaveBalance" Type="int" />
+          <Property Name="Provisioned" Type="bit" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="StatusUpdates" Type="nvarchar" MaxLength="200" />
+          <Property Name="Location" Type="nvarchar" MaxLength="100" />
+          <Property Name="RoleTypeID" Type="int" />
+          <Property Name="FundID" Type="int" />
+          <Property Name="NumberOfCheckIns" Type="int" />
+          <Property Name="LastCheckIn" Type="datetime" />
+          <Property Name="Resigned" Type="bit" />
+          <Property Name="ResignationDate" Type="datetime" />
+          <Property Name="NextYearBalance" Type="int" />
+          <Property Name="NextYearCasualLeaveBalance" Type="int" />
+          <Property Name="VacationsCarryOver" Type="int" />
+          <Property Name="OriginalCarryOver" Type="int" />
+          <Property Name="HasQuotas" Type="bit" />
+        </EntityType>
+        <EntityType Name="EmployeesVacationDays">
+          <Key>
+            <PropertyRef Name="VacationDaysId" />
+          </Key>
+          <Property Name="VacationDaysId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VacationDay1" Type="nvarchar" MaxLength="15" />
+          <Property Name="VacationDay2" Type="nvarchar" MaxLength="15" />
+          <Property Name="employeeId" Type="int" />
+        </EntityType>
+        <EntityType Name="EmployeesView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="BasedOut" Type="nvarchar" MaxLength="50" />
+          <Property Name="DirectLine" Type="nvarchar" MaxLength="50" />
+          <Property Name="DottedLine" Type="nvarchar" MaxLength="50" />
+          <Property Name="HiringDate" Type="datetime" />
+          <Property Name="VacationBalance" Type="int" />
+          <Property Name="VacationsCarryOver" Type="int" />
+          <Property Name="PassportNumber" Type="nvarchar(max)" />
+          <Property Name="Role" Type="nvarchar" MaxLength="50" />
+          <Property Name="Workload" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="EmployeesWeekendDays">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="Day" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EmployeeVacation">
+          <Key>
+            <PropertyRef Name="EmployeeVacationId" />
+          </Key>
+          <Property Name="EmployeeVacationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="roleName" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="Subsidaries">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="SubsidaryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ChildSubName" Type="nvarchar" MaxLength="50" />
+          <Property Name="FlightAverage" Type="float" />
+        </EntityType>
+        <EntityType Name="VacationBalanceBackUp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" />
+          <Property Name="VacationBalance" Type="int" />
+          <Property Name="CasualLeaveBalance" Type="int" />
+          <Property Name="Alias" Type="nvarchar(max)" />
+          <Property Name="Backupdate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="VacationsHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" />
+          <Property Name="username" Type="nvarchar" MaxLength="100" />
+          <Property Name="TypeId " Type="int" />
+          <Property Name="fromdate" Type="date" />
+          <Property Name="todate" Type="date" />
+          <Property Name="Status" Type="int" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="attachements" Type="varbinary(max)" />
+          <Property Name="reason" Type="nvarchar" MaxLength="300" />
+          <Property Name="WorkingDays" Type="int" />
+          <Property Name="AttachmentName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="VacationsLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="employeeId" Type="int" />
+          <Property Name="vacationBalanceBefore" Type="int" />
+          <Property Name="vacationBalanceAfter" Type="int" />
+          <Property Name="CompensationBalanceBefore" Type="int" />
+          <Property Name="CompensationBalanceAfter" Type="int" />
+          <Property Name="modifiedBy" Type="nvarchar" MaxLength="150" />
+          <Property Name="modifiedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="VacationStatusTypes">
+          <Key>
+            <PropertyRef Name="VacationStatusId" />
+          </Key>
+          <Property Name="VacationStatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusType" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="VacationTypes">
+          <Key>
+            <PropertyRef Name="VacationTypeId" />
+          </Key>
+          <Property Name="VacationTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VacationTypeName" Type="nvarchar" MaxLength="200" />
+          <Property Name="DisplayName" Type="nvarchar" MaxLength="50" />
+          <Property Name="IconSymbol" Type="nvarchar" MaxLength="100" />
+          <Property Name="IconSymbolResourceName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Workloads">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WorkloadName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="DirectLineManagerRelation">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="Employees1" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees1">
+              <PropertyRef Name="directLine" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="DottedLineManagerRelation">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="Employees1" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees1">
+              <PropertyRef Name="dottedLine" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EmployeeRolesRelation">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_contact">
+          <End Role="contact" Type="Self.contact" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="contact">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="Employees1" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees1">
+              <PropertyRef Name="directLine" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Workloads">
+          <End Role="Workloads" Type="Self.Workloads" Multiplicity="0..1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Workloads">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="Workload" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeesVacationDays_EmployeesVacationDays">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="EmployeesVacationDays" Type="Self.EmployeesVacationDays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeesVacationDays">
+              <PropertyRef Name="employeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeesWeekendDays_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="EmployeesWeekendDays" Type="Self.EmployeesWeekendDays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeesWeekendDays">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VacationsHistory_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="VacationsHistory" Type="Self.VacationsHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VacationsHistory">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VacationsHistory_VacationStatusTypes">
+          <End Role="VacationStatusTypes" Type="Self.VacationStatusTypes" Multiplicity="0..1" />
+          <End Role="VacationsHistory" Type="Self.VacationsHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VacationStatusTypes">
+              <PropertyRef Name="VacationStatusId" />
+            </Principal>
+            <Dependent Role="VacationsHistory">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VacationsHistory_VacationTypes">
+          <End Role="VacationTypes" Type="Self.VacationTypes" Multiplicity="0..1" />
+          <End Role="VacationsHistory" Type="Self.VacationsHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VacationTypes">
+              <PropertyRef Name="VacationTypeId" />
+            </Principal>
+            <Dependent Role="VacationsHistory">
+              <PropertyRef Name="TypeId " />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VacationsLog_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="VacationsLog" Type="Self.VacationsLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VacationsLog">
+              <PropertyRef Name="employeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CIDvNEXtModelStoreContainer">
+          <EntitySet Name="contact" EntityType="Self.contact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeesVacationDays" EntityType="Self.EmployeesVacationDays" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeesView" EntityType="Self.EmployeesView" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeesWeekendDays" EntityType="Self.EmployeesWeekendDays" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeVacation" EntityType="Self.EmployeeVacation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subsidaries" EntityType="Self.Subsidaries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VacationBalanceBackUp" EntityType="Self.VacationBalanceBackUp" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VacationsHistory" EntityType="Self.VacationsHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VacationsLog" EntityType="Self.VacationsLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VacationStatusTypes" EntityType="Self.VacationStatusTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VacationTypes" EntityType="Self.VacationTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Workloads" EntityType="Self.Workloads" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="DirectLineManagerRelation" Association="Self.DirectLineManagerRelation">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Employees1" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="DottedLineManagerRelation" Association="Self.DottedLineManagerRelation">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Employees1" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="EmployeeRolesRelation" Association="Self.EmployeeRolesRelation">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_contact" Association="Self.FK_Employees_contact">
+            <End Role="contact" EntitySet="contact" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Employees" Association="Self.FK_Employees_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Employees1" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Workloads" Association="Self.FK_Employees_Workloads">
+            <End Role="Workloads" EntitySet="Workloads" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeesVacationDays_EmployeesVacationDays" Association="Self.FK_EmployeesVacationDays_EmployeesVacationDays">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="EmployeesVacationDays" EntitySet="EmployeesVacationDays" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeesWeekendDays_Employees" Association="Self.FK_EmployeesWeekendDays_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="EmployeesWeekendDays" EntitySet="EmployeesWeekendDays" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VacationsHistory_Employees" Association="Self.FK_VacationsHistory_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="VacationsHistory" EntitySet="VacationsHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VacationsHistory_VacationStatusTypes" Association="Self.FK_VacationsHistory_VacationStatusTypes">
+            <End Role="VacationStatusTypes" EntitySet="VacationStatusTypes" />
+            <End Role="VacationsHistory" EntitySet="VacationsHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VacationsHistory_VacationTypes" Association="Self.FK_VacationsHistory_VacationTypes">
+            <End Role="VacationTypes" EntitySet="VacationTypes" />
+            <End Role="VacationsHistory" EntitySet="VacationsHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VacationsLog_Employees" Association="Self.FK_VacationsLog_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="VacationsLog" EntitySet="VacationsLog" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CIDvNEXtModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="contact">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PassportNumber" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="BasedOut" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Nationality" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Birthday" Type="DateTime" Precision="3" />
+          <Property Name="Personal_Mail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BaseCity" Type="Int32" />
+          <Property Name="FullName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Employees_contact" FromRole="contact" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="employeeId" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="hiringDate" Type="DateTime" Precision="3" />
+          <Property Name="directLine" Type="Int32" />
+          <Property Name="dottedLine" Type="Int32" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="Workload" Type="Int32" />
+          <Property Name="VacationBalance" Type="Int32" />
+          <Property Name="CasualLeaveBalance" Type="Int32" />
+          <Property Name="Provisioned" Type="Boolean" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="StatusUpdates" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RoleTypeID" Type="Int32" />
+          <Property Name="FundID" Type="Int32" />
+          <Property Name="NumberOfCheckIns" Type="Int32" />
+          <Property Name="LastCheckIn" Type="DateTime" Precision="3" />
+          <Property Name="Resigned" Type="Boolean" />
+          <Property Name="ResignationDate" Type="DateTime" Precision="3" />
+          <Property Name="NextYearBalance" Type="Int32" />
+          <Property Name="NextYearCasualLeaveBalance" Type="Int32" />
+          <Property Name="VacationsCarryOver" Type="Int32" />
+          <Property Name="OriginalCarryOver" Type="Int32" />
+          <Property Name="HasQuotas" Type="Boolean" />
+          <NavigationProperty Name="contact" Relationship="Self.FK_Employees_contact" FromRole="Employees" ToRole="contact" />
+          <NavigationProperty Name="Employees1" Relationship="Self.DirectLineManagerRelation" FromRole="Employees" ToRole="Employees1" />
+          <NavigationProperty Name="Employee1" Relationship="Self.DirectLineManagerRelation" FromRole="Employees1" ToRole="Employees" />
+          <NavigationProperty Name="Employees11" Relationship="Self.DottedLineManagerRelation" FromRole="Employees" ToRole="Employees1" />
+          <NavigationProperty Name="Employee2" Relationship="Self.DottedLineManagerRelation" FromRole="Employees1" ToRole="Employees" />
+          <NavigationProperty Name="Role" Relationship="Self.EmployeeRolesRelation" FromRole="Employees" ToRole="Roles" />
+          <NavigationProperty Name="Employees12" Relationship="Self.FK_Employees_Employees" FromRole="Employees" ToRole="Employees1" />
+          <NavigationProperty Name="Employee3" Relationship="Self.FK_Employees_Employees" FromRole="Employees1" ToRole="Employees" />
+          <NavigationProperty Name="Workload1" Relationship="Self.FK_Employees_Workloads" FromRole="Employees" ToRole="Workloads" />
+          <NavigationProperty Name="EmployeesVacationDays" Relationship="Self.FK_EmployeesVacationDays_EmployeesVacationDays" FromRole="Employees" ToRole="EmployeesVacationDays" />
+          <NavigationProperty Name="EmployeesWeekendDays" Relationship="Self.FK_EmployeesWeekendDays_Employees" FromRole="Employees" ToRole="EmployeesWeekendDays" />
+          <NavigationProperty Name="VacationsHistories" Relationship="Self.FK_VacationsHistory_Employees" FromRole="Employees" ToRole="VacationsHistory" />
+          <NavigationProperty Name="VacationsLogs" Relationship="Self.FK_VacationsLog_Employees" FromRole="Employees" ToRole="VacationsLog" />
+        </EntityType>
+        <EntityType Name="EmployeesVacationDay">
+          <Key>
+            <PropertyRef Name="VacationDaysId" />
+          </Key>
+          <Property Name="VacationDaysId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VacationDay1" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="VacationDay2" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="employeeId" Type="Int32" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_EmployeesVacationDays_EmployeesVacationDays" FromRole="EmployeesVacationDays" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="EmployeesWeekendDay">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="Day" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_EmployeesWeekendDays_Employees" FromRole="EmployeesWeekendDays" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="EmployeeVacation">
+          <Key>
+            <PropertyRef Name="EmployeeVacationId" />
+          </Key>
+          <Property Name="EmployeeVacationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeId" Type="Int32" />
+          <Property Name="EmployeeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="roleName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employees" Relationship="Self.EmployeeRolesRelation" FromRole="Roles" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="Subsidary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="SubsidaryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ChildSubName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightAverage" Type="Double" />
+        </EntityType>
+        <EntityType Name="VacationBalanceBackUp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeId" Type="Int32" />
+          <Property Name="VacationBalance" Type="Int32" />
+          <Property Name="CasualLeaveBalance" Type="Int32" />
+          <Property Name="Alias" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Backupdate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="VacationsHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeId" Type="Int32" />
+          <Property Name="username" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TypeId_" Type="Int32" />
+          <Property Name="fromdate" Type="DateTime" Precision="0" />
+          <Property Name="todate" Type="DateTime" Precision="0" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="attachements" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="reason" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="WorkingDays" Type="Int32" />
+          <Property Name="AttachmentName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_VacationsHistory_Employees" FromRole="VacationsHistory" ToRole="Employees" />
+          <NavigationProperty Name="VacationStatusType" Relationship="Self.FK_VacationsHistory_VacationStatusTypes" FromRole="VacationsHistory" ToRole="VacationStatusTypes" />
+          <NavigationProperty Name="VacationType" Relationship="Self.FK_VacationsHistory_VacationTypes" FromRole="VacationsHistory" ToRole="VacationTypes" />
+        </EntityType>
+        <EntityType Name="VacationsLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="employeeId" Type="Int32" />
+          <Property Name="vacationBalanceBefore" Type="Int32" />
+          <Property Name="vacationBalanceAfter" Type="Int32" />
+          <Property Name="CompensationBalanceBefore" Type="Int32" />
+          <Property Name="CompensationBalanceAfter" Type="Int32" />
+          <Property Name="modifiedBy" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="modifiedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_VacationsLog_Employees" FromRole="VacationsLog" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="VacationStatusType">
+          <Key>
+            <PropertyRef Name="VacationStatusId" />
+          </Key>
+          <Property Name="VacationStatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusType" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="VacationsHistories" Relationship="Self.FK_VacationsHistory_VacationStatusTypes" FromRole="VacationStatusTypes" ToRole="VacationsHistory" />
+        </EntityType>
+        <EntityType Name="VacationType">
+          <Key>
+            <PropertyRef Name="VacationTypeId" />
+          </Key>
+          <Property Name="VacationTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VacationTypeName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IconSymbol" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IconSymbolResourceName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="VacationsHistories" Relationship="Self.FK_VacationsHistory_VacationTypes" FromRole="VacationTypes" ToRole="VacationsHistory" />
+        </EntityType>
+        <EntityType Name="Workload">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WorkloadName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_Workloads" FromRole="Workloads" ToRole="Employees" />
+        </EntityType>
+        <Association Name="FK_Employees_contact">
+          <End Role="contact" Type="Self.contact" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="contact">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="DirectLineManagerRelation">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Employees1" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees1">
+              <PropertyRef Name="directLine" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="DottedLineManagerRelation">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Employees1" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees1">
+              <PropertyRef Name="dottedLine" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EmployeeRolesRelation">
+          <End Role="Roles" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="Employees" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Employees">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Employees1" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees1">
+              <PropertyRef Name="directLine" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Workloads">
+          <End Role="Workloads" Type="Self.Workload" Multiplicity="0..1" />
+          <End Role="Employees" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Workloads">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="Workload" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeesVacationDays_EmployeesVacationDays">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="EmployeesVacationDays" Type="Self.EmployeesVacationDay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeesVacationDays">
+              <PropertyRef Name="employeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeesWeekendDays_Employees">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmployeesWeekendDays" Type="Self.EmployeesWeekendDay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeesWeekendDays">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VacationsHistory_Employees">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="VacationsHistory" Type="Self.VacationsHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VacationsHistory">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VacationsLog_Employees">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="VacationsLog" Type="Self.VacationsLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VacationsLog">
+              <PropertyRef Name="employeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VacationsHistory_VacationStatusTypes">
+          <End Role="VacationStatusTypes" Type="Self.VacationStatusType" Multiplicity="0..1" />
+          <End Role="VacationsHistory" Type="Self.VacationsHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VacationStatusTypes">
+              <PropertyRef Name="VacationStatusId" />
+            </Principal>
+            <Dependent Role="VacationsHistory">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VacationsHistory_VacationTypes">
+          <End Role="VacationTypes" Type="Self.VacationType" Multiplicity="0..1" />
+          <End Role="VacationsHistory" Type="Self.VacationsHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VacationTypes">
+              <PropertyRef Name="VacationTypeId" />
+            </Principal>
+            <Dependent Role="VacationsHistory">
+              <PropertyRef Name="TypeId_" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CIDvNEXtEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="contacts" EntityType="Self.contact" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="EmployeesVacationDays" EntityType="Self.EmployeesVacationDay" />
+          <EntitySet Name="EmployeesWeekendDays" EntityType="Self.EmployeesWeekendDay" />
+          <EntitySet Name="EmployeeVacations" EntityType="Self.EmployeeVacation" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="Subsidaries" EntityType="Self.Subsidary" />
+          <EntitySet Name="VacationBalanceBackUps" EntityType="Self.VacationBalanceBackUp" />
+          <EntitySet Name="VacationsHistories" EntityType="Self.VacationsHistory" />
+          <EntitySet Name="VacationsLogs" EntityType="Self.VacationsLog" />
+          <EntitySet Name="VacationStatusTypes" EntityType="Self.VacationStatusType" />
+          <EntitySet Name="VacationTypes" EntityType="Self.VacationType" />
+          <EntitySet Name="Workloads" EntityType="Self.Workload" />
+          <AssociationSet Name="FK_Employees_contact" Association="Self.FK_Employees_contact">
+            <End Role="contact" EntitySet="contacts" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="DirectLineManagerRelation" Association="Self.DirectLineManagerRelation">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Employees1" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="DottedLineManagerRelation" Association="Self.DottedLineManagerRelation">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Employees1" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="EmployeeRolesRelation" Association="Self.EmployeeRolesRelation">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Employees" Association="Self.FK_Employees_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Employees1" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Workloads" Association="Self.FK_Employees_Workloads">
+            <End Role="Workloads" EntitySet="Workloads" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeesVacationDays_EmployeesVacationDays" Association="Self.FK_EmployeesVacationDays_EmployeesVacationDays">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="EmployeesVacationDays" EntitySet="EmployeesVacationDays" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeesWeekendDays_Employees" Association="Self.FK_EmployeesWeekendDays_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="EmployeesWeekendDays" EntitySet="EmployeesWeekendDays" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VacationsHistory_Employees" Association="Self.FK_VacationsHistory_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="VacationsHistory" EntitySet="VacationsHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VacationsLog_Employees" Association="Self.FK_VacationsLog_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="VacationsLog" EntitySet="VacationsLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VacationsHistory_VacationStatusTypes" Association="Self.FK_VacationsHistory_VacationStatusTypes">
+            <End Role="VacationStatusTypes" EntitySet="VacationStatusTypes" />
+            <End Role="VacationsHistory" EntitySet="VacationsHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VacationsHistory_VacationTypes" Association="Self.FK_VacationsHistory_VacationTypes">
+            <End Role="VacationTypes" EntitySet="VacationTypes" />
+            <End Role="VacationsHistory" EntitySet="VacationsHistories" />
+          </AssociationSet>
+          <EntitySet Name="EmployeesViews" EntityType="CIDvNEXtModel.EmployeesView" />
+        </EntityContainer>
+        <EntityType Name="EmployeesView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BasedOut" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DirectLine" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DottedLine" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HiringDate" Type="DateTime" Precision="3" />
+          <Property Name="VacationBalance" Type="Int32" />
+          <Property Name="VacationsCarryOver" Type="Int32" />
+          <Property Name="PassportNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Workload" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CIDvNEXtModelStoreContainer" CdmEntityContainer="CIDvNEXtEntities">
+          <EntitySetMapping Name="contacts">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.contact">
+              <MappingFragment StoreEntitySet="contact">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="PassportNumber" ColumnName="PassportNumber" />
+                <ScalarProperty Name="BasedOut" ColumnName="BasedOut" />
+                <ScalarProperty Name="Nationality" ColumnName="Nationality" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="Personal_Mail" ColumnName="Personal Mail" />
+                <ScalarProperty Name="BaseCity" ColumnName="BaseCity" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.Employee">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="employeeId" ColumnName="employeeId" />
+                <ScalarProperty Name="hiringDate" ColumnName="hiringDate" />
+                <ScalarProperty Name="directLine" ColumnName="directLine" />
+                <ScalarProperty Name="dottedLine" ColumnName="dottedLine" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Workload" ColumnName="Workload" />
+                <ScalarProperty Name="VacationBalance" ColumnName="VacationBalance" />
+                <ScalarProperty Name="CasualLeaveBalance" ColumnName="CasualLeaveBalance" />
+                <ScalarProperty Name="Provisioned" ColumnName="Provisioned" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="StatusUpdates" ColumnName="StatusUpdates" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="RoleTypeID" ColumnName="RoleTypeID" />
+                <ScalarProperty Name="FundID" ColumnName="FundID" />
+                <ScalarProperty Name="NumberOfCheckIns" ColumnName="NumberOfCheckIns" />
+                <ScalarProperty Name="LastCheckIn" ColumnName="LastCheckIn" />
+                <ScalarProperty Name="Resigned" ColumnName="Resigned" />
+                <ScalarProperty Name="ResignationDate" ColumnName="ResignationDate" />
+                <ScalarProperty Name="NextYearBalance" ColumnName="NextYearBalance" />
+                <ScalarProperty Name="NextYearCasualLeaveBalance" ColumnName="NextYearCasualLeaveBalance" />
+                <ScalarProperty Name="VacationsCarryOver" ColumnName="VacationsCarryOver" />
+                <ScalarProperty Name="OriginalCarryOver" ColumnName="OriginalCarryOver" />
+                <ScalarProperty Name="HasQuotas" ColumnName="HasQuotas" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeesVacationDays">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.EmployeesVacationDay">
+              <MappingFragment StoreEntitySet="EmployeesVacationDays">
+                <ScalarProperty Name="VacationDaysId" ColumnName="VacationDaysId" />
+                <ScalarProperty Name="VacationDay1" ColumnName="VacationDay1" />
+                <ScalarProperty Name="VacationDay2" ColumnName="VacationDay2" />
+                <ScalarProperty Name="employeeId" ColumnName="employeeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeesWeekendDays">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.EmployeesWeekendDay">
+              <MappingFragment StoreEntitySet="EmployeesWeekendDays">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeVacations">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.EmployeeVacation">
+              <MappingFragment StoreEntitySet="EmployeeVacation">
+                <ScalarProperty Name="EmployeeVacationId" ColumnName="EmployeeVacationId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="roleName" ColumnName="roleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subsidaries">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.Subsidary">
+              <MappingFragment StoreEntitySet="Subsidaries">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SubsidaryName" ColumnName="SubsidaryName" />
+                <ScalarProperty Name="ChildSubName" ColumnName="ChildSubName" />
+                <ScalarProperty Name="FlightAverage" ColumnName="FlightAverage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VacationBalanceBackUps">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.VacationBalanceBackUp">
+              <MappingFragment StoreEntitySet="VacationBalanceBackUp">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="VacationBalance" ColumnName="VacationBalance" />
+                <ScalarProperty Name="CasualLeaveBalance" ColumnName="CasualLeaveBalance" />
+                <ScalarProperty Name="Alias" ColumnName="Alias" />
+                <ScalarProperty Name="Backupdate" ColumnName="Backupdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VacationsHistories">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.VacationsHistory">
+              <MappingFragment StoreEntitySet="VacationsHistory">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="TypeId_" ColumnName="TypeId " />
+                <ScalarProperty Name="fromdate" ColumnName="fromdate" />
+                <ScalarProperty Name="todate" ColumnName="todate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="attachements" ColumnName="attachements" />
+                <ScalarProperty Name="reason" ColumnName="reason" />
+                <ScalarProperty Name="WorkingDays" ColumnName="WorkingDays" />
+                <ScalarProperty Name="AttachmentName" ColumnName="AttachmentName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VacationsLogs">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.VacationsLog">
+              <MappingFragment StoreEntitySet="VacationsLog">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="employeeId" ColumnName="employeeId" />
+                <ScalarProperty Name="vacationBalanceBefore" ColumnName="vacationBalanceBefore" />
+                <ScalarProperty Name="vacationBalanceAfter" ColumnName="vacationBalanceAfter" />
+                <ScalarProperty Name="CompensationBalanceBefore" ColumnName="CompensationBalanceBefore" />
+                <ScalarProperty Name="CompensationBalanceAfter" ColumnName="CompensationBalanceAfter" />
+                <ScalarProperty Name="modifiedBy" ColumnName="modifiedBy" />
+                <ScalarProperty Name="modifiedOn" ColumnName="modifiedOn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VacationStatusTypes">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.VacationStatusType">
+              <MappingFragment StoreEntitySet="VacationStatusTypes">
+                <ScalarProperty Name="VacationStatusId" ColumnName="VacationStatusId" />
+                <ScalarProperty Name="StatusType" ColumnName="StatusType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VacationTypes">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.VacationType">
+              <MappingFragment StoreEntitySet="VacationTypes">
+                <ScalarProperty Name="VacationTypeId" ColumnName="VacationTypeId" />
+                <ScalarProperty Name="VacationTypeName" ColumnName="VacationTypeName" />
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+                <ScalarProperty Name="IconSymbol" ColumnName="IconSymbol" />
+                <ScalarProperty Name="IconSymbolResourceName" ColumnName="IconSymbolResourceName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Workloads">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.Workload">
+              <MappingFragment StoreEntitySet="Workloads">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="WorkloadName" ColumnName="WorkloadName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeesViews">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.EmployeesView">
+              <MappingFragment StoreEntitySet="EmployeesView">
+                <ScalarProperty Name="Workload" ColumnName="Workload" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="PassportNumber" ColumnName="PassportNumber" />
+                <ScalarProperty Name="VacationsCarryOver" ColumnName="VacationsCarryOver" />
+                <ScalarProperty Name="VacationBalance" ColumnName="VacationBalance" />
+                <ScalarProperty Name="HiringDate" ColumnName="HiringDate" />
+                <ScalarProperty Name="DottedLine" ColumnName="DottedLine" />
+                <ScalarProperty Name="DirectLine" ColumnName="DirectLine" />
+                <ScalarProperty Name="BasedOut" ColumnName="BasedOut" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
