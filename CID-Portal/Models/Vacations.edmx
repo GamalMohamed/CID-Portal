@@ -23,6 +23,18 @@
           <Property Name="BaseCity" Type="int" />
           <Property Name="FullName" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="Countries">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CountryCode" Type="nvarchar" MaxLength="2" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SubsidaryID" Type="int" />
+          <Property Name="CIADollarAveragePerDay" Type="float" />
+          <Property Name="HotelAveragePerNight" Type="float" />
+          <Property Name="ExpressLimitPerDay" Type="float" />
+        </EntityType>
         <EntityType Name="Employees">
           <Key>
             <PropertyRef Name="Id" />
@@ -214,6 +226,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Countries_Countries">
+          <End Role="Subsidaries" Type="Self.Subsidaries" Multiplicity="0..1" />
+          <End Role="Countries" Type="Self.Countries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subsidaries">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Countries">
+              <PropertyRef Name="SubsidaryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Employees_contact">
           <End Role="contact" Type="Self.contact" Multiplicity="1" />
           <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
@@ -324,6 +348,7 @@
         </Association>
         <EntityContainer Name="CIDvNEXtModelStoreContainer">
           <EntitySet Name="contact" EntityType="Self.contact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Countries" EntityType="Self.Countries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeesVacationDays" EntityType="Self.EmployeesVacationDays" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeesView" EntityType="Self.EmployeesView" Schema="dbo" store:Type="Tables" />
@@ -348,6 +373,10 @@
           <AssociationSet Name="EmployeeRolesRelation" Association="Self.EmployeeRolesRelation">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Countries_Countries" Association="Self.FK_Countries_Countries">
+            <End Role="Subsidaries" EntitySet="Subsidaries" />
+            <End Role="Countries" EntitySet="Countries" />
           </AssociationSet>
           <AssociationSet Name="FK_Employees_contact" Association="Self.FK_Employees_contact">
             <End Role="contact" EntitySet="contact" />
@@ -496,6 +525,7 @@
           <Property Name="SubsidaryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ChildSubName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FlightAverage" Type="Double" />
+          <NavigationProperty Name="Countries" Relationship="CIDvNEXtModel.FK_Countries_Countries" FromRole="Subsidary" ToRole="Country" />
         </EntityType>
         <EntityType Name="VacationBalanceBackUp">
           <Key>
@@ -776,6 +806,11 @@
             <End Role="VacationsHistory" EntitySet="VacationsHistories" />
           </AssociationSet>
           <EntitySet Name="EmployeesViews" EntityType="CIDvNEXtModel.EmployeesView" />
+          <EntitySet Name="Countries" EntityType="CIDvNEXtModel.Country" />
+          <AssociationSet Name="FK_Countries_Countries" Association="CIDvNEXtModel.FK_Countries_Countries">
+            <End Role="Subsidary" EntitySet="Subsidaries" />
+            <End Role="Country" EntitySet="Countries" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="EmployeesView">
           <Key>
@@ -795,6 +830,31 @@
           <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Workload" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CountryCode" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SubsidaryID" Type="Int32" />
+          <Property Name="CIADollarAveragePerDay" Type="Double" />
+          <Property Name="HotelAveragePerNight" Type="Double" />
+          <Property Name="ExpressLimitPerDay" Type="Double" />
+          <NavigationProperty Name="Subsidary" Relationship="CIDvNEXtModel.FK_Countries_Countries" FromRole="Country" ToRole="Subsidary" />
+        </EntityType>
+        <Association Name="FK_Countries_Countries">
+          <End Type="CIDvNEXtModel.Subsidary" Role="Subsidary" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.Country" Role="Country" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subsidary">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Country">
+              <PropertyRef Name="SubsidaryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -984,6 +1044,19 @@
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Countries">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.Country">
+              <MappingFragment StoreEntitySet="Countries">
+                <ScalarProperty Name="ExpressLimitPerDay" ColumnName="ExpressLimitPerDay" />
+                <ScalarProperty Name="HotelAveragePerNight" ColumnName="HotelAveragePerNight" />
+                <ScalarProperty Name="CIADollarAveragePerDay" ColumnName="CIADollarAveragePerDay" />
+                <ScalarProperty Name="SubsidaryID" ColumnName="SubsidaryID" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

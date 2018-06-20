@@ -31,6 +31,8 @@
         <AssociationConnector Association="CIDvNEXtModel.FK_VacationsHistory_VacationStatusTypes" ManuallyRouted="false" />
         <AssociationConnector Association="CIDvNEXtModel.FK_VacationsHistory_VacationTypes" ManuallyRouted="false" />
         <EntityTypeShape EntityType="CIDvNEXtModel.EmployeesView" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.Country" Width="1.5" PointX="5" PointY="21" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Countries_Countries" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

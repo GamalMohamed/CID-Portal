@@ -12,11 +12,16 @@ namespace VacationsPortal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Subsidary
+    public partial class Country
     {
         public int Id { get; set; }
-        public string SubsidaryName { get; set; }
-        public string ChildSubName { get; set; }
-        public Nullable<double> FlightAverage { get; set; }
+        public string CountryCode { get; set; }
+        public string CountryName { get; set; }
+        public Nullable<int> SubsidaryID { get; set; }
+        public Nullable<double> CIADollarAveragePerDay { get; set; }
+        public Nullable<double> HotelAveragePerNight { get; set; }
+        public Nullable<double> ExpressLimitPerDay { get; set; }
+    
+        public virtual Subsidary Subsidary { get; set; }
     }
 }

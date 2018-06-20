@@ -38,7 +38,10 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.HiringDate)
+            @if (Model.HiringDate != null)
+            {
+                @Model.HiringDate.Value.ToShortDateString()
+            }
         </dd>
 
         <dt>
