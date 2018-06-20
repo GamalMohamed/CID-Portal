@@ -259,11 +259,82 @@ namespace VacationsPortal.Controllers
         {
             if (ModelState.IsValid)
             {
-                //_db.Entry(employee).State = EntityState.Modified;
-                //_db.SaveChanges();
+                // Update contact and employee
+                var contact = _db.contacts.FirstOrDefault(e => e.Id == employeevm.Id);
+                if (contact != null)
+                {
+                    var roole = _db.Roles.FirstOrDefault(r => r.Id == employeevm.Role.Id);
+                    var woorkload = _db.Workloads.FirstOrDefault(w => w.Id == employeevm.Workload.Id);
+                    contact.FullName = employeevm.Name;
+                    contact.FirstName = employeevm.Name.Split(' ')[0];
+                    contact.LastName = employeevm.Name.Split(' ')[1];
+                    contact.BasedOut = employeevm.BasedOut.CountryName;
+                    contact.UserName = employeevm.UserName;
+                    contact.Email = employeevm.UserName + "@microsoft.com";
+                    contact.PassportNumber = employeevm.PassportNumber;
+                    contact.PhoneNumber = employeevm.PhoneNumber;
+                    contact.Employee.VacationsCarryOver = employeevm.VacationsCarryOver;
+                    contact.Employee.VacationBalance = employeevm.VacationBalance;
+                    contact.Employee.hiringDate = employeevm.HiringDate;
+                    contact.Employee.RoleID = employeevm.Role.Id;
+                    contact.Employee.Workload = employeevm.Workload.Id;
+                    contact.Employee.Role = roole;
+                    contact.Employee.Workload1 = woorkload;
+                    contact.Employee.directLine = employeevm.DirectLine.Id;
+                    contact.Employee.dottedLine = employeevm.DottedLine.Id;
+
+                    _db.SaveChanges();
+
+                    // Update EmployeesView
+                    var empview = _db.EmployeesViews.FirstOrDefault(e => e.Id == contact.Id);
+                    var emps = _db.Employees.ToList();
+                    string directlineName = "", dottedlineName = "";
+                    if (contact.Employee.directLine != null)
+                    {
+                        var dirline = emps.FirstOrDefault(e => e.Id == contact.Employee.directLine);
+                        if (dirline != null)
+                        {
+                            directlineName = dirline.contact.FullName;
+                        }
+                    }
+
+                    if (contact.Employee.dottedLine != null)
+                    {
+                        var dotline = emps.FirstOrDefault(e => e.Id == contact.Employee.dottedLine);
+                        if (dotline != null)
+                        {
+                            dottedlineName = dotline.contact.FullName;
+                        }
+                    }
+
+                    string role = "", workload = "";
+                    if (contact.Employee.Role != null)
+                    {
+                        role = contact.Employee.Role.roleName;
+                    }
+                    if (contact.Employee.Workload1 != null)
+                    {
+                        workload = contact.Employee.Workload1.WorkloadName;
+                    }
+                    empview.Id = contact.Id;
+                    empview.BasedOut = contact.BasedOut;
+                    empview.Email = contact.Email;
+                    empview.HiringDate = contact.Employee.hiringDate;
+                    empview.Name = contact.FullName;
+                    empview.PassportNumber = contact.PassportNumber;
+                    empview.VacationBalance = contact.Employee.VacationBalance;
+                    empview.VacationsCarryOver = contact.Employee.VacationsCarryOver;
+                    empview.PhoneNumber = contact.PhoneNumber;
+                    empview.Role = role;
+                    empview.Workload = workload;
+                    empview.DirectLine = directlineName;
+                    empview.DottedLine = dottedlineName;
+
+                    _db.SaveChanges();
+                }
                 return RedirectToAction("Index");
             }
-            
+
             return View(employeevm);
         }
 
