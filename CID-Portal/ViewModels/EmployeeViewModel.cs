@@ -35,5 +35,7 @@ namespace VacationsPortal.ViewModels
         public int? VacationBalance { get; set; }
 
         public int? VacationsCarryOver { get; set; }
+
+        public bool Resigned { get; set; }
     }
 }

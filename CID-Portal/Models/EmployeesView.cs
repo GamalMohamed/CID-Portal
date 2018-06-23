@@ -27,5 +27,6 @@ namespace VacationsPortal.Models
         public string PassportNumber { get; set; }
         public string Role { get; set; }
         public string Workload { get; set; }
+        public Nullable<bool> Resigned { get; set; }
     }
 }

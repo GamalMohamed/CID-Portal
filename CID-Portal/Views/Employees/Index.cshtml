@@ -7,7 +7,19 @@
 <h2>Employees</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create")'">
+        + New Employee
+    </button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Resigned")'">
+        View Resigned
+    </button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("NullResigned")'">
+        View NullResigned
+    </button>
+    <a class="btn btn-primary" href="@("/Employees/ClearCarryOver/")"
+       onclick="return confirm('Are you sure that you want to clear CarryOver for ALL employees?');">
+        Clear CarryOver
+    </a>
 </p>
 <hr/>
 <table class="table" id="tb">
@@ -78,7 +90,9 @@
                 </td>
 
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                    <a type="button" class="btn btn-primary" href="@("/Employees/Edit/"+item.Id.ToString())">
+                        Edit
+                    </a>
                 </td>
             </tr>
         }

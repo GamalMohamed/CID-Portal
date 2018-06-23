@@ -99,6 +99,7 @@
           <Property Name="PassportNumber" Type="nvarchar(max)" />
           <Property Name="Role" Type="nvarchar" MaxLength="50" />
           <Property Name="Workload" Type="nvarchar" MaxLength="50" />
+          <Property Name="Resigned" Type="bit" />
         </EntityType>
         <EntityType Name="EmployeesWeekendDays">
           <Key>
@@ -840,6 +841,7 @@
           <Property Name="PassportNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Workload" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Resigned" Type="Boolean" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -1052,6 +1054,7 @@
           <EntitySetMapping Name="EmployeesViews">
             <EntityTypeMapping TypeName="CIDvNEXtModel.EmployeesView">
               <MappingFragment StoreEntitySet="EmployeesView">
+                <ScalarProperty Name="Resigned" ColumnName="Resigned" />
                 <ScalarProperty Name="Workload" ColumnName="Workload" />
                 <ScalarProperty Name="Role" ColumnName="Role" />
                 <ScalarProperty Name="PassportNumber" ColumnName="PassportNumber" />

@@ -25,14 +25,41 @@ namespace VacationsPortal.Controllers
             return true;
         }
 
-
+        public ActionResult ClearCarryOver()
+        {
+            _db.Database.ExecuteSqlCommand("UPDATE dbo.EmployeesView SET VacationsCarryOver = 0");
+            _db.Database.ExecuteSqlCommand("UPDATE dbo.Employees SET VacationsCarryOver = 0");
+            return RedirectToAction("Index");
+        }
 
         // GET: Employees
         public ActionResult Index()
         {
             if (IsUserAuthenticated())
             {
-                return View(_db.EmployeesViews.ToList());
+                return View(_db.EmployeesViews.Where(e => e.Resigned.Value == false).ToList());
+            }
+
+            ViewBag.ErrorMsg = "Not authenticated user.";
+            return View("Error");
+        }
+
+        public ActionResult Resigned()
+        {
+            if (IsUserAuthenticated())
+            {
+                return View("Index",_db.EmployeesViews.Where(e => e.Resigned.Value).ToList());
+            }
+
+            ViewBag.ErrorMsg = "Not authenticated user.";
+            return View("Error");
+        }
+
+        public ActionResult NullResigned()
+        {
+            if (IsUserAuthenticated())
+            {
+                return View("Index", _db.EmployeesViews.Where(e => e.Resigned == null).ToList());
             }
 
             ViewBag.ErrorMsg = "Not authenticated user.";
@@ -40,62 +67,65 @@ namespace VacationsPortal.Controllers
         }
 
         // IMP NOTE: THIS ROUTE IS FOR DEVELOPMENT PURPOSES ONLY!!
-        public ActionResult FillEmployeesView()
-        {
-            var emps = _db.Employees.ToList();
-            foreach (var emp in emps)
-            {
-                string directlineName = "", dottedlineName = "";
-                if (emp.directLine != null)
-                {
-                    var dirline = emps.FirstOrDefault(e => e.Id == emp.directLine);
-                    if (dirline != null)
-                    {
-                        directlineName = dirline.contact.FullName;
-                    }
-                }
+        //public ActionResult FillEmployeesView()
+        //{
+        //    var emps = _db.Employees.ToList();
+        //    foreach (var emp in emps)
+        //    {
+        //        string directlineName = "", dottedlineName = "";
+        //        if (emp.directLine != null)
+        //        {
+        //            var dirline = emps.FirstOrDefault(e => e.Id == emp.directLine);
+        //            if (dirline != null)
+        //            {
+        //                directlineName = dirline.contact.FullName;
+        //            }
+        //        }
 
-                if (emp.dottedLine != null)
-                {
-                    var dotline = emps.FirstOrDefault(e => e.Id == emp.dottedLine);
-                    if (dotline != null)
-                    {
-                        dottedlineName = dotline.contact.FullName;
-                    }
-                }
+        //        if (emp.dottedLine != null)
+        //        {
+        //            var dotline = emps.FirstOrDefault(e => e.Id == emp.dottedLine);
+        //            if (dotline != null)
+        //            {
+        //                dottedlineName = dotline.contact.FullName;
+        //            }
+        //        }
 
-                string role = "", workload = "";
-                if (emp.Role != null)
-                {
-                    role = emp.Role.roleName;
-                }
-                if (emp.Workload != null)
-                {
-                    workload = emp.Workload1.WorkloadName;
-                }
+        //        string role = "", workload = "";
+        //        if (emp.Role != null)
+        //        {
+        //            role = emp.Role.roleName;
+        //        }
+        //        if (emp.Workload != null)
+        //        {
+        //            workload = emp.Workload1.WorkloadName;
+        //        }
 
-                var empvw = new EmployeesView();
-                empvw.Id = emp.Id;
-                empvw.BasedOut = emp.contact.BasedOut;
-                empvw.Email = emp.contact.Email;
-                empvw.HiringDate = emp.hiringDate;
-                empvw.Name = emp.contact.FirstName + ' ' + emp.contact.LastName;
-                empvw.PhoneNumber = emp.contact.PhoneNumber;
-                empvw.VacationBalance = emp.VacationBalance;
-                empvw.VacationsCarryOver = emp.VacationsCarryOver;
-                empvw.PassportNumber = emp.contact.PassportNumber;
-                empvw.Role = role;
-                empvw.Workload = workload;
-                empvw.DirectLine = directlineName;
-                empvw.DottedLine = dottedlineName;
+        //        var empvw = new EmployeesView
+        //        {
+        //            Id = emp.Id,
+        //            BasedOut = emp.contact.BasedOut,
+        //            Email = emp.contact.Email,
+        //            HiringDate = emp.hiringDate,
+        //            Name = emp.contact.FirstName + ' ' + emp.contact.LastName,
+        //            PhoneNumber = emp.contact.PhoneNumber,
+        //            VacationBalance = emp.VacationBalance,
+        //            VacationsCarryOver = emp.VacationsCarryOver,
+        //            PassportNumber = emp.contact.PassportNumber,
+        //            Role = role,
+        //            Workload = workload,
+        //            DirectLine = directlineName,
+        //            DottedLine = dottedlineName,
+        //            Resigned = emp.Resigned
+        //        };
 
-                _db.EmployeesViews.Add(empvw);
+        //        _db.EmployeesViews.Add(empvw);
 
-                _db.SaveChanges();
-            }
+        //        _db.SaveChanges();
+        //    }
 
-            return RedirectToAction("Index");
-        }
+        //    return RedirectToAction("Index");
+        //}
 
         // GET: Employees/Details/5
 
@@ -116,11 +146,17 @@ namespace VacationsPortal.Controllers
         // GET: Employees/Create
         public ActionResult Create()
         {
-            ViewBag.EmployeesList = new SelectList(_db.contacts.ToList(), "Id", "FullName");
-            ViewBag.RolesList = new SelectList(_db.Roles.ToList(), "Id", "roleName");
-            ViewBag.WorkloadsList = new SelectList(_db.Workloads.ToList(), "Id", "WorkloadName");
-            ViewBag.CountriesList = new SelectList(_db.Countries.ToList(), "CountryName", "CountryName");
-            return View();
+            if (IsUserAuthenticated())
+            {
+                ViewBag.EmployeesList = new SelectList(_db.contacts.ToList(), "Id", "FullName");
+                ViewBag.RolesList = new SelectList(_db.Roles.ToList(), "Id", "roleName");
+                ViewBag.WorkloadsList = new SelectList(_db.Workloads.ToList(), "Id", "WorkloadName");
+                ViewBag.CountriesList = new SelectList(_db.Countries.ToList(), "CountryName", "CountryName");
+                return View();
+            }
+
+            ViewBag.ErrorMsg = "Not authenticated user.";
+            return View("Error");
         }
 
         // POST: Employees/Create
@@ -131,8 +167,13 @@ namespace VacationsPortal.Controllers
             var emps = _db.Employees.ToList();
             if (ModelState.IsValid)
             {
-                var firstname = employeevm.Name.Split(' ')[0];
-                var lastname = employeevm.Name.Substring(firstname.Length + 1, employeevm.Name.Length - firstname.Length - 1);
+                var nametokens = employeevm.Name.Split(' ');
+                var firstname = nametokens[0];
+                var lastname = "";
+                if (nametokens.Length > 1)
+                {
+                    lastname = employeevm.Name.Substring(firstname.Length + 1, employeevm.Name.Length - firstname.Length - 1);
+                }
 
                 // Add contact
                 var contact = new contact()
@@ -167,7 +208,8 @@ namespace VacationsPortal.Controllers
                         Role = roole,
                         Workload1 = woorkload,
                         directLine = employeevm.DirectLine.Id,
-                        dottedLine = employeevm.DottedLine.Id
+                        dottedLine = employeevm.DottedLine.Id,
+                        Resigned = false
                     };
                     _db.SaveChanges();
 
@@ -214,7 +256,8 @@ namespace VacationsPortal.Controllers
                         Role = role,
                         Workload = workload,
                         DirectLine = directlineName,
-                        DottedLine = dottedlineName
+                        DottedLine = dottedlineName,
+                        Resigned = false
                     };
                     _db.EmployeesViews.Add(empview);
                     _db.SaveChanges();
@@ -242,7 +285,7 @@ namespace VacationsPortal.Controllers
             var dirline = _db.Employees.FirstOrDefault(e => e.Id == contact.Employee.directLine.Value);
             var dotline = _db.Employees.FirstOrDefault(e => e.Id == contact.Employee.dottedLine.Value);
             var basedOut = _db.Countries.FirstOrDefault(e => e.CountryName == contact.BasedOut);
-
+            var resigned = contact.Employee.Resigned != null && contact.Employee.Resigned.Value;
             var employeevm = new EmployeeViewModel()
             {
                 Id = contact.Id,
@@ -257,7 +300,8 @@ namespace VacationsPortal.Controllers
                 VacationsCarryOver = contact.Employee.VacationsCarryOver,
                 DirectLine = dirline,
                 DottedLine = dotline,
-                BasedOut = basedOut
+                BasedOut = basedOut,
+                Resigned = resigned
             };
 
             ViewBag.EmployeesList = new SelectList(_db.contacts.ToList(), "Id", "FullName");
@@ -279,8 +323,13 @@ namespace VacationsPortal.Controllers
                 if (contact != null)
                 {
                     contact.FullName = employeevm.Name;
-                    var firstname = employeevm.Name.Split(' ')[0];
-                    var lastname = employeevm.Name.Substring(firstname.Length + 1, employeevm.Name.Length - firstname.Length - 1);
+                    var nametokens = employeevm.Name.Split(' ');
+                    var firstname = nametokens[0];
+                    var lastname = "";
+                    if (nametokens.Length > 1)
+                    {
+                        lastname = employeevm.Name.Substring(firstname.Length + 1, employeevm.Name.Length - firstname.Length - 1);
+                    }
                     contact.FirstName = firstname;
                     contact.LastName = lastname;
                     contact.BasedOut = employeevm.BasedOut.CountryName;
@@ -300,6 +349,7 @@ namespace VacationsPortal.Controllers
                     contact.Employee.Workload = employeevm.Workload.Id;
                     contact.Employee.Role = roole;
                     contact.Employee.Workload1 = woorkload;
+                    contact.Employee.Resigned = employeevm.Resigned;
                     
                     _db.SaveChanges();
 
@@ -347,7 +397,7 @@ namespace VacationsPortal.Controllers
                     empview.Workload = workload;
                     empview.DirectLine = directlineName;
                     empview.DottedLine = dottedlineName;
-
+                    empview.Resigned = contact.Employee.Resigned;
                     _db.SaveChanges();
                 }
                 return RedirectToAction("Index");

@@ -107,6 +107,17 @@
         <dd>
             @Html.DisplayFor(model => model.BasedOut)
         </dd>
+
+        <dt>
+            @Html.Label("Resigned")
+        </dt>
+
+        <dd>
+            @if (Model.Resigned != null)
+            {
+                @(Model.Resigned.Value ? Html.Label("YES") : Html.Label("NO"))
+            }
+        </dd>
     </dl>
 </div>
 <p>
