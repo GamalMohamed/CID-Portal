@@ -25,6 +25,30 @@ namespace VacationsPortal.Controllers
             return true;
         }
 
+        public ActionResult MarkResigned(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var employee = _db.Employees.FirstOrDefault(e => e.Id == id);
+            if (employee != null)
+            {
+                employee.Resigned = true;
+            }
+            _db.SaveChanges();
+
+            var empview = _db.EmployeesViews.FirstOrDefault(e => e.Id == id);
+            if (empview != null)
+            {
+                empview.Resigned = true;
+            }
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
         public ActionResult ClearCarryOver()
         {
             _db.Database.ExecuteSqlCommand("UPDATE dbo.EmployeesView SET VacationsCarryOver = 0");
@@ -209,7 +233,10 @@ namespace VacationsPortal.Controllers
                         Workload1 = woorkload,
                         directLine = employeevm.DirectLine.Id,
                         dottedLine = employeevm.DottedLine.Id,
-                        Resigned = false
+                        Resigned = false,
+                        Provisioned = true,
+                        Active = true,
+                        StatusUpdates = "Welcome me to CID on Windows"
                     };
                     _db.SaveChanges();
 

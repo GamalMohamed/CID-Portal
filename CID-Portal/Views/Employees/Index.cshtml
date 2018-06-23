@@ -44,11 +44,11 @@
                 @Html.DisplayNameFor(model => model.VacationBalance)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.VacationsCarryOver)
+                @Html.DisplayName("CarryOver")
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.DirectLine)
-            </th>
+            </th>*@
 
             <th></th>
         </tr>
@@ -85,14 +85,16 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.VacationsCarryOver)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.DirectLine)
-                </td>
+                </td>*@
 
                 <td>
-                    <a type="button" class="btn btn-primary" href="@("/Employees/Edit/"+item.Id.ToString())">
+                    @Html.ActionLink("Resigned", "MarkResigned", new { id = item.Id }) | 
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                    @*<a type="button" class="btn btn-primary" href="@("/Employees/Edit/"+item.Id.ToString())">
                         Edit
-                    </a>
+                    </a>*@
                 </td>
             </tr>
         }
