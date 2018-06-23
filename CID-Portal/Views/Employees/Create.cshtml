@@ -7,7 +7,7 @@
 <h2>Create Employee</h2>
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "frm" }))
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
@@ -23,9 +23,9 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.UserName, "Username(v-example)", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.UserName, "Username", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", placeholder = "v-example" } })
                 @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -41,7 +41,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.HiringDate, "Hiring date", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.HiringDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.HiringDate, new { htmlAttributes = new { @class = "form-control", placeholder = "mm/dd/yyyy" } })
                 @Html.ValidationMessageFor(model => model.HiringDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -124,4 +124,11 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.AreYouSurr/jquery.are-you-sure.min.js"></script>
+    <script>
+        $(function () {
+            $('#frm').areYouSure();
+        });
+
+    </script>
 }

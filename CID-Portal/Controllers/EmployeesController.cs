@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Security.Policy;
 using System.Web;
 using System.Web.Mvc;
 using VacationsPortal.Models;
@@ -16,15 +17,26 @@ namespace VacationsPortal.Controllers
     {
         private readonly CIDvNEXtEntities _db = new CIDvNEXtEntities();
 
-        private string GetCurrentUserEmail()
+        private bool IsUserAuthenticated()
         {
-            return ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            //var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
+            //return authUser != null;
+            return true;
         }
+
+
 
         // GET: Employees
         public ActionResult Index()
         {
-            return View(_db.EmployeesViews.ToList());
+            if (IsUserAuthenticated())
+            {
+                return View(_db.EmployeesViews.ToList());
+            }
+
+            ViewBag.ErrorMsg = "Not authenticated user.";
+            return View("Error");
         }
 
         // IMP NOTE: THIS ROUTE IS FOR DEVELOPMENT PURPOSES ONLY!!
@@ -119,12 +131,15 @@ namespace VacationsPortal.Controllers
             var emps = _db.Employees.ToList();
             if (ModelState.IsValid)
             {
+                var firstname = employeevm.Name.Split(' ')[0];
+                var lastname = employeevm.Name.Substring(firstname.Length + 1, employeevm.Name.Length - firstname.Length - 1);
+
                 // Add contact
                 var contact = new contact()
                 {
                     FullName = employeevm.Name,
-                    FirstName = employeevm.Name.Split(' ')[0],
-                    LastName = employeevm.Name.Split(' ')[1],
+                    FirstName = firstname,
+                    LastName = lastname,
                     BasedOut = employeevm.BasedOut.CountryName,
                     UserName = employeevm.UserName,
                     Email = employeevm.UserName + "@microsoft.com",
@@ -263,11 +278,11 @@ namespace VacationsPortal.Controllers
                 var contact = _db.contacts.FirstOrDefault(e => e.Id == employeevm.Id);
                 if (contact != null)
                 {
-                    var roole = _db.Roles.FirstOrDefault(r => r.Id == employeevm.Role.Id);
-                    var woorkload = _db.Workloads.FirstOrDefault(w => w.Id == employeevm.Workload.Id);
                     contact.FullName = employeevm.Name;
-                    contact.FirstName = employeevm.Name.Split(' ')[0];
-                    contact.LastName = employeevm.Name.Split(' ')[1];
+                    var firstname = employeevm.Name.Split(' ')[0];
+                    var lastname = employeevm.Name.Substring(firstname.Length + 1, employeevm.Name.Length - firstname.Length - 1);
+                    contact.FirstName = firstname;
+                    contact.LastName = lastname;
                     contact.BasedOut = employeevm.BasedOut.CountryName;
                     contact.UserName = employeevm.UserName;
                     contact.Email = employeevm.UserName + "@microsoft.com";
@@ -276,13 +291,16 @@ namespace VacationsPortal.Controllers
                     contact.Employee.VacationsCarryOver = employeevm.VacationsCarryOver;
                     contact.Employee.VacationBalance = employeevm.VacationBalance;
                     contact.Employee.hiringDate = employeevm.HiringDate;
+                    contact.Employee.directLine = employeevm.DirectLine.Id;
+                    contact.Employee.dottedLine = employeevm.DottedLine.Id;
+
+                    var roole = _db.Roles.FirstOrDefault(r => r.Id == employeevm.Role.Id);
+                    var woorkload = _db.Workloads.FirstOrDefault(w => w.Id == employeevm.Workload.Id);
                     contact.Employee.RoleID = employeevm.Role.Id;
                     contact.Employee.Workload = employeevm.Workload.Id;
                     contact.Employee.Role = roole;
                     contact.Employee.Workload1 = woorkload;
-                    contact.Employee.directLine = employeevm.DirectLine.Id;
-                    contact.Employee.dottedLine = employeevm.DottedLine.Id;
-
+                    
                     _db.SaveChanges();
 
                     // Update EmployeesView

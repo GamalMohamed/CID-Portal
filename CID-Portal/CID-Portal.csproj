@@ -161,6 +161,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AuthUser.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\contact.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
@@ -415,8 +418,8 @@
     <Content Include="Content\DataTables\css\semanticui.scss" />
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
-    <None Include="Properties\PublishProfiles\VacationPortal - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\VacationPortal - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\CID-Portal - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\CID-Portal - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
@@ -498,7 +501,17 @@
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <Content Include="Scripts\jquery.AreYouSurr\are-you-sure.jquery.json" />
+    <Content Include="Scripts\jquery.AreYouSurr\bower.json" />
+    <Content Include="Scripts\jquery.AreYouSurr\package.json" />
+    <Content Include="Scripts\jquery.AreYouSurr\README.md" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.AreYouSurr\ays-beforeunload-shim.js" />
+    <Content Include="Scripts\jquery.AreYouSurr\Gruntfile.js" />
+    <Content Include="Scripts\jquery.AreYouSurr\jquery.are-you-sure.js" />
+    <Content Include="Scripts\jquery.AreYouSurr\jquery.are-you-sure.min.js" />
+    <Content Include="Scripts\jquery.AreYouSurr\spec\javascripts\fixtures\input-text.html" />
+    <Content Include="Scripts\jquery.AreYouSurr\spec\javascripts\jquery.are-you-sure_spec.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
