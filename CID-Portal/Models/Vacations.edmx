@@ -14,6 +14,13 @@
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="Privilege" Type="int" />
         </EntityType>
+        <EntityType Name="CIDW8RoleTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="150" />
+        </EntityType>
         <EntityType Name="Cities">
           <Key>
             <PropertyRef Name="Id" />
@@ -104,7 +111,6 @@
           <Property Name="HiringDate" Type="datetime" />
           <Property Name="VacationBalance" Type="int" />
           <Property Name="VacationsCarryOver" Type="int" />
-          <Property Name="PassportNumber" Type="nvarchar(max)" />
           <Property Name="Role" Type="nvarchar" MaxLength="50" />
           <Property Name="Workload" Type="nvarchar" MaxLength="50" />
           <Property Name="Resigned" Type="bit" />
@@ -280,6 +286,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Employees_CIDW8RoleTypes">
+          <End Role="CIDW8RoleTypes" Type="Self.CIDW8RoleTypes" Multiplicity="0..1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CIDW8RoleTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="RoleTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Employees_contact">
           <End Role="contact" Type="Self.contact" Multiplicity="1" />
           <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
@@ -390,6 +408,7 @@
         </Association>
         <EntityContainer Name="CIDvNEXtModelStoreContainer">
           <EntitySet Name="AuthUsers" EntityType="Self.AuthUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CIDW8RoleTypes" EntityType="Self.CIDW8RoleTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cities" EntityType="Self.Cities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="contact" EntityType="Self.contact" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Countries" EntityType="Self.Countries" Schema="dbo" store:Type="Tables" />
@@ -429,6 +448,10 @@
           <AssociationSet Name="FK_Countries_Countries" Association="Self.FK_Countries_Countries">
             <End Role="Subsidaries" EntitySet="Subsidaries" />
             <End Role="Countries" EntitySet="Countries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_CIDW8RoleTypes" Association="Self.FK_Employees_CIDW8RoleTypes">
+            <End Role="CIDW8RoleTypes" EntitySet="CIDW8RoleTypes" />
+            <End Role="Employees" EntitySet="Employees" />
           </AssociationSet>
           <AssociationSet Name="FK_Employees_contact" Association="Self.FK_Employees_contact">
             <End Role="contact" EntitySet="contact" />
@@ -532,6 +555,7 @@
           <NavigationProperty Name="EmployeesWeekendDays" Relationship="Self.FK_EmployeesWeekendDays_Employees" FromRole="Employees" ToRole="EmployeesWeekendDays" />
           <NavigationProperty Name="VacationsHistories" Relationship="Self.FK_VacationsHistory_Employees" FromRole="Employees" ToRole="VacationsHistory" />
           <NavigationProperty Name="VacationsLogs" Relationship="Self.FK_VacationsLog_Employees" FromRole="Employees" ToRole="VacationsLog" />
+          <NavigationProperty Name="CIDW8RoleTypes" Relationship="CIDvNEXtModel.FK_Employees_CIDW8RoleTypes" FromRole="Employee" ToRole="CIDW8RoleTypes" />
         </EntityType>
         <EntityType Name="EmployeesVacationDay">
           <Key>
@@ -874,6 +898,11 @@
             <End Role="City" EntitySet="Cities" />
             <End Role="contact" EntitySet="contacts" />
           </AssociationSet>
+          <EntitySet Name="CIDW8RoleTypes" EntityType="CIDvNEXtModel.CIDW8RoleTypes" />
+          <AssociationSet Name="FK_Employees_CIDW8RoleTypes" Association="CIDvNEXtModel.FK_Employees_CIDW8RoleTypes">
+            <End Role="CIDW8RoleTypes" EntitySet="CIDW8RoleTypes" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="EmployeesView">
           <Key>
@@ -889,7 +918,6 @@
           <Property Name="HiringDate" Type="DateTime" Precision="3" />
           <Property Name="VacationBalance" Type="Int32" />
           <Property Name="VacationsCarryOver" Type="Int32" />
-          <Property Name="PassportNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Workload" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Resigned" Type="Boolean" />
@@ -960,6 +988,26 @@
             </Principal>
             <Dependent Role="contact">
               <PropertyRef Name="BaseCity" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CIDW8RoleTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employees" Relationship="CIDvNEXtModel.FK_Employees_CIDW8RoleTypes" FromRole="CIDW8RoleTypes" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_Employees_CIDW8RoleTypes">
+          <End Type="CIDvNEXtModel.CIDW8RoleTypes" Role="CIDW8RoleTypes" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.Employee" Role="Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CIDW8RoleTypes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="RoleTypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1143,7 +1191,6 @@
                 <ScalarProperty Name="Resigned" ColumnName="Resigned" />
                 <ScalarProperty Name="Workload" ColumnName="Workload" />
                 <ScalarProperty Name="Role" ColumnName="Role" />
-                <ScalarProperty Name="PassportNumber" ColumnName="PassportNumber" />
                 <ScalarProperty Name="VacationsCarryOver" ColumnName="VacationsCarryOver" />
                 <ScalarProperty Name="VacationBalance" ColumnName="VacationBalance" />
                 <ScalarProperty Name="HiringDate" ColumnName="HiringDate" />
@@ -1185,6 +1232,14 @@
               <MappingFragment StoreEntitySet="Cities">
                 <ScalarProperty Name="CountryID" ColumnName="CountryID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CIDW8RoleTypes">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.CIDW8RoleTypes">
+              <MappingFragment StoreEntitySet="CIDW8RoleTypes">
+                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

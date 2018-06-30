@@ -42,5 +42,6 @@ namespace VacationsPortal.Models
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<AuthUser> AuthUsers { get; set; }
         public virtual DbSet<City> Cities { get; set; }
+        public virtual DbSet<CIDW8RoleTypes> CIDW8RoleTypes { get; set; }
     }
 }

@@ -135,7 +135,6 @@ namespace VacationsPortal.Controllers
         //            PhoneNumber = emp.contact.PhoneNumber,
         //            VacationBalance = emp.VacationBalance,
         //            VacationsCarryOver = emp.VacationsCarryOver,
-        //            PassportNumber = emp.contact.PassportNumber,
         //            Role = role,
         //            Workload = workload,
         //            DirectLine = directlineName,
@@ -199,7 +198,7 @@ namespace VacationsPortal.Controllers
                 {
                     lastname = employeevm.Name.Substring(firstname.Length + 1, employeevm.Name.Length - firstname.Length - 1);
                 }
-
+                var city = _db.Cities.FirstOrDefault(c => c.Id == employeevm.BaseCity.Id);
                 // Add contact
                 var contact = new contact()
                 {
@@ -209,7 +208,9 @@ namespace VacationsPortal.Controllers
                     BasedOut = employeevm.BasedOut.CountryName,
                     UserName = employeevm.UserName,
                     Email = employeevm.UserName + "@microsoft.com",
-                    PhoneNumber = employeevm.PhoneNumber
+                    PhoneNumber = employeevm.PhoneNumber,
+                    BaseCity = employeevm.BaseCity.Id,
+                    City = city
                 };
 
                 _db.contacts.Add(contact);
@@ -224,15 +225,18 @@ namespace VacationsPortal.Controllers
                     contactDb.Employee = new Employee()
                     {
                         Id = contactDb.Id,
-                        VacationsCarryOver = employeevm.VacationsCarryOver,
-                        VacationBalance = employeevm.VacationBalance,
+                        VacationsCarryOver = employeevm.VacationsCarryOver ?? 0,
+                        VacationBalance = employeevm.VacationBalance ?? 0,
                         hiringDate = employeevm.HiringDate,
                         RoleID = employeevm.Role.Id,
                         Workload = employeevm.Workload.Id,
                         Role = roole,
                         Workload1 = woorkload,
+                        RoleTypeID = 0,
+                        CIDW8RoleTypes = _db.CIDW8RoleTypes.FirstOrDefault(r => r.Id == 0),
                         directLine = employeevm.DirectLine.Id,
                         dottedLine = employeevm.DottedLine.Id,
+                        CasualLeaveBalance = 0,
                         Resigned = false,
                         Provisioned = true,
                         Active = true,
@@ -276,7 +280,6 @@ namespace VacationsPortal.Controllers
                         Email = contactDb.Email,
                         HiringDate = contactDb.Employee.hiringDate,
                         Name = contactDb.FullName,
-                        PassportNumber = contactDb.PassportNumber,
                         VacationBalance = contactDb.Employee.VacationBalance,
                         VacationsCarryOver = contactDb.Employee.VacationsCarryOver,
                         PhoneNumber = contactDb.PhoneNumber,
@@ -334,6 +337,7 @@ namespace VacationsPortal.Controllers
             ViewBag.RolesList = new SelectList(_db.Roles.ToList(), "Id", "roleName");
             ViewBag.WorkloadsList = new SelectList(_db.Workloads.ToList(), "Id", "WorkloadName");
             ViewBag.CountriesList = new SelectList(_db.Countries.ToList(), "CountryName", "CountryName");
+            ViewBag.CitiesList = new SelectList(_db.Cities.ToList(), "Id", "Name");
             return View(employeevm);
         }
 
@@ -363,19 +367,22 @@ namespace VacationsPortal.Controllers
                     contact.UserName = employeevm.UserName;
                     contact.Email = employeevm.UserName + "@microsoft.com";
                     contact.PhoneNumber = employeevm.PhoneNumber;
-                    contact.Employee.VacationsCarryOver = employeevm.VacationsCarryOver;
-                    contact.Employee.VacationBalance = employeevm.VacationBalance;
+                    contact.Employee.VacationsCarryOver = employeevm.VacationsCarryOver ?? 0;
+                    contact.Employee.VacationBalance = employeevm.VacationBalance ?? 0;
                     contact.Employee.hiringDate = employeevm.HiringDate;
                     contact.Employee.directLine = employeevm.DirectLine.Id;
                     contact.Employee.dottedLine = employeevm.DottedLine.Id;
 
                     var roole = _db.Roles.FirstOrDefault(r => r.Id == employeevm.Role.Id);
                     var woorkload = _db.Workloads.FirstOrDefault(w => w.Id == employeevm.Workload.Id);
+                    var city = _db.Cities.FirstOrDefault(c => c.Id == employeevm.BaseCity.Id);
                     contact.Employee.RoleID = employeevm.Role.Id;
                     contact.Employee.Workload = employeevm.Workload.Id;
                     contact.Employee.Role = roole;
                     contact.Employee.Workload1 = woorkload;
                     contact.Employee.Resigned = employeevm.Resigned;
+                    contact.BaseCity = employeevm.BaseCity.Id;
+                    contact.City = city;
                     
                     _db.SaveChanges();
 
@@ -410,20 +417,22 @@ namespace VacationsPortal.Controllers
                     {
                         workload = contact.Employee.Workload1.WorkloadName;
                     }
-                    empview.Id = contact.Id;
-                    empview.BasedOut = contact.BasedOut;
-                    empview.Email = contact.Email;
-                    empview.HiringDate = contact.Employee.hiringDate;
-                    empview.Name = contact.FullName;
-                    empview.PassportNumber = contact.PassportNumber;
-                    empview.VacationBalance = contact.Employee.VacationBalance;
-                    empview.VacationsCarryOver = contact.Employee.VacationsCarryOver;
-                    empview.PhoneNumber = contact.PhoneNumber;
-                    empview.Role = role;
-                    empview.Workload = workload;
-                    empview.DirectLine = directlineName;
-                    empview.DottedLine = dottedlineName;
-                    empview.Resigned = contact.Employee.Resigned;
+                    if (empview != null)
+                    {
+                        empview.Id = contact.Id;
+                        empview.BasedOut = contact.BasedOut;
+                        empview.Email = contact.Email;
+                        empview.HiringDate = contact.Employee.hiringDate;
+                        empview.Name = contact.FullName;
+                        empview.VacationBalance = contact.Employee.VacationBalance;
+                        empview.VacationsCarryOver = contact.Employee.VacationsCarryOver;
+                        empview.PhoneNumber = contact.PhoneNumber;
+                        empview.Role = role;
+                        empview.Workload = workload;
+                        empview.DirectLine = directlineName;
+                        empview.DottedLine = dottedlineName;
+                        empview.Resigned = contact.Employee.Resigned;
+                    }
                     _db.SaveChanges();
                 }
                 return RedirectToAction("Index");

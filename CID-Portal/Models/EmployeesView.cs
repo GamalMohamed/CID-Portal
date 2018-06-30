@@ -24,7 +24,6 @@ namespace VacationsPortal.Models
         public Nullable<System.DateTime> HiringDate { get; set; }
         public Nullable<int> VacationBalance { get; set; }
         public Nullable<int> VacationsCarryOver { get; set; }
-        public string PassportNumber { get; set; }
         public string Role { get; set; }
         public string Workload { get; set; }
         public Nullable<bool> Resigned { get; set; }

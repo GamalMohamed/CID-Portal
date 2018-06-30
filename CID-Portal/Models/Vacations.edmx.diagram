@@ -37,6 +37,8 @@
         <EntityTypeShape EntityType="CIDvNEXtModel.City" Width="1.5" PointX="7.25" PointY="21.375" />
         <AssociationConnector Association="CIDvNEXtModel.FK_Cities_Countries" />
         <AssociationConnector Association="CIDvNEXtModel.FK_Contact_Cities" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.CIDW8RoleTypes" Width="1.5" PointX="10.625" PointY="8.875" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Employees_CIDW8RoleTypes" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

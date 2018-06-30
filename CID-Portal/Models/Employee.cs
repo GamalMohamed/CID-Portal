@@ -71,5 +71,6 @@ namespace VacationsPortal.Models
         public virtual ICollection<VacationsHistory> VacationsHistories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VacationsLog> VacationsLogs { get; set; }
+        public virtual CIDW8RoleTypes CIDW8RoleTypes { get; set; }
     }
 }
