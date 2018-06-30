@@ -14,6 +14,14 @@
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="Privilege" Type="int" />
         </EntityType>
+        <EntityType Name="Cities">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CountryID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="contact">
           <Key>
             <PropertyRef Name="Id" />
@@ -236,6 +244,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Cities_Countries">
+          <End Role="Countries" Type="Self.Countries" Multiplicity="1" />
+          <End Role="Cities" Type="Self.Cities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cities">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contact_Cities">
+          <End Role="Cities" Type="Self.Cities" Multiplicity="0..1" />
+          <End Role="contact" Type="Self.contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cities">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="contact">
+              <PropertyRef Name="BaseCity" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Countries_Countries">
           <End Role="Subsidaries" Type="Self.Subsidaries" Multiplicity="0..1" />
           <End Role="Countries" Type="Self.Countries" Multiplicity="*" />
@@ -358,6 +390,7 @@
         </Association>
         <EntityContainer Name="CIDvNEXtModelStoreContainer">
           <EntitySet Name="AuthUsers" EntityType="Self.AuthUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cities" EntityType="Self.Cities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="contact" EntityType="Self.contact" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Countries" EntityType="Self.Countries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
@@ -384,6 +417,14 @@
           <AssociationSet Name="EmployeeRolesRelation" Association="Self.EmployeeRolesRelation">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cities_Countries" Association="Self.FK_Cities_Countries">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="Cities" EntitySet="Cities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contact_Cities" Association="Self.FK_Contact_Cities">
+            <End Role="Cities" EntitySet="Cities" />
+            <End Role="contact" EntitySet="contact" />
           </AssociationSet>
           <AssociationSet Name="FK_Countries_Countries" Association="Self.FK_Countries_Countries">
             <End Role="Subsidaries" EntitySet="Subsidaries" />
@@ -448,6 +489,7 @@
           <Property Name="BaseCity" Type="Int32" />
           <Property Name="FullName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_Employees_contact" FromRole="contact" ToRole="Employees" />
+          <NavigationProperty Name="City" Relationship="CIDvNEXtModel.FK_Contact_Cities" FromRole="contact" ToRole="City" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -823,6 +865,15 @@
             <End Role="Country" EntitySet="Countries" />
           </AssociationSet>
           <EntitySet Name="AuthUsers" EntityType="CIDvNEXtModel.AuthUser" />
+          <EntitySet Name="Cities" EntityType="CIDvNEXtModel.City" />
+          <AssociationSet Name="FK_Cities_Countries" Association="CIDvNEXtModel.FK_Cities_Countries">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="City" EntitySet="Cities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contact_Cities" Association="CIDvNEXtModel.FK_Contact_Cities">
+            <End Role="City" EntitySet="Cities" />
+            <End Role="contact" EntitySet="contacts" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="EmployeesView">
           <Key>
@@ -855,6 +906,7 @@
           <Property Name="HotelAveragePerNight" Type="Double" />
           <Property Name="ExpressLimitPerDay" Type="Double" />
           <NavigationProperty Name="Subsidary" Relationship="CIDvNEXtModel.FK_Countries_Countries" FromRole="Country" ToRole="Subsidary" />
+          <NavigationProperty Name="Cities" Relationship="CIDvNEXtModel.FK_Cities_Countries" FromRole="Country" ToRole="City" />
         </EntityType>
         <Association Name="FK_Countries_Countries">
           <End Type="CIDvNEXtModel.Subsidary" Role="Subsidary" Multiplicity="0..1" />
@@ -877,6 +929,40 @@
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Privilege" Type="Int32" />
         </EntityType>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CountryID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Country" Relationship="CIDvNEXtModel.FK_Cities_Countries" FromRole="City" ToRole="Country" />
+          <NavigationProperty Name="contacts" Relationship="CIDvNEXtModel.FK_Contact_Cities" FromRole="City" ToRole="contact" />
+        </EntityType>
+        <Association Name="FK_Cities_Countries">
+          <End Type="CIDvNEXtModel.Country" Role="Country" Multiplicity="1" />
+          <End Type="CIDvNEXtModel.City" Role="City" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="City">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contact_Cities">
+          <End Type="CIDvNEXtModel.City" Role="City" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.contact" Role="contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="contact">
+              <PropertyRef Name="BaseCity" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1089,6 +1175,15 @@
               <MappingFragment StoreEntitySet="AuthUsers">
                 <ScalarProperty Name="Privilege" ColumnName="Privilege" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cities">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.City">
+              <MappingFragment StoreEntitySet="Cities">
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

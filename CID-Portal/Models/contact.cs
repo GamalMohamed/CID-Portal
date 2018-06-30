@@ -29,5 +29,6 @@ namespace VacationsPortal.Models
         public string FullName { get; set; }
     
         public virtual Employee Employee { get; set; }
+        public virtual City City { get; set; }
     }
 }

@@ -176,6 +176,7 @@ namespace VacationsPortal.Controllers
                 ViewBag.RolesList = new SelectList(_db.Roles.ToList(), "Id", "roleName");
                 ViewBag.WorkloadsList = new SelectList(_db.Workloads.ToList(), "Id", "WorkloadName");
                 ViewBag.CountriesList = new SelectList(_db.Countries.ToList(), "CountryName", "CountryName");
+                ViewBag.CitiesList = new SelectList(_db.Cities.ToList(), "Id", "Name");
                 return View();
             }
 
@@ -208,7 +209,6 @@ namespace VacationsPortal.Controllers
                     BasedOut = employeevm.BasedOut.CountryName,
                     UserName = employeevm.UserName,
                     Email = employeevm.UserName + "@microsoft.com",
-                    PassportNumber = employeevm.PassportNumber,
                     PhoneNumber = employeevm.PhoneNumber
                 };
 
@@ -321,7 +321,6 @@ namespace VacationsPortal.Controllers
                 UserName = contact.UserName,
                 HiringDate = contact.Employee.hiringDate,
                 Name = contact.FullName,
-                PassportNumber = contact.PassportNumber,
                 PhoneNumber = contact.PhoneNumber,
                 VacationBalance = contact.Employee.VacationBalance,
                 VacationsCarryOver = contact.Employee.VacationsCarryOver,
@@ -360,9 +359,9 @@ namespace VacationsPortal.Controllers
                     contact.FirstName = firstname;
                     contact.LastName = lastname;
                     contact.BasedOut = employeevm.BasedOut.CountryName;
+                    contact.City = employeevm.BaseCity;
                     contact.UserName = employeevm.UserName;
                     contact.Email = employeevm.UserName + "@microsoft.com";
-                    contact.PassportNumber = employeevm.PassportNumber;
                     contact.PhoneNumber = employeevm.PhoneNumber;
                     contact.Employee.VacationsCarryOver = employeevm.VacationsCarryOver;
                     contact.Employee.VacationBalance = employeevm.VacationBalance;

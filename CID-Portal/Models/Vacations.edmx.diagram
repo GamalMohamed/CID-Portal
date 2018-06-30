@@ -34,6 +34,9 @@
         <EntityTypeShape EntityType="CIDvNEXtModel.Country" Width="1.5" PointX="5" PointY="21" />
         <AssociationConnector Association="CIDvNEXtModel.FK_Countries_Countries" />
         <EntityTypeShape EntityType="CIDvNEXtModel.AuthUser" Width="1.5" PointX="10.375" PointY="5.75" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.City" Width="1.5" PointX="7.25" PointY="21.375" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Cities_Countries" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Contact_Cities" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -41,5 +41,6 @@ namespace VacationsPortal.Models
         public virtual DbSet<EmployeesView> EmployeesViews { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<AuthUser> AuthUsers { get; set; }
+        public virtual DbSet<City> Cities { get; set; }
     }
 }

@@ -18,8 +18,6 @@ namespace VacationsPortal.ViewModels
 
         public string PhoneNumber { get; set; }
 
-        public string PassportNumber { get; set; }
-
         public DateTime? HiringDate { get; set; }
 
         public Role Role { get; set; }
@@ -31,6 +29,8 @@ namespace VacationsPortal.ViewModels
         public Employee DirectLine { get; set; }
 
         public Employee DottedLine { get; set; }
+
+        public City BaseCity { get; set; }
 
         public int? VacationBalance { get; set; }
 

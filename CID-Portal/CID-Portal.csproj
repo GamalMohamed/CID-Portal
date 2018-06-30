@@ -164,6 +164,9 @@
     <Compile Include="Models\AuthUser.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\City.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\contact.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
