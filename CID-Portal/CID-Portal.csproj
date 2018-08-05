@@ -164,6 +164,12 @@
     <Compile Include="Models\AuthUser.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CashInAdvance.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CashInAdvanceStatu.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CIDW8RoleTypes.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
@@ -176,7 +182,13 @@
     <Compile Include="Models\Country.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Currency.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Employee.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EmployeeCountry.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EmployeesVacationDay.cs">
@@ -191,10 +203,46 @@
     <Compile Include="Models\EmployeeVacation.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ExpenseCategory.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ExpenseReportStatu.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ExpensesDetail.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ExpensesReport.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ExpensesSubCategoryType.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Hotel.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Role.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Route.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Subsidary.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TravelRequest.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TravelRequestStatu.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TRHotelInfo.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Trip.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TRItemsStatu.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\VacationBalanceBackUp.cs">
@@ -523,14 +571,18 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -541,6 +593,11 @@
     <Content Include="Views\Employees\Details.cshtml" />
     <Content Include="Views\Employees\Edit.cshtml" />
     <Content Include="Views\Employees\Index.cshtml" />
+    <Content Include="Views\FullExpenses\Create.cshtml" />
+    <Content Include="Views\FullExpenses\Delete.cshtml" />
+    <Content Include="Views\FullExpenses\Details.cshtml" />
+    <Content Include="Views\FullExpenses\Edit.cshtml" />
+    <Content Include="Views\FullExpenses\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

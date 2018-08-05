@@ -12,29 +12,28 @@ namespace VacationsPortal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class City
+    public partial class TRHotelInfo
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public City()
+        public TRHotelInfo()
         {
-            this.contacts = new HashSet<contact>();
-            this.Hotels = new HashSet<Hotel>();
             this.Routes = new HashSet<Route>();
-            this.Routes1 = new HashSet<Route>();
         }
     
         public int Id { get; set; }
-        public string Name { get; set; }
-        public int CountryID { get; set; }
+        public Nullable<int> TRID { get; set; }
+        public string CountryName { get; set; }
+        public Nullable<int> HotelId { get; set; }
+        public Nullable<double> HotelRate { get; set; }
+        public Nullable<int> PaymentMethodID { get; set; }
+        public System.DateTime CheckInDate { get; set; }
+        public System.DateTime CheckOutDate { get; set; }
+        public Nullable<int> CurrencyID { get; set; }
     
-        public virtual Country Country { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<contact> contacts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Hotel> Hotels { get; set; }
+        public virtual Currency Currency { get; set; }
+        public virtual Hotel Hotel { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Route> Routes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Route> Routes1 { get; set; }
+        public virtual TravelRequest TravelRequest { get; set; }
     }
 }

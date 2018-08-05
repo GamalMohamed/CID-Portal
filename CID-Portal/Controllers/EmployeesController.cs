@@ -19,10 +19,10 @@ namespace VacationsPortal.Controllers
 
         private bool IsUserAuthenticated()
         {
-            var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
-            var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
-            return authUser != null;
-            //return true;
+            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            //var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
+            //return authUser != null;
+            return true;
         }
 
         public ActionResult MarkResigned(int? id)

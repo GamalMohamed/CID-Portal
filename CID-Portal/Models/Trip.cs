@@ -12,29 +12,36 @@ namespace VacationsPortal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class City
+    public partial class Trip
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public City()
+        public Trip()
         {
-            this.contacts = new HashSet<contact>();
-            this.Hotels = new HashSet<Hotel>();
+            this.CashInAdvances = new HashSet<CashInAdvance>();
+            this.ExpensesReports = new HashSet<ExpensesReport>();
             this.Routes = new HashSet<Route>();
-            this.Routes1 = new HashSet<Route>();
         }
     
         public int Id { get; set; }
-        public string Name { get; set; }
-        public int CountryID { get; set; }
+        public Nullable<int> EmployeeId { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+        public Nullable<int> NumberofDays { get; set; }
+        public Nullable<int> NumberofWorkingDays { get; set; }
+        public Nullable<int> Status { get; set; }
+        public string ModifiedBy { get; set; }
+        public Nullable<System.DateTime> ModifiedOn { get; set; }
+        public Nullable<bool> Business { get; set; }
+        public Nullable<bool> IsCanceled { get; set; }
+        public Nullable<int> TRID { get; set; }
     
-        public virtual Country Country { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<contact> contacts { get; set; }
+        public virtual ICollection<CashInAdvance> CashInAdvances { get; set; }
+        public virtual Employee Employee { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Hotel> Hotels { get; set; }
+        public virtual ICollection<ExpensesReport> ExpensesReports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Route> Routes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Route> Routes1 { get; set; }
+        public virtual TravelRequest TravelRequest { get; set; }
     }
 }

@@ -43,5 +43,21 @@ namespace VacationsPortal.Models
         public virtual DbSet<AuthUser> AuthUsers { get; set; }
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<CIDW8RoleTypes> CIDW8RoleTypes { get; set; }
+        public virtual DbSet<CashInAdvance> CashInAdvances { get; set; }
+        public virtual DbSet<CashInAdvanceStatu> CashInAdvanceStatus { get; set; }
+        public virtual DbSet<Currency> Currencies { get; set; }
+        public virtual DbSet<EmployeeCountry> EmployeeCountries { get; set; }
+        public virtual DbSet<ExpenseCategory> ExpenseCategories { get; set; }
+        public virtual DbSet<ExpenseReportStatu> ExpenseReportStatus { get; set; }
+        public virtual DbSet<ExpensesDetail> ExpensesDetails { get; set; }
+        public virtual DbSet<ExpensesReport> ExpensesReports { get; set; }
+        public virtual DbSet<ExpensesSubCategoryType> ExpensesSubCategoryTypes { get; set; }
+        public virtual DbSet<Hotel> Hotels { get; set; }
+        public virtual DbSet<Route> Routes { get; set; }
+        public virtual DbSet<TravelRequest> TravelRequests { get; set; }
+        public virtual DbSet<TravelRequestStatu> TravelRequestStatus { get; set; }
+        public virtual DbSet<TRHotelInfo> TRHotelInfoes { get; set; }
+        public virtual DbSet<Trip> Trips { get; set; }
+        public virtual DbSet<TRItemsStatu> TRItemsStatus { get; set; }
     }
 }

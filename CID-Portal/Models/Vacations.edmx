@@ -14,6 +14,44 @@
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="Privilege" Type="int" />
         </EntityType>
+        <EntityType Name="CashInAdvance">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CurrencyID" Type="int" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ManagerApproverID" Type="int" />
+          <Property Name="OperationApproverID" Type="int" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="500" />
+          <Property Name="TripID" Type="int" />
+          <Property Name="RequestDate" Type="datetime" />
+          <Property Name="ManagerApprovalDate" Type="datetime" />
+          <Property Name="OperationApprovalDate" Type="datetime" />
+          <Property Name="CashInAdvanceStatus" Type="int" />
+          <Property Name="Paid" Type="bit" />
+          <Property Name="RejectionReason" Type="nvarchar(max)" />
+          <Property Name="ExchangeRate" Type="float" />
+          <Property Name="SettledAmount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="SettlementDate" Type="datetime" />
+          <Property Name="OperationsComment" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="CashInAdvanceStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="CashInAdvanceStatus" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CIA_ExpenseReport">
+          <Key>
+            <PropertyRef Name="ExpenseReportID" />
+            <PropertyRef Name="CashInAdvanceRequestID" />
+          </Key>
+          <Property Name="ExpenseReportID" Type="int" Nullable="false" />
+          <Property Name="CashInAdvanceRequestID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="CIDW8RoleTypes">
           <Key>
             <PropertyRef Name="Id" />
@@ -58,6 +96,32 @@
           <Property Name="CIADollarAveragePerDay" Type="float" />
           <Property Name="HotelAveragePerNight" Type="float" />
           <Property Name="ExpressLimitPerDay" Type="float" />
+        </EntityType>
+        <EntityType Name="CountriesCurrencies">
+          <Key>
+            <PropertyRef Name="CountryID" />
+            <PropertyRef Name="CurrencyID" />
+          </Key>
+          <Property Name="CountryID" Type="int" Nullable="false" />
+          <Property Name="CurrencyID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Currencies">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="CurrencyName" Type="nvarchar" MaxLength="20" />
+          <Property Name="ExchangeRate" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="Symbol" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="EmployeeCountries">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="CountryID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="CountryID" Type="int" Nullable="false" />
+          <Property Name="DateAdded" Type="datetime" />
         </EntityType>
         <EntityType Name="Employees">
           <Key>
@@ -133,12 +197,122 @@
           <Property Name="StartDate" Type="date" />
           <Property Name="EndDate" Type="date" />
         </EntityType>
+        <EntityType Name="ExpenseCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ExpenseName" Type="nvarchar" MaxLength="25" />
+          <Property Name="Opex" Type="int" />
+          <Property Name="NonTripType" Type="int" />
+          <Property Name="HasSubCategory" Type="bit" />
+        </EntityType>
+        <EntityType Name="ExpenseReportStatus">
+          <Key>
+            <PropertyRef Name="StatusID" />
+          </Key>
+          <Property Name="StatusID" Type="int" Nullable="false" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ExpensesDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExpensesDate" Type="datetime" />
+          <Property Name="ExpenseSubTypeID" Type="int" />
+          <Property Name="AmountInCurrency" Type="float" />
+          <Property Name="Currency" Type="int" Nullable="false" />
+          <Property Name="ExchangeRate" Type="float" />
+          <Property Name="AmountInUSD" Type="float" />
+          <Property Name="HasRecipt" Type="bit" />
+          <Property Name="SubmissionDate" Type="datetime" Nullable="false" />
+          <Property Name="ExpenseReportID" Type="int" />
+          <Property Name="ExpensesCategoryID" Type="int" Nullable="false" />
+          <Property Name="SubmissionSourceID" Type="int" />
+          <Property Name="USDExchange" Type="float" />
+          <Property Name="GeoID" Type="int" />
+          <Property Name="IOType" Type="varchar" MaxLength="10" />
+          <Property Name="Valid" Type="bit" />
+          <Property Name="Validated" Type="bit" />
+          <Property Name="RejectionReasonID" Type="int" />
+          <Property Name="RejectionMessage" Type="nvarchar(max)" />
+          <Property Name="RouteId" Type="int" />
+        </EntityType>
+        <EntityType Name="ExpensesReport">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApprovalDate" Type="datetime" />
+          <Property Name="TotalAmountInUSD" Type="float" />
+          <Property Name="SubmissionDate" Type="datetime" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="USDExchange" Type="float" />
+          <Property Name="TripID" Type="int" />
+          <Property Name="CreationDate" Type="datetime" />
+          <Property Name="ValidatorID" Type="int" />
+          <Property Name="ApproverID" Type="int" />
+          <Property Name="CashInAdvance" Type="float" />
+          <Property Name="ExpenseBrief" Type="ntext" />
+          <Property Name="StatusID" Type="int" />
+          <Property Name="ExceededLimitReason" Type="nvarchar" MaxLength="200" />
+          <Property Name="Title" Type="nvarchar" MaxLength="300" />
+          <Property Name="TotalAmountInEGP" Type="float" />
+          <Property Name="SettledAmount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="SettlementDate" Type="datetime" />
+          <Property Name="OperationsComment" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ExpensesSubCategoryTypes">
+          <Key>
+            <PropertyRef Name="ExpensesSubCategoryTypesId" />
+          </Key>
+          <Property Name="ExpensesSubCategoryTypesId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExpensesCategoryTypesId" Type="int" />
+          <Property Name="ExpensesSubTypeName" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Hotels">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="CityID" Type="int" Nullable="false" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="Roles">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="roleName" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="Route">
+          <Key>
+            <PropertyRef Name="routeId" />
+          </Key>
+          <Property Name="routeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tripId" Type="int" Nullable="false" />
+          <Property Name="arrivalDate" Type="datetime" />
+          <Property Name="toCountry" Type="int" />
+          <Property Name="fromCountry" Type="int" />
+          <Property Name="requireVisa" Type="bit" />
+          <Property Name="CityFrom" Type="int" />
+          <Property Name="CityTo" Type="int" />
+          <Property Name="HotelInfoId" Type="int" />
+          <Property Name="AccommodationRequested" Type="bit" />
+          <Property Name="FlightRequested" Type="bit" />
+          <Property Name="InvitationLetterRequested" Type="bit" />
+          <Property Name="HRLetterRequested" Type="bit" />
+          <Property Name="Rating" Type="int" />
+          <Property Name="VisaCost" Type="float" />
+          <Property Name="VisaCostCurrencyID" Type="int" />
+          <Property Name="VisaStatusID" Type="int" />
+          <Property Name="ForecastedFlight" Type="float" />
+          <Property Name="ForecastedAccommodation" Type="float" />
+          <Property Name="ForecastedExpenses" Type="float" />
+          <Property Name="ForecastedTotal" Type="float" />
+          <Property Name="HotelRating" Type="int" />
         </EntityType>
         <EntityType Name="Subsidaries">
           <Key>
@@ -148,6 +322,98 @@
           <Property Name="SubsidaryName" Type="nvarchar" MaxLength="50" />
           <Property Name="ChildSubName" Type="nvarchar" MaxLength="50" />
           <Property Name="FlightAverage" Type="float" />
+        </EntityType>
+        <EntityType Name="TravelRequests">
+          <Key>
+            <PropertyRef Name="TRID" />
+          </Key>
+          <Property Name="TRID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RequesterNotes" Type="nvarchar(max)" />
+          <Property Name="RequestedOn" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="TRStatusID" Type="int" />
+          <Property Name="FlightStatus" Type="int" />
+          <Property Name="TotalFlightCost" Type="float" />
+          <Property Name="HotelStatus" Type="int" />
+          <Property Name="VisaStatus" Type="int" />
+          <Property Name="HRLetterStatus" Type="int" />
+          <Property Name="InvitationLetterStatus" Type="int" />
+          <Property Name="OperationsNotes" Type="nvarchar(max)" />
+          <Property Name="ChangeRequestDate" Type="datetime" />
+          <Property Name="ChangeRequestReason" Type="nvarchar(max)" />
+          <Property Name="TravelRequestForm" Type="ntext" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="100" />
+          <Property Name="ExcelStatusId" Type="int" />
+          <Property Name="TotalReissueCost" Type="float" />
+          <Property Name="Rating" Type="int" />
+          <Property Name="RatingComment" Type="nvarchar(max)" />
+          <Property Name="TotalFlightCostCurrencyID" Type="int" />
+          <Property Name="TotalHotelCost" Type="float" />
+          <Property Name="TotalHotelCostCurrencyID" Type="int" />
+          <Property Name="TotalReissueCost2" Type="float" />
+          <Property Name="TotalReissueCost3" Type="float" />
+          <Property Name="FlightRefundCost" Type="float" />
+          <Property Name="ForcastedFlightsCost" Type="float" />
+          <Property Name="ForcastedAccommodationCost" Type="float" />
+          <Property Name="ForcastedExpenses" Type="float" />
+          <Property Name="ForcastedTotal" Type="float" />
+          <Property Name="TotalFlightCost2" Type="float" />
+          <Property Name="TotalFlightCostCurrencyID2" Type="int" />
+          <Property Name="FlightInvoiceStatus" Type="int" />
+          <Property Name="FlightInvoiceStatus2" Type="int" />
+          <Property Name="TotalReissueStatus" Type="int" />
+          <Property Name="TotalReissueStatus2" Type="int" />
+          <Property Name="TotalReissueStatus3" Type="int" />
+          <Property Name="VisaInvoiceStatus" Type="int" />
+          <Property Name="HoteInvoiceStatus" Type="int" />
+          <Property Name="PoStatus" Type="int" />
+          <Property Name="FlightRefundInvoiceStatus" Type="int" />
+        </EntityType>
+        <EntityType Name="TravelRequestStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TRHotelInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TRID" Type="int" />
+          <Property Name="CountryName" Type="nchar" MaxLength="400" Nullable="false" />
+          <Property Name="HotelId" Type="int" />
+          <Property Name="HotelRate" Type="float" />
+          <Property Name="PaymentMethodID" Type="int" />
+          <Property Name="CheckInDate" Type="datetime" Nullable="false" />
+          <Property Name="CheckOutDate" Type="datetime" Nullable="false" />
+          <Property Name="CurrencyID" Type="int" />
+        </EntityType>
+        <EntityType Name="Trips">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="NumberofDays" Type="int" />
+          <Property Name="NumberofWorkingDays" Type="int" />
+          <Property Name="Status" Type="int" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="150" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="Business" Type="bit" />
+          <Property Name="IsCanceled" Type="bit" />
+          <Property Name="TRID" Type="int" />
+        </EntityType>
+        <EntityType Name="TRItemsStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="VacationBalanceBackUp">
           <Key>
@@ -250,6 +516,176 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Route__HotelInfo">
+          <End Role="TRHotelInfo" Type="Self.TRHotelInfo" Multiplicity="0..1" />
+          <End Role="Route" Type="Self.Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRHotelInfo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="HotelInfoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TravelReq__Fligh__04BA9F53">
+          <End Role="TRItemsStatus" Type="Self.TRItemsStatus" Multiplicity="0..1" />
+          <End Role="TravelRequests" Type="Self.TravelRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequests">
+              <PropertyRef Name="FlightStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TravelReq__Hotel__00EA0E6F">
+          <End Role="TRItemsStatus" Type="Self.TRItemsStatus" Multiplicity="0..1" />
+          <End Role="TravelRequests" Type="Self.TravelRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequests">
+              <PropertyRef Name="HotelStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TravelReq__HRLet__02D256E1">
+          <End Role="TRItemsStatus" Type="Self.TRItemsStatus" Multiplicity="0..1" />
+          <End Role="TravelRequests" Type="Self.TravelRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequests">
+              <PropertyRef Name="HRLetterStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TravelReq__Invit__03C67B1A">
+          <End Role="TRItemsStatus" Type="Self.TRItemsStatus" Multiplicity="0..1" />
+          <End Role="TravelRequests" Type="Self.TravelRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequests">
+              <PropertyRef Name="InvitationLetterStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TravelReq__PoSta__5125ECB4">
+          <End Role="TRItemsStatus" Type="Self.TRItemsStatus" Multiplicity="0..1" />
+          <End Role="TravelRequests" Type="Self.TravelRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequests">
+              <PropertyRef Name="PoStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TravelReq__VisaS__01DE32A8">
+          <End Role="TRItemsStatus" Type="Self.TRItemsStatus" Multiplicity="0..1" />
+          <End Role="TravelRequests" Type="Self.TravelRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequests">
+              <PropertyRef Name="VisaStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashInAdvance_CashInAdvanceStatus">
+          <End Role="CashInAdvanceStatus" Type="Self.CashInAdvanceStatus" Multiplicity="0..1" />
+          <End Role="CashInAdvance" Type="Self.CashInAdvance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CashInAdvanceStatus">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CashInAdvance">
+              <PropertyRef Name="CashInAdvanceStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashInAdvance_Currencies">
+          <End Role="Currencies" Type="Self.Currencies" Multiplicity="1" />
+          <End Role="CashInAdvance" Type="Self.CashInAdvance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currencies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CashInAdvance">
+              <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashInAdvance_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="CashInAdvance" Type="Self.CashInAdvance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CashInAdvance">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashInAdvance_Trips">
+          <End Role="Trips" Type="Self.Trips" Multiplicity="0..1" />
+          <End Role="CashInAdvance" Type="Self.CashInAdvance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trips">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CashInAdvance">
+              <PropertyRef Name="TripID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashInAdvanceadminApprover">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="CashInAdvance" Type="Self.CashInAdvance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CashInAdvance">
+              <PropertyRef Name="OperationApproverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashInAdvanceManagerApprover">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="CashInAdvance" Type="Self.CashInAdvance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CashInAdvance">
+              <PropertyRef Name="ManagerApproverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CIA_ExpenseReport_CashInAdvance">
+          <End Role="CashInAdvance" Type="Self.CashInAdvance" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CIA_ExpenseReport" Type="Self.CIA_ExpenseReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CashInAdvance">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CIA_ExpenseReport">
+              <PropertyRef Name="CashInAdvanceRequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Cities_Countries">
           <End Role="Countries" Type="Self.Countries" Multiplicity="1" />
           <End Role="Cities" Type="Self.Cities" Multiplicity="*" />
@@ -283,6 +719,54 @@
             </Principal>
             <Dependent Role="Countries">
               <PropertyRef Name="SubsidaryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CountriesCurrencies_Countries">
+          <End Role="Countries" Type="Self.Countries" Multiplicity="1" />
+          <End Role="CountriesCurrencies" Type="Self.CountriesCurrencies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CountriesCurrencies">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CountriesCurrencies_Currencies">
+          <End Role="Currencies" Type="Self.Currencies" Multiplicity="1" />
+          <End Role="CountriesCurrencies" Type="Self.CountriesCurrencies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currencies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CountriesCurrencies">
+              <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeCountries_Countries">
+          <End Role="Countries" Type="Self.Countries" Multiplicity="1" />
+          <End Role="EmployeeCountries" Type="Self.EmployeeCountries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeeCountries">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeCountries_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="EmployeeCountries" Type="Self.EmployeeCountries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeeCountries">
+              <PropertyRef Name="EmployeeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -358,6 +842,338 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ExpenseReportCIARequest">
+          <End Role="ExpensesReport" Type="Self.ExpensesReport" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CIA_ExpenseReport" Type="Self.CIA_ExpenseReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpensesReport">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CIA_ExpenseReport">
+              <PropertyRef Name="ExpenseReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpenseReportStatus">
+          <End Role="ExpenseReportStatus" Type="Self.ExpenseReportStatus" Multiplicity="0..1" />
+          <End Role="ExpensesReport" Type="Self.ExpensesReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpenseReportStatus">
+              <PropertyRef Name="StatusID" />
+            </Principal>
+            <Dependent Role="ExpensesReport">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesDetails_Countries">
+          <End Role="Countries" Type="Self.Countries" Multiplicity="0..1" />
+          <End Role="ExpensesDetails" Type="Self.ExpensesDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExpensesDetails">
+              <PropertyRef Name="GeoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesDetails_Currency">
+          <End Role="Currencies" Type="Self.Currencies" Multiplicity="1" />
+          <End Role="ExpensesDetails" Type="Self.ExpensesDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currencies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ExpensesDetails">
+              <PropertyRef Name="Currency" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesDetails_ExpenseCategory">
+          <End Role="ExpenseCategory" Type="Self.ExpenseCategory" Multiplicity="1" />
+          <End Role="ExpensesDetails" Type="Self.ExpensesDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpenseCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ExpensesDetails">
+              <PropertyRef Name="ExpensesCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesDetails_ExpensesReport">
+          <End Role="ExpensesReport" Type="Self.ExpensesReport" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ExpensesDetails" Type="Self.ExpensesDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpensesReport">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ExpensesDetails">
+              <PropertyRef Name="ExpenseReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesDetails_ExpenseSubTypeID">
+          <End Role="ExpensesSubCategoryTypes" Type="Self.ExpensesSubCategoryTypes" Multiplicity="0..1" />
+          <End Role="ExpensesDetails" Type="Self.ExpensesDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpensesSubCategoryTypes">
+              <PropertyRef Name="ExpensesSubCategoryTypesId" />
+            </Principal>
+            <Dependent Role="ExpensesDetails">
+              <PropertyRef Name="ExpenseSubTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesDetails_Route">
+          <End Role="Route" Type="Self.Route" Multiplicity="0..1" />
+          <End Role="ExpensesDetails" Type="Self.ExpensesDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Route">
+              <PropertyRef Name="routeId" />
+            </Principal>
+            <Dependent Role="ExpensesDetails">
+              <PropertyRef Name="RouteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesReport_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="ExpensesReport" Type="Self.ExpensesReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExpensesReport">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesReport_Employees1">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="ExpensesReport" Type="Self.ExpensesReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExpensesReport">
+              <PropertyRef Name="ValidatorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesReport_Employees2">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="ExpensesReport" Type="Self.ExpensesReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExpensesReport">
+              <PropertyRef Name="ApproverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesReport_Trips">
+          <End Role="Trips" Type="Self.Trips" Multiplicity="0..1" />
+          <End Role="ExpensesReport" Type="Self.ExpensesReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trips">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExpensesReport">
+              <PropertyRef Name="TripID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hotels_Cities">
+          <End Role="Cities" Type="Self.Cities" Multiplicity="1" />
+          <End Role="Hotels" Type="Self.Hotels" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cities">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Hotels">
+              <PropertyRef Name="CityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Route_CitiesFrom">
+          <End Role="Cities" Type="Self.Cities" Multiplicity="0..1" />
+          <End Role="Route" Type="Self.Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cities">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="CityFrom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Route_CitiesTo">
+          <End Role="Cities" Type="Self.Cities" Multiplicity="0..1" />
+          <End Role="Route" Type="Self.Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cities">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="CityTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Route_Countries">
+          <End Role="Countries" Type="Self.Countries" Multiplicity="0..1" />
+          <End Role="Route" Type="Self.Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="toCountry" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Route_Countries1">
+          <End Role="Countries" Type="Self.Countries" Multiplicity="0..1" />
+          <End Role="Route" Type="Self.Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Countries">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="fromCountry" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Route_Trips">
+          <End Role="Trips" Type="Self.Trips" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Route" Type="Self.Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trips">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="tripId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RouteVisa_Currencies">
+          <End Role="Currencies" Type="Self.Currencies" Multiplicity="0..1" />
+          <End Role="Route" Type="Self.Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currencies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="VisaCostCurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RouteVisaStatus_TRItemsStatus">
+          <End Role="TRItemsStatus" Type="Self.TRItemsStatus" Multiplicity="0..1" />
+          <End Role="Route" Type="Self.Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="VisaStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TR_TRStatus">
+          <End Role="TravelRequestStatus" Type="Self.TravelRequestStatus" Multiplicity="0..1" />
+          <End Role="TravelRequests" Type="Self.TravelRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelRequestStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequests">
+              <PropertyRef Name="TRStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelRequestsTotalFlightCost_Currencies">
+          <End Role="Currencies" Type="Self.Currencies" Multiplicity="0..1" />
+          <End Role="TravelRequests" Type="Self.TravelRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currencies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TravelRequests">
+              <PropertyRef Name="TotalFlightCostCurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelRequestsTotalHotelCost_Currencies">
+          <End Role="Currencies" Type="Self.Currencies" Multiplicity="0..1" />
+          <End Role="TravelRequests" Type="Self.TravelRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currencies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TravelRequests">
+              <PropertyRef Name="TotalHotelCostCurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRHotelInfo_Currencies">
+          <End Role="Currencies" Type="Self.Currencies" Multiplicity="0..1" />
+          <End Role="TRHotelInfo" Type="Self.TRHotelInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currencies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TRHotelInfo">
+              <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRHotelInfo_Hotels">
+          <End Role="Hotels" Type="Self.Hotels" Multiplicity="0..1" />
+          <End Role="TRHotelInfo" Type="Self.TRHotelInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hotels">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TRHotelInfo">
+              <PropertyRef Name="HotelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRHotelInfo_TravelRequests">
+          <End Role="TravelRequests" Type="Self.TravelRequests" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TRHotelInfo" Type="Self.TRHotelInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelRequests">
+              <PropertyRef Name="TRID" />
+            </Principal>
+            <Dependent Role="TRHotelInfo">
+              <PropertyRef Name="TRID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Trips_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="Trips" Type="Self.Trips" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Trips">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_VacationsHistory_Employees">
           <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
           <End Role="VacationsHistory" Type="Self.VacationsHistory" Multiplicity="*" />
@@ -406,19 +1222,61 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="TotalFlight2_Currency">
+          <End Role="Currencies" Type="Self.Currencies" Multiplicity="0..1" />
+          <End Role="TravelRequests" Type="Self.TravelRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currencies">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TravelRequests">
+              <PropertyRef Name="TotalFlightCostCurrencyID2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Trips_TRequests">
+          <End Role="TravelRequests" Type="Self.TravelRequests" Multiplicity="0..1" />
+          <End Role="Trips" Type="Self.Trips" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelRequests">
+              <PropertyRef Name="TRID" />
+            </Principal>
+            <Dependent Role="Trips">
+              <PropertyRef Name="TRID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CIDvNEXtModelStoreContainer">
           <EntitySet Name="AuthUsers" EntityType="Self.AuthUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CashInAdvance" EntityType="Self.CashInAdvance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CashInAdvanceStatus" EntityType="Self.CashInAdvanceStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CIA_ExpenseReport" EntityType="Self.CIA_ExpenseReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CIDW8RoleTypes" EntityType="Self.CIDW8RoleTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cities" EntityType="Self.Cities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="contact" EntityType="Self.contact" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Countries" EntityType="Self.Countries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CountriesCurrencies" EntityType="Self.CountriesCurrencies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Currencies" EntityType="Self.Currencies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeCountries" EntityType="Self.EmployeeCountries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeesVacationDays" EntityType="Self.EmployeesVacationDays" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeesView" EntityType="Self.EmployeesView" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeesWeekendDays" EntityType="Self.EmployeesWeekendDays" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeVacation" EntityType="Self.EmployeeVacation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpenseCategory" EntityType="Self.ExpenseCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpenseReportStatus" EntityType="Self.ExpenseReportStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpensesDetails" EntityType="Self.ExpensesDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpensesReport" EntityType="Self.ExpensesReport" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpensesSubCategoryTypes" EntityType="Self.ExpensesSubCategoryTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Hotels" EntityType="Self.Hotels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Route" EntityType="Self.Route" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subsidaries" EntityType="Self.Subsidaries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TravelRequests" EntityType="Self.TravelRequests" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TravelRequestStatus" EntityType="Self.TravelRequestStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TRHotelInfo" EntityType="Self.TRHotelInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Trips" EntityType="Self.Trips" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TRItemsStatus" EntityType="Self.TRItemsStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VacationBalanceBackUp" EntityType="Self.VacationBalanceBackUp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VacationsHistory" EntityType="Self.VacationsHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VacationsLog" EntityType="Self.VacationsLog" Schema="dbo" store:Type="Tables" />
@@ -437,6 +1295,62 @@
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Employees" EntitySet="Employees" />
           </AssociationSet>
+          <AssociationSet Name="FK__Route__HotelInfo" Association="Self.FK__Route__HotelInfo">
+            <End Role="TRHotelInfo" EntitySet="TRHotelInfo" />
+            <End Role="Route" EntitySet="Route" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TravelReq__Fligh__04BA9F53" Association="Self.FK__TravelReq__Fligh__04BA9F53">
+            <End Role="TRItemsStatus" EntitySet="TRItemsStatus" />
+            <End Role="TravelRequests" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TravelReq__Hotel__00EA0E6F" Association="Self.FK__TravelReq__Hotel__00EA0E6F">
+            <End Role="TRItemsStatus" EntitySet="TRItemsStatus" />
+            <End Role="TravelRequests" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TravelReq__HRLet__02D256E1" Association="Self.FK__TravelReq__HRLet__02D256E1">
+            <End Role="TRItemsStatus" EntitySet="TRItemsStatus" />
+            <End Role="TravelRequests" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TravelReq__Invit__03C67B1A" Association="Self.FK__TravelReq__Invit__03C67B1A">
+            <End Role="TRItemsStatus" EntitySet="TRItemsStatus" />
+            <End Role="TravelRequests" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TravelReq__PoSta__5125ECB4" Association="Self.FK__TravelReq__PoSta__5125ECB4">
+            <End Role="TRItemsStatus" EntitySet="TRItemsStatus" />
+            <End Role="TravelRequests" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TravelReq__VisaS__01DE32A8" Association="Self.FK__TravelReq__VisaS__01DE32A8">
+            <End Role="TRItemsStatus" EntitySet="TRItemsStatus" />
+            <End Role="TravelRequests" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashInAdvance_CashInAdvanceStatus" Association="Self.FK_CashInAdvance_CashInAdvanceStatus">
+            <End Role="CashInAdvanceStatus" EntitySet="CashInAdvanceStatus" />
+            <End Role="CashInAdvance" EntitySet="CashInAdvance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashInAdvance_Currencies" Association="Self.FK_CashInAdvance_Currencies">
+            <End Role="Currencies" EntitySet="Currencies" />
+            <End Role="CashInAdvance" EntitySet="CashInAdvance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashInAdvance_Employees" Association="Self.FK_CashInAdvance_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="CashInAdvance" EntitySet="CashInAdvance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashInAdvance_Trips" Association="Self.FK_CashInAdvance_Trips">
+            <End Role="Trips" EntitySet="Trips" />
+            <End Role="CashInAdvance" EntitySet="CashInAdvance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashInAdvanceadminApprover" Association="Self.FK_CashInAdvanceadminApprover">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="CashInAdvance" EntitySet="CashInAdvance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashInAdvanceManagerApprover" Association="Self.FK_CashInAdvanceManagerApprover">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="CashInAdvance" EntitySet="CashInAdvance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CIA_ExpenseReport_CashInAdvance" Association="Self.FK_CIA_ExpenseReport_CashInAdvance">
+            <End Role="CashInAdvance" EntitySet="CashInAdvance" />
+            <End Role="CIA_ExpenseReport" EntitySet="CIA_ExpenseReport" />
+          </AssociationSet>
           <AssociationSet Name="FK_Cities_Countries" Association="Self.FK_Cities_Countries">
             <End Role="Countries" EntitySet="Countries" />
             <End Role="Cities" EntitySet="Cities" />
@@ -448,6 +1362,22 @@
           <AssociationSet Name="FK_Countries_Countries" Association="Self.FK_Countries_Countries">
             <End Role="Subsidaries" EntitySet="Subsidaries" />
             <End Role="Countries" EntitySet="Countries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CountriesCurrencies_Countries" Association="Self.FK_CountriesCurrencies_Countries">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="CountriesCurrencies" EntitySet="CountriesCurrencies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CountriesCurrencies_Currencies" Association="Self.FK_CountriesCurrencies_Currencies">
+            <End Role="Currencies" EntitySet="Currencies" />
+            <End Role="CountriesCurrencies" EntitySet="CountriesCurrencies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeCountries_Countries" Association="Self.FK_EmployeeCountries_Countries">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="EmployeeCountries" EntitySet="EmployeeCountries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeCountries_Employees" Association="Self.FK_EmployeeCountries_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="EmployeeCountries" EntitySet="EmployeeCountries" />
           </AssociationSet>
           <AssociationSet Name="FK_Employees_CIDW8RoleTypes" Association="Self.FK_Employees_CIDW8RoleTypes">
             <End Role="CIDW8RoleTypes" EntitySet="CIDW8RoleTypes" />
@@ -473,6 +1403,114 @@
             <End Role="Employees" EntitySet="Employees" />
             <End Role="EmployeesWeekendDays" EntitySet="EmployeesWeekendDays" />
           </AssociationSet>
+          <AssociationSet Name="FK_ExpenseReportCIARequest" Association="Self.FK_ExpenseReportCIARequest">
+            <End Role="ExpensesReport" EntitySet="ExpensesReport" />
+            <End Role="CIA_ExpenseReport" EntitySet="CIA_ExpenseReport" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpenseReportStatus" Association="Self.FK_ExpenseReportStatus">
+            <End Role="ExpenseReportStatus" EntitySet="ExpenseReportStatus" />
+            <End Role="ExpensesReport" EntitySet="ExpensesReport" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesDetails_Countries" Association="Self.FK_ExpensesDetails_Countries">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="ExpensesDetails" EntitySet="ExpensesDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesDetails_Currency" Association="Self.FK_ExpensesDetails_Currency">
+            <End Role="Currencies" EntitySet="Currencies" />
+            <End Role="ExpensesDetails" EntitySet="ExpensesDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesDetails_ExpenseCategory" Association="Self.FK_ExpensesDetails_ExpenseCategory">
+            <End Role="ExpenseCategory" EntitySet="ExpenseCategory" />
+            <End Role="ExpensesDetails" EntitySet="ExpensesDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesDetails_ExpensesReport" Association="Self.FK_ExpensesDetails_ExpensesReport">
+            <End Role="ExpensesReport" EntitySet="ExpensesReport" />
+            <End Role="ExpensesDetails" EntitySet="ExpensesDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesDetails_ExpenseSubTypeID" Association="Self.FK_ExpensesDetails_ExpenseSubTypeID">
+            <End Role="ExpensesSubCategoryTypes" EntitySet="ExpensesSubCategoryTypes" />
+            <End Role="ExpensesDetails" EntitySet="ExpensesDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesDetails_Route" Association="Self.FK_ExpensesDetails_Route">
+            <End Role="Route" EntitySet="Route" />
+            <End Role="ExpensesDetails" EntitySet="ExpensesDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesReport_Employees" Association="Self.FK_ExpensesReport_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="ExpensesReport" EntitySet="ExpensesReport" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesReport_Employees1" Association="Self.FK_ExpensesReport_Employees1">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="ExpensesReport" EntitySet="ExpensesReport" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesReport_Employees2" Association="Self.FK_ExpensesReport_Employees2">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="ExpensesReport" EntitySet="ExpensesReport" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesReport_Trips" Association="Self.FK_ExpensesReport_Trips">
+            <End Role="Trips" EntitySet="Trips" />
+            <End Role="ExpensesReport" EntitySet="ExpensesReport" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hotels_Cities" Association="Self.FK_Hotels_Cities">
+            <End Role="Cities" EntitySet="Cities" />
+            <End Role="Hotels" EntitySet="Hotels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Route_CitiesFrom" Association="Self.FK_Route_CitiesFrom">
+            <End Role="Cities" EntitySet="Cities" />
+            <End Role="Route" EntitySet="Route" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Route_CitiesTo" Association="Self.FK_Route_CitiesTo">
+            <End Role="Cities" EntitySet="Cities" />
+            <End Role="Route" EntitySet="Route" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Route_Countries" Association="Self.FK_Route_Countries">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="Route" EntitySet="Route" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Route_Countries1" Association="Self.FK_Route_Countries1">
+            <End Role="Countries" EntitySet="Countries" />
+            <End Role="Route" EntitySet="Route" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Route_Trips" Association="Self.FK_Route_Trips">
+            <End Role="Trips" EntitySet="Trips" />
+            <End Role="Route" EntitySet="Route" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RouteVisa_Currencies" Association="Self.FK_RouteVisa_Currencies">
+            <End Role="Currencies" EntitySet="Currencies" />
+            <End Role="Route" EntitySet="Route" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RouteVisaStatus_TRItemsStatus" Association="Self.FK_RouteVisaStatus_TRItemsStatus">
+            <End Role="TRItemsStatus" EntitySet="TRItemsStatus" />
+            <End Role="Route" EntitySet="Route" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TR_TRStatus" Association="Self.FK_TR_TRStatus">
+            <End Role="TravelRequestStatus" EntitySet="TravelRequestStatus" />
+            <End Role="TravelRequests" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelRequestsTotalFlightCost_Currencies" Association="Self.FK_TravelRequestsTotalFlightCost_Currencies">
+            <End Role="Currencies" EntitySet="Currencies" />
+            <End Role="TravelRequests" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelRequestsTotalHotelCost_Currencies" Association="Self.FK_TravelRequestsTotalHotelCost_Currencies">
+            <End Role="Currencies" EntitySet="Currencies" />
+            <End Role="TravelRequests" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRHotelInfo_Currencies" Association="Self.FK_TRHotelInfo_Currencies">
+            <End Role="Currencies" EntitySet="Currencies" />
+            <End Role="TRHotelInfo" EntitySet="TRHotelInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRHotelInfo_Hotels" Association="Self.FK_TRHotelInfo_Hotels">
+            <End Role="Hotels" EntitySet="Hotels" />
+            <End Role="TRHotelInfo" EntitySet="TRHotelInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRHotelInfo_TravelRequests" Association="Self.FK_TRHotelInfo_TravelRequests">
+            <End Role="TravelRequests" EntitySet="TravelRequests" />
+            <End Role="TRHotelInfo" EntitySet="TRHotelInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Trips_Employees" Association="Self.FK_Trips_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Trips" EntitySet="Trips" />
+          </AssociationSet>
           <AssociationSet Name="FK_VacationsHistory_Employees" Association="Self.FK_VacationsHistory_Employees">
             <End Role="Employees" EntitySet="Employees" />
             <End Role="VacationsHistory" EntitySet="VacationsHistory" />
@@ -488,6 +1526,14 @@
           <AssociationSet Name="FK_VacationsLog_Employees" Association="Self.FK_VacationsLog_Employees">
             <End Role="Employees" EntitySet="Employees" />
             <End Role="VacationsLog" EntitySet="VacationsLog" />
+          </AssociationSet>
+          <AssociationSet Name="TotalFlight2_Currency" Association="Self.TotalFlight2_Currency">
+            <End Role="Currencies" EntitySet="Currencies" />
+            <End Role="TravelRequests" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="Trips_TRequests" Association="Self.Trips_TRequests">
+            <End Role="TravelRequests" EntitySet="TravelRequests" />
+            <End Role="Trips" EntitySet="Trips" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -556,6 +1602,14 @@
           <NavigationProperty Name="VacationsHistories" Relationship="Self.FK_VacationsHistory_Employees" FromRole="Employees" ToRole="VacationsHistory" />
           <NavigationProperty Name="VacationsLogs" Relationship="Self.FK_VacationsLog_Employees" FromRole="Employees" ToRole="VacationsLog" />
           <NavigationProperty Name="CIDW8RoleTypes" Relationship="CIDvNEXtModel.FK_Employees_CIDW8RoleTypes" FromRole="Employee" ToRole="CIDW8RoleTypes" />
+          <NavigationProperty Name="CashInAdvances" Relationship="CIDvNEXtModel.FK_CashInAdvance_Employees" FromRole="Employee" ToRole="CashInAdvance" />
+          <NavigationProperty Name="CashInAdvances1" Relationship="CIDvNEXtModel.FK_CashInAdvanceadminApprover" FromRole="Employee" ToRole="CashInAdvance" />
+          <NavigationProperty Name="CashInAdvances2" Relationship="CIDvNEXtModel.FK_CashInAdvanceManagerApprover" FromRole="Employee" ToRole="CashInAdvance" />
+          <NavigationProperty Name="EmployeeCountries" Relationship="CIDvNEXtModel.FK_EmployeeCountries_Employees" FromRole="Employee" ToRole="EmployeeCountry" />
+          <NavigationProperty Name="ExpensesReports" Relationship="CIDvNEXtModel.FK_ExpensesReport_Employees" FromRole="Employee" ToRole="ExpensesReport" />
+          <NavigationProperty Name="ExpensesReports1" Relationship="CIDvNEXtModel.FK_ExpensesReport_Employees1" FromRole="Employee" ToRole="ExpensesReport" />
+          <NavigationProperty Name="ExpensesReports2" Relationship="CIDvNEXtModel.FK_ExpensesReport_Employees2" FromRole="Employee" ToRole="ExpensesReport" />
+          <NavigationProperty Name="Trips" Relationship="CIDvNEXtModel.FK_Trips_Employees" FromRole="Employee" ToRole="Trip" />
         </EntityType>
         <EntityType Name="EmployeesVacationDay">
           <Key>
@@ -903,6 +1957,202 @@
             <End Role="CIDW8RoleTypes" EntitySet="CIDW8RoleTypes" />
             <End Role="Employee" EntitySet="Employees" />
           </AssociationSet>
+          <EntitySet Name="CashInAdvances" EntityType="CIDvNEXtModel.CashInAdvance" />
+          <EntitySet Name="CashInAdvanceStatus" EntityType="CIDvNEXtModel.CashInAdvanceStatu" />
+          <EntitySet Name="Currencies" EntityType="CIDvNEXtModel.Currency" />
+          <EntitySet Name="EmployeeCountries" EntityType="CIDvNEXtModel.EmployeeCountry" />
+          <EntitySet Name="ExpenseCategories" EntityType="CIDvNEXtModel.ExpenseCategory" />
+          <EntitySet Name="ExpenseReportStatus" EntityType="CIDvNEXtModel.ExpenseReportStatu" />
+          <EntitySet Name="ExpensesDetails" EntityType="CIDvNEXtModel.ExpensesDetail" />
+          <EntitySet Name="ExpensesReports" EntityType="CIDvNEXtModel.ExpensesReport" />
+          <EntitySet Name="ExpensesSubCategoryTypes" EntityType="CIDvNEXtModel.ExpensesSubCategoryType" />
+          <EntitySet Name="Hotels" EntityType="CIDvNEXtModel.Hotel" />
+          <EntitySet Name="Routes" EntityType="CIDvNEXtModel.Route" />
+          <EntitySet Name="TravelRequests" EntityType="CIDvNEXtModel.TravelRequest" />
+          <EntitySet Name="TravelRequestStatus" EntityType="CIDvNEXtModel.TravelRequestStatu" />
+          <EntitySet Name="TRHotelInfoes" EntityType="CIDvNEXtModel.TRHotelInfo" />
+          <EntitySet Name="Trips" EntityType="CIDvNEXtModel.Trip" />
+          <EntitySet Name="TRItemsStatus" EntityType="CIDvNEXtModel.TRItemsStatu" />
+          <AssociationSet Name="FK_CashInAdvance_CashInAdvanceStatus" Association="CIDvNEXtModel.FK_CashInAdvance_CashInAdvanceStatus">
+            <End Role="CashInAdvanceStatu" EntitySet="CashInAdvanceStatus" />
+            <End Role="CashInAdvance" EntitySet="CashInAdvances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashInAdvance_Currencies" Association="CIDvNEXtModel.FK_CashInAdvance_Currencies">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="CashInAdvance" EntitySet="CashInAdvances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashInAdvance_Employees" Association="CIDvNEXtModel.FK_CashInAdvance_Employees">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="CashInAdvance" EntitySet="CashInAdvances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashInAdvance_Trips" Association="CIDvNEXtModel.FK_CashInAdvance_Trips">
+            <End Role="Trip" EntitySet="Trips" />
+            <End Role="CashInAdvance" EntitySet="CashInAdvances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashInAdvanceadminApprover" Association="CIDvNEXtModel.FK_CashInAdvanceadminApprover">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="CashInAdvance" EntitySet="CashInAdvances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CashInAdvanceManagerApprover" Association="CIDvNEXtModel.FK_CashInAdvanceManagerApprover">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="CashInAdvance" EntitySet="CashInAdvances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hotels_Cities" Association="CIDvNEXtModel.FK_Hotels_Cities">
+            <End Role="City" EntitySet="Cities" />
+            <End Role="Hotel" EntitySet="Hotels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Route_CitiesFrom" Association="CIDvNEXtModel.FK_Route_CitiesFrom">
+            <End Role="City" EntitySet="Cities" />
+            <End Role="Route" EntitySet="Routes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Route_CitiesTo" Association="CIDvNEXtModel.FK_Route_CitiesTo">
+            <End Role="City" EntitySet="Cities" />
+            <End Role="Route" EntitySet="Routes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeCountries_Countries" Association="CIDvNEXtModel.FK_EmployeeCountries_Countries">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="EmployeeCountry" EntitySet="EmployeeCountries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesDetails_Countries" Association="CIDvNEXtModel.FK_ExpensesDetails_Countries">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="ExpensesDetail" EntitySet="ExpensesDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Route_Countries" Association="CIDvNEXtModel.FK_Route_Countries">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="Route" EntitySet="Routes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Route_Countries1" Association="CIDvNEXtModel.FK_Route_Countries1">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="Route" EntitySet="Routes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesDetails_Currency" Association="CIDvNEXtModel.FK_ExpensesDetails_Currency">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="ExpensesDetail" EntitySet="ExpensesDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RouteVisa_Currencies" Association="CIDvNEXtModel.FK_RouteVisa_Currencies">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="Route" EntitySet="Routes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelRequestsTotalFlightCost_Currencies" Association="CIDvNEXtModel.FK_TravelRequestsTotalFlightCost_Currencies">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="TravelRequest" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelRequestsTotalHotelCost_Currencies" Association="CIDvNEXtModel.FK_TravelRequestsTotalHotelCost_Currencies">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="TravelRequest" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRHotelInfo_Currencies" Association="CIDvNEXtModel.FK_TRHotelInfo_Currencies">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="TRHotelInfo" EntitySet="TRHotelInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="TotalFlight2_Currency" Association="CIDvNEXtModel.TotalFlight2_Currency">
+            <End Role="Currency" EntitySet="Currencies" />
+            <End Role="TravelRequest" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeCountries_Employees" Association="CIDvNEXtModel.FK_EmployeeCountries_Employees">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmployeeCountry" EntitySet="EmployeeCountries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesReport_Employees" Association="CIDvNEXtModel.FK_ExpensesReport_Employees">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="ExpensesReport" EntitySet="ExpensesReports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesReport_Employees1" Association="CIDvNEXtModel.FK_ExpensesReport_Employees1">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="ExpensesReport" EntitySet="ExpensesReports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesReport_Employees2" Association="CIDvNEXtModel.FK_ExpensesReport_Employees2">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="ExpensesReport" EntitySet="ExpensesReports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Trips_Employees" Association="CIDvNEXtModel.FK_Trips_Employees">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Trip" EntitySet="Trips" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesDetails_ExpenseCategory" Association="CIDvNEXtModel.FK_ExpensesDetails_ExpenseCategory">
+            <End Role="ExpenseCategory" EntitySet="ExpenseCategories" />
+            <End Role="ExpensesDetail" EntitySet="ExpensesDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpenseReportStatus" Association="CIDvNEXtModel.FK_ExpenseReportStatus">
+            <End Role="ExpenseReportStatu" EntitySet="ExpenseReportStatus" />
+            <End Role="ExpensesReport" EntitySet="ExpensesReports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesDetails_ExpensesReport" Association="CIDvNEXtModel.FK_ExpensesDetails_ExpensesReport">
+            <End Role="ExpensesReport" EntitySet="ExpensesReports" />
+            <End Role="ExpensesDetail" EntitySet="ExpensesDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesDetails_ExpenseSubTypeID" Association="CIDvNEXtModel.FK_ExpensesDetails_ExpenseSubTypeID">
+            <End Role="ExpensesSubCategoryType" EntitySet="ExpensesSubCategoryTypes" />
+            <End Role="ExpensesDetail" EntitySet="ExpensesDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesDetails_Route" Association="CIDvNEXtModel.FK_ExpensesDetails_Route">
+            <End Role="Route" EntitySet="Routes" />
+            <End Role="ExpensesDetail" EntitySet="ExpensesDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExpensesReport_Trips" Association="CIDvNEXtModel.FK_ExpensesReport_Trips">
+            <End Role="Trip" EntitySet="Trips" />
+            <End Role="ExpensesReport" EntitySet="ExpensesReports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRHotelInfo_Hotels" Association="CIDvNEXtModel.FK_TRHotelInfo_Hotels">
+            <End Role="Hotel" EntitySet="Hotels" />
+            <End Role="TRHotelInfo" EntitySet="TRHotelInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Route__HotelInfo" Association="CIDvNEXtModel.FK__Route__HotelInfo">
+            <End Role="TRHotelInfo" EntitySet="TRHotelInfoes" />
+            <End Role="Route" EntitySet="Routes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Route_Trips" Association="CIDvNEXtModel.FK_Route_Trips">
+            <End Role="Trip" EntitySet="Trips" />
+            <End Role="Route" EntitySet="Routes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RouteVisaStatus_TRItemsStatus" Association="CIDvNEXtModel.FK_RouteVisaStatus_TRItemsStatus">
+            <End Role="TRItemsStatu" EntitySet="TRItemsStatus" />
+            <End Role="Route" EntitySet="Routes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TravelReq__Fligh__04BA9F53" Association="CIDvNEXtModel.FK__TravelReq__Fligh__04BA9F53">
+            <End Role="TRItemsStatu" EntitySet="TRItemsStatus" />
+            <End Role="TravelRequest" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TravelReq__Hotel__00EA0E6F" Association="CIDvNEXtModel.FK__TravelReq__Hotel__00EA0E6F">
+            <End Role="TRItemsStatu" EntitySet="TRItemsStatus" />
+            <End Role="TravelRequest" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TravelReq__HRLet__02D256E1" Association="CIDvNEXtModel.FK__TravelReq__HRLet__02D256E1">
+            <End Role="TRItemsStatu" EntitySet="TRItemsStatus" />
+            <End Role="TravelRequest" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TravelReq__Invit__03C67B1A" Association="CIDvNEXtModel.FK__TravelReq__Invit__03C67B1A">
+            <End Role="TRItemsStatu" EntitySet="TRItemsStatus" />
+            <End Role="TravelRequest" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TravelReq__PoSta__5125ECB4" Association="CIDvNEXtModel.FK__TravelReq__PoSta__5125ECB4">
+            <End Role="TRItemsStatu" EntitySet="TRItemsStatus" />
+            <End Role="TravelRequest" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TravelReq__VisaS__01DE32A8" Association="CIDvNEXtModel.FK__TravelReq__VisaS__01DE32A8">
+            <End Role="TRItemsStatu" EntitySet="TRItemsStatus" />
+            <End Role="TravelRequest" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TR_TRStatus" Association="CIDvNEXtModel.FK_TR_TRStatus">
+            <End Role="TravelRequestStatu" EntitySet="TravelRequestStatus" />
+            <End Role="TravelRequest" EntitySet="TravelRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRHotelInfo_TravelRequests" Association="CIDvNEXtModel.FK_TRHotelInfo_TravelRequests">
+            <End Role="TravelRequest" EntitySet="TravelRequests" />
+            <End Role="TRHotelInfo" EntitySet="TRHotelInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="Trips_TRequests" Association="CIDvNEXtModel.Trips_TRequests">
+            <End Role="TravelRequest" EntitySet="TravelRequests" />
+            <End Role="Trip" EntitySet="Trips" />
+          </AssociationSet>
+          <AssociationSet Name="CIA_ExpenseReport" Association="CIDvNEXtModel.CIA_ExpenseReport">
+            <End Role="CashInAdvance" EntitySet="CashInAdvances" />
+            <End Role="ExpensesReport" EntitySet="ExpensesReports" />
+          </AssociationSet>
+          <AssociationSet Name="CountriesCurrencies" Association="CIDvNEXtModel.CountriesCurrencies">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="Currency" EntitySet="Currencies" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="EmployeesView">
           <Key>
@@ -935,6 +2185,11 @@
           <Property Name="ExpressLimitPerDay" Type="Double" />
           <NavigationProperty Name="Subsidary" Relationship="CIDvNEXtModel.FK_Countries_Countries" FromRole="Country" ToRole="Subsidary" />
           <NavigationProperty Name="Cities" Relationship="CIDvNEXtModel.FK_Cities_Countries" FromRole="Country" ToRole="City" />
+          <NavigationProperty Name="EmployeeCountries" Relationship="CIDvNEXtModel.FK_EmployeeCountries_Countries" FromRole="Country" ToRole="EmployeeCountry" />
+          <NavigationProperty Name="ExpensesDetails" Relationship="CIDvNEXtModel.FK_ExpensesDetails_Countries" FromRole="Country" ToRole="ExpensesDetail" />
+          <NavigationProperty Name="Routes" Relationship="CIDvNEXtModel.FK_Route_Countries" FromRole="Country" ToRole="Route" />
+          <NavigationProperty Name="Routes1" Relationship="CIDvNEXtModel.FK_Route_Countries1" FromRole="Country" ToRole="Route" />
+          <NavigationProperty Name="Currencies" Relationship="CIDvNEXtModel.CountriesCurrencies" FromRole="Country" ToRole="Currency" />
         </EntityType>
         <Association Name="FK_Countries_Countries">
           <End Type="CIDvNEXtModel.Subsidary" Role="Subsidary" Multiplicity="0..1" />
@@ -966,6 +2221,9 @@
           <Property Name="CountryID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Country" Relationship="CIDvNEXtModel.FK_Cities_Countries" FromRole="City" ToRole="Country" />
           <NavigationProperty Name="contacts" Relationship="CIDvNEXtModel.FK_Contact_Cities" FromRole="City" ToRole="contact" />
+          <NavigationProperty Name="Hotels" Relationship="CIDvNEXtModel.FK_Hotels_Cities" FromRole="City" ToRole="Hotel" />
+          <NavigationProperty Name="Routes" Relationship="CIDvNEXtModel.FK_Route_CitiesFrom" FromRole="City" ToRole="Route" />
+          <NavigationProperty Name="Routes1" Relationship="CIDvNEXtModel.FK_Route_CitiesTo" FromRole="City" ToRole="Route" />
         </EntityType>
         <Association Name="FK_Cities_Countries">
           <End Type="CIDvNEXtModel.Country" Role="Country" Multiplicity="1" />
@@ -1010,6 +2268,860 @@
               <PropertyRef Name="RoleTypeID" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CashInAdvance">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CurrencyID" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ManagerApproverID" Type="Int32" />
+          <Property Name="OperationApproverID" Type="Int32" />
+          <Property Name="Reason" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TripID" Type="Int32" />
+          <Property Name="RequestDate" Type="DateTime" Precision="3" />
+          <Property Name="ManagerApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="OperationApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="CashInAdvanceStatus" Type="Int32" />
+          <Property Name="Paid" Type="Boolean" />
+          <Property Name="RejectionReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ExchangeRate" Type="Double" />
+          <Property Name="SettledAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="SettlementDate" Type="DateTime" Precision="3" />
+          <Property Name="OperationsComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CashInAdvanceStatu" Relationship="CIDvNEXtModel.FK_CashInAdvance_CashInAdvanceStatus" FromRole="CashInAdvance" ToRole="CashInAdvanceStatu" />
+          <NavigationProperty Name="Currency" Relationship="CIDvNEXtModel.FK_CashInAdvance_Currencies" FromRole="CashInAdvance" ToRole="Currency" />
+          <NavigationProperty Name="Employee" Relationship="CIDvNEXtModel.FK_CashInAdvance_Employees" FromRole="CashInAdvance" ToRole="Employee" />
+          <NavigationProperty Name="Trip" Relationship="CIDvNEXtModel.FK_CashInAdvance_Trips" FromRole="CashInAdvance" ToRole="Trip" />
+          <NavigationProperty Name="Employee1" Relationship="CIDvNEXtModel.FK_CashInAdvanceadminApprover" FromRole="CashInAdvance" ToRole="Employee" />
+          <NavigationProperty Name="Employee2" Relationship="CIDvNEXtModel.FK_CashInAdvanceManagerApprover" FromRole="CashInAdvance" ToRole="Employee" />
+          <NavigationProperty Name="ExpensesReports" Relationship="CIDvNEXtModel.CIA_ExpenseReport" FromRole="CashInAdvance" ToRole="ExpensesReport" />
+        </EntityType>
+        <EntityType Name="CashInAdvanceStatu">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="CashInAdvanceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CashInAdvances" Relationship="CIDvNEXtModel.FK_CashInAdvance_CashInAdvanceStatus" FromRole="CashInAdvanceStatu" ToRole="CashInAdvance" />
+        </EntityType>
+        <EntityType Name="Currency">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="CurrencyName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ExchangeRate" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="Symbol" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="CashInAdvances" Relationship="CIDvNEXtModel.FK_CashInAdvance_Currencies" FromRole="Currency" ToRole="CashInAdvance" />
+          <NavigationProperty Name="ExpensesDetails" Relationship="CIDvNEXtModel.FK_ExpensesDetails_Currency" FromRole="Currency" ToRole="ExpensesDetail" />
+          <NavigationProperty Name="Routes" Relationship="CIDvNEXtModel.FK_RouteVisa_Currencies" FromRole="Currency" ToRole="Route" />
+          <NavigationProperty Name="TravelRequests" Relationship="CIDvNEXtModel.FK_TravelRequestsTotalFlightCost_Currencies" FromRole="Currency" ToRole="TravelRequest" />
+          <NavigationProperty Name="TravelRequests1" Relationship="CIDvNEXtModel.FK_TravelRequestsTotalHotelCost_Currencies" FromRole="Currency" ToRole="TravelRequest" />
+          <NavigationProperty Name="TRHotelInfoes" Relationship="CIDvNEXtModel.FK_TRHotelInfo_Currencies" FromRole="Currency" ToRole="TRHotelInfo" />
+          <NavigationProperty Name="TravelRequests2" Relationship="CIDvNEXtModel.TotalFlight2_Currency" FromRole="Currency" ToRole="TravelRequest" />
+          <NavigationProperty Name="Countries" Relationship="CIDvNEXtModel.CountriesCurrencies" FromRole="Currency" ToRole="Country" />
+        </EntityType>
+        <EntityType Name="EmployeeCountry">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="CountryID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="CountryID" Type="Int32" Nullable="false" />
+          <Property Name="DateAdded" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Country" Relationship="CIDvNEXtModel.FK_EmployeeCountries_Countries" FromRole="EmployeeCountry" ToRole="Country" />
+          <NavigationProperty Name="Employee" Relationship="CIDvNEXtModel.FK_EmployeeCountries_Employees" FromRole="EmployeeCountry" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="ExpenseCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ExpenseName" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Opex" Type="Int32" />
+          <Property Name="NonTripType" Type="Int32" />
+          <Property Name="HasSubCategory" Type="Boolean" />
+          <NavigationProperty Name="ExpensesDetails" Relationship="CIDvNEXtModel.FK_ExpensesDetails_ExpenseCategory" FromRole="ExpenseCategory" ToRole="ExpensesDetail" />
+        </EntityType>
+        <EntityType Name="ExpenseReportStatu">
+          <Key>
+            <PropertyRef Name="StatusID" />
+          </Key>
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ExpensesReports" Relationship="CIDvNEXtModel.FK_ExpenseReportStatus" FromRole="ExpenseReportStatu" ToRole="ExpensesReport" />
+        </EntityType>
+        <EntityType Name="ExpensesDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExpensesDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpenseSubTypeID" Type="Int32" />
+          <Property Name="AmountInCurrency" Type="Double" />
+          <Property Name="Currency" Type="Int32" Nullable="false" />
+          <Property Name="ExchangeRate" Type="Double" />
+          <Property Name="AmountInUSD" Type="Double" />
+          <Property Name="HasRecipt" Type="Boolean" />
+          <Property Name="SubmissionDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExpenseReportID" Type="Int32" />
+          <Property Name="ExpensesCategoryID" Type="Int32" Nullable="false" />
+          <Property Name="SubmissionSourceID" Type="Int32" />
+          <Property Name="USDExchange" Type="Double" />
+          <Property Name="GeoID" Type="Int32" />
+          <Property Name="IOType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Valid" Type="Boolean" />
+          <Property Name="Validated" Type="Boolean" />
+          <Property Name="RejectionReasonID" Type="Int32" />
+          <Property Name="RejectionMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RouteId" Type="Int32" />
+          <NavigationProperty Name="Country" Relationship="CIDvNEXtModel.FK_ExpensesDetails_Countries" FromRole="ExpensesDetail" ToRole="Country" />
+          <NavigationProperty Name="Currency1" Relationship="CIDvNEXtModel.FK_ExpensesDetails_Currency" FromRole="ExpensesDetail" ToRole="Currency" />
+          <NavigationProperty Name="ExpenseCategory" Relationship="CIDvNEXtModel.FK_ExpensesDetails_ExpenseCategory" FromRole="ExpensesDetail" ToRole="ExpenseCategory" />
+          <NavigationProperty Name="ExpensesReport" Relationship="CIDvNEXtModel.FK_ExpensesDetails_ExpensesReport" FromRole="ExpensesDetail" ToRole="ExpensesReport" />
+          <NavigationProperty Name="ExpensesSubCategoryType" Relationship="CIDvNEXtModel.FK_ExpensesDetails_ExpenseSubTypeID" FromRole="ExpensesDetail" ToRole="ExpensesSubCategoryType" />
+          <NavigationProperty Name="Route" Relationship="CIDvNEXtModel.FK_ExpensesDetails_Route" FromRole="ExpensesDetail" ToRole="Route" />
+        </EntityType>
+        <EntityType Name="ExpensesReport">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="TotalAmountInUSD" Type="Double" />
+          <Property Name="SubmissionDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="USDExchange" Type="Double" />
+          <Property Name="TripID" Type="Int32" />
+          <Property Name="CreationDate" Type="DateTime" Precision="3" />
+          <Property Name="ValidatorID" Type="Int32" />
+          <Property Name="ApproverID" Type="Int32" />
+          <Property Name="CashInAdvance" Type="Double" />
+          <Property Name="ExpenseBrief" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="ExceededLimitReason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="TotalAmountInEGP" Type="Double" />
+          <Property Name="SettledAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="SettlementDate" Type="DateTime" Precision="3" />
+          <Property Name="OperationsComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="CIDvNEXtModel.FK_ExpensesReport_Employees" FromRole="ExpensesReport" ToRole="Employee" />
+          <NavigationProperty Name="Employee1" Relationship="CIDvNEXtModel.FK_ExpensesReport_Employees1" FromRole="ExpensesReport" ToRole="Employee" />
+          <NavigationProperty Name="Employee2" Relationship="CIDvNEXtModel.FK_ExpensesReport_Employees2" FromRole="ExpensesReport" ToRole="Employee" />
+          <NavigationProperty Name="ExpenseReportStatu" Relationship="CIDvNEXtModel.FK_ExpenseReportStatus" FromRole="ExpensesReport" ToRole="ExpenseReportStatu" />
+          <NavigationProperty Name="ExpensesDetails" Relationship="CIDvNEXtModel.FK_ExpensesDetails_ExpensesReport" FromRole="ExpensesReport" ToRole="ExpensesDetail" />
+          <NavigationProperty Name="Trip" Relationship="CIDvNEXtModel.FK_ExpensesReport_Trips" FromRole="ExpensesReport" ToRole="Trip" />
+          <NavigationProperty Name="CashInAdvances" Relationship="CIDvNEXtModel.CIA_ExpenseReport" FromRole="ExpensesReport" ToRole="CashInAdvance" />
+        </EntityType>
+        <EntityType Name="ExpensesSubCategoryType">
+          <Key>
+            <PropertyRef Name="ExpensesSubCategoryTypesId" />
+          </Key>
+          <Property Name="ExpensesSubCategoryTypesId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExpensesCategoryTypesId" Type="Int32" />
+          <Property Name="ExpensesSubTypeName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ExpensesDetails" Relationship="CIDvNEXtModel.FK_ExpensesDetails_ExpenseSubTypeID" FromRole="ExpensesSubCategoryType" ToRole="ExpensesDetail" />
+        </EntityType>
+        <EntityType Name="Hotel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CityID" Type="Int32" Nullable="false" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="City" Relationship="CIDvNEXtModel.FK_Hotels_Cities" FromRole="Hotel" ToRole="City" />
+          <NavigationProperty Name="TRHotelInfoes" Relationship="CIDvNEXtModel.FK_TRHotelInfo_Hotels" FromRole="Hotel" ToRole="TRHotelInfo" />
+        </EntityType>
+        <EntityType Name="Route">
+          <Key>
+            <PropertyRef Name="routeId" />
+          </Key>
+          <Property Name="routeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tripId" Type="Int32" Nullable="false" />
+          <Property Name="arrivalDate" Type="DateTime" Precision="3" />
+          <Property Name="toCountry" Type="Int32" />
+          <Property Name="fromCountry" Type="Int32" />
+          <Property Name="requireVisa" Type="Boolean" />
+          <Property Name="CityFrom" Type="Int32" />
+          <Property Name="CityTo" Type="Int32" />
+          <Property Name="HotelInfoId" Type="Int32" />
+          <Property Name="AccommodationRequested" Type="Boolean" />
+          <Property Name="FlightRequested" Type="Boolean" />
+          <Property Name="InvitationLetterRequested" Type="Boolean" />
+          <Property Name="HRLetterRequested" Type="Boolean" />
+          <Property Name="Rating" Type="Int32" />
+          <Property Name="VisaCost" Type="Double" />
+          <Property Name="VisaCostCurrencyID" Type="Int32" />
+          <Property Name="VisaStatusID" Type="Int32" />
+          <Property Name="ForecastedFlight" Type="Double" />
+          <Property Name="ForecastedAccommodation" Type="Double" />
+          <Property Name="ForecastedExpenses" Type="Double" />
+          <Property Name="ForecastedTotal" Type="Double" />
+          <Property Name="HotelRating" Type="Int32" />
+          <NavigationProperty Name="City" Relationship="CIDvNEXtModel.FK_Route_CitiesFrom" FromRole="Route" ToRole="City" />
+          <NavigationProperty Name="City1" Relationship="CIDvNEXtModel.FK_Route_CitiesTo" FromRole="Route" ToRole="City" />
+          <NavigationProperty Name="Country" Relationship="CIDvNEXtModel.FK_Route_Countries" FromRole="Route" ToRole="Country" />
+          <NavigationProperty Name="Country1" Relationship="CIDvNEXtModel.FK_Route_Countries1" FromRole="Route" ToRole="Country" />
+          <NavigationProperty Name="Currency" Relationship="CIDvNEXtModel.FK_RouteVisa_Currencies" FromRole="Route" ToRole="Currency" />
+          <NavigationProperty Name="ExpensesDetails" Relationship="CIDvNEXtModel.FK_ExpensesDetails_Route" FromRole="Route" ToRole="ExpensesDetail" />
+          <NavigationProperty Name="TRHotelInfo" Relationship="CIDvNEXtModel.FK__Route__HotelInfo" FromRole="Route" ToRole="TRHotelInfo" />
+          <NavigationProperty Name="Trip" Relationship="CIDvNEXtModel.FK_Route_Trips" FromRole="Route" ToRole="Trip" />
+          <NavigationProperty Name="TRItemsStatu" Relationship="CIDvNEXtModel.FK_RouteVisaStatus_TRItemsStatus" FromRole="Route" ToRole="TRItemsStatu" />
+        </EntityType>
+        <EntityType Name="TravelRequest">
+          <Key>
+            <PropertyRef Name="TRID" />
+          </Key>
+          <Property Name="TRID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RequesterNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RequestedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="TRStatusID" Type="Int32" />
+          <Property Name="FlightStatus" Type="Int32" />
+          <Property Name="TotalFlightCost" Type="Double" />
+          <Property Name="HotelStatus" Type="Int32" />
+          <Property Name="VisaStatus" Type="Int32" />
+          <Property Name="HRLetterStatus" Type="Int32" />
+          <Property Name="InvitationLetterStatus" Type="Int32" />
+          <Property Name="OperationsNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ChangeRequestDate" Type="DateTime" Precision="3" />
+          <Property Name="ChangeRequestReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TravelRequestForm" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ExcelStatusId" Type="Int32" />
+          <Property Name="TotalReissueCost" Type="Double" />
+          <Property Name="Rating" Type="Int32" />
+          <Property Name="RatingComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TotalFlightCostCurrencyID" Type="Int32" />
+          <Property Name="TotalHotelCost" Type="Double" />
+          <Property Name="TotalHotelCostCurrencyID" Type="Int32" />
+          <Property Name="TotalReissueCost2" Type="Double" />
+          <Property Name="TotalReissueCost3" Type="Double" />
+          <Property Name="FlightRefundCost" Type="Double" />
+          <Property Name="ForcastedFlightsCost" Type="Double" />
+          <Property Name="ForcastedAccommodationCost" Type="Double" />
+          <Property Name="ForcastedExpenses" Type="Double" />
+          <Property Name="ForcastedTotal" Type="Double" />
+          <Property Name="TotalFlightCost2" Type="Double" />
+          <Property Name="TotalFlightCostCurrencyID2" Type="Int32" />
+          <Property Name="FlightInvoiceStatus" Type="Int32" />
+          <Property Name="FlightInvoiceStatus2" Type="Int32" />
+          <Property Name="TotalReissueStatus" Type="Int32" />
+          <Property Name="TotalReissueStatus2" Type="Int32" />
+          <Property Name="TotalReissueStatus3" Type="Int32" />
+          <Property Name="VisaInvoiceStatus" Type="Int32" />
+          <Property Name="HoteInvoiceStatus" Type="Int32" />
+          <Property Name="PoStatus" Type="Int32" />
+          <Property Name="FlightRefundInvoiceStatus" Type="Int32" />
+          <NavigationProperty Name="Currency" Relationship="CIDvNEXtModel.FK_TravelRequestsTotalFlightCost_Currencies" FromRole="TravelRequest" ToRole="Currency" />
+          <NavigationProperty Name="Currency1" Relationship="CIDvNEXtModel.FK_TravelRequestsTotalHotelCost_Currencies" FromRole="TravelRequest" ToRole="Currency" />
+          <NavigationProperty Name="Currency2" Relationship="CIDvNEXtModel.TotalFlight2_Currency" FromRole="TravelRequest" ToRole="Currency" />
+          <NavigationProperty Name="TRItemsStatu" Relationship="CIDvNEXtModel.FK__TravelReq__Fligh__04BA9F53" FromRole="TravelRequest" ToRole="TRItemsStatu" />
+          <NavigationProperty Name="TRItemsStatu1" Relationship="CIDvNEXtModel.FK__TravelReq__Hotel__00EA0E6F" FromRole="TravelRequest" ToRole="TRItemsStatu" />
+          <NavigationProperty Name="TRItemsStatu2" Relationship="CIDvNEXtModel.FK__TravelReq__HRLet__02D256E1" FromRole="TravelRequest" ToRole="TRItemsStatu" />
+          <NavigationProperty Name="TRItemsStatu3" Relationship="CIDvNEXtModel.FK__TravelReq__Invit__03C67B1A" FromRole="TravelRequest" ToRole="TRItemsStatu" />
+          <NavigationProperty Name="TRItemsStatu4" Relationship="CIDvNEXtModel.FK__TravelReq__PoSta__5125ECB4" FromRole="TravelRequest" ToRole="TRItemsStatu" />
+          <NavigationProperty Name="TRItemsStatu5" Relationship="CIDvNEXtModel.FK__TravelReq__VisaS__01DE32A8" FromRole="TravelRequest" ToRole="TRItemsStatu" />
+          <NavigationProperty Name="TravelRequestStatu" Relationship="CIDvNEXtModel.FK_TR_TRStatus" FromRole="TravelRequest" ToRole="TravelRequestStatu" />
+          <NavigationProperty Name="TRHotelInfoes" Relationship="CIDvNEXtModel.FK_TRHotelInfo_TravelRequests" FromRole="TravelRequest" ToRole="TRHotelInfo" />
+          <NavigationProperty Name="Trips" Relationship="CIDvNEXtModel.Trips_TRequests" FromRole="TravelRequest" ToRole="Trip" />
+        </EntityType>
+        <EntityType Name="TravelRequestStatu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="TravelRequests" Relationship="CIDvNEXtModel.FK_TR_TRStatus" FromRole="TravelRequestStatu" ToRole="TravelRequest" />
+        </EntityType>
+        <EntityType Name="TRHotelInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TRID" Type="Int32" />
+          <Property Name="CountryName" Type="String" Nullable="false" MaxLength="400" FixedLength="true" Unicode="true" />
+          <Property Name="HotelId" Type="Int32" />
+          <Property Name="HotelRate" Type="Double" />
+          <Property Name="PaymentMethodID" Type="Int32" />
+          <Property Name="CheckInDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CheckOutDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CurrencyID" Type="Int32" />
+          <NavigationProperty Name="Currency" Relationship="CIDvNEXtModel.FK_TRHotelInfo_Currencies" FromRole="TRHotelInfo" ToRole="Currency" />
+          <NavigationProperty Name="Hotel" Relationship="CIDvNEXtModel.FK_TRHotelInfo_Hotels" FromRole="TRHotelInfo" ToRole="Hotel" />
+          <NavigationProperty Name="Routes" Relationship="CIDvNEXtModel.FK__Route__HotelInfo" FromRole="TRHotelInfo" ToRole="Route" />
+          <NavigationProperty Name="TravelRequest" Relationship="CIDvNEXtModel.FK_TRHotelInfo_TravelRequests" FromRole="TRHotelInfo" ToRole="TravelRequest" />
+        </EntityType>
+        <EntityType Name="Trip">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeId" Type="Int32" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="NumberofDays" Type="Int32" />
+          <Property Name="NumberofWorkingDays" Type="Int32" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="Business" Type="Boolean" />
+          <Property Name="IsCanceled" Type="Boolean" />
+          <Property Name="TRID" Type="Int32" />
+          <NavigationProperty Name="CashInAdvances" Relationship="CIDvNEXtModel.FK_CashInAdvance_Trips" FromRole="Trip" ToRole="CashInAdvance" />
+          <NavigationProperty Name="Employee" Relationship="CIDvNEXtModel.FK_Trips_Employees" FromRole="Trip" ToRole="Employee" />
+          <NavigationProperty Name="ExpensesReports" Relationship="CIDvNEXtModel.FK_ExpensesReport_Trips" FromRole="Trip" ToRole="ExpensesReport" />
+          <NavigationProperty Name="Routes" Relationship="CIDvNEXtModel.FK_Route_Trips" FromRole="Trip" ToRole="Route" />
+          <NavigationProperty Name="TravelRequest" Relationship="CIDvNEXtModel.Trips_TRequests" FromRole="Trip" ToRole="TravelRequest" />
+        </EntityType>
+        <EntityType Name="TRItemsStatu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Routes" Relationship="CIDvNEXtModel.FK_RouteVisaStatus_TRItemsStatus" FromRole="TRItemsStatu" ToRole="Route" />
+          <NavigationProperty Name="TravelRequests" Relationship="CIDvNEXtModel.FK__TravelReq__Fligh__04BA9F53" FromRole="TRItemsStatu" ToRole="TravelRequest" />
+          <NavigationProperty Name="TravelRequests1" Relationship="CIDvNEXtModel.FK__TravelReq__Hotel__00EA0E6F" FromRole="TRItemsStatu" ToRole="TravelRequest" />
+          <NavigationProperty Name="TravelRequests2" Relationship="CIDvNEXtModel.FK__TravelReq__HRLet__02D256E1" FromRole="TRItemsStatu" ToRole="TravelRequest" />
+          <NavigationProperty Name="TravelRequests3" Relationship="CIDvNEXtModel.FK__TravelReq__Invit__03C67B1A" FromRole="TRItemsStatu" ToRole="TravelRequest" />
+          <NavigationProperty Name="TravelRequests4" Relationship="CIDvNEXtModel.FK__TravelReq__PoSta__5125ECB4" FromRole="TRItemsStatu" ToRole="TravelRequest" />
+          <NavigationProperty Name="TravelRequests5" Relationship="CIDvNEXtModel.FK__TravelReq__VisaS__01DE32A8" FromRole="TRItemsStatu" ToRole="TravelRequest" />
+        </EntityType>
+        <Association Name="FK_CashInAdvance_CashInAdvanceStatus">
+          <End Type="CIDvNEXtModel.CashInAdvanceStatu" Role="CashInAdvanceStatu" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.CashInAdvance" Role="CashInAdvance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CashInAdvanceStatu">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CashInAdvance">
+              <PropertyRef Name="CashInAdvanceStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashInAdvance_Currencies">
+          <End Type="CIDvNEXtModel.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="CIDvNEXtModel.CashInAdvance" Role="CashInAdvance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CashInAdvance">
+              <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashInAdvance_Employees">
+          <End Type="CIDvNEXtModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.CashInAdvance" Role="CashInAdvance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CashInAdvance">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashInAdvance_Trips">
+          <End Type="CIDvNEXtModel.Trip" Role="Trip" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.CashInAdvance" Role="CashInAdvance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trip">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CashInAdvance">
+              <PropertyRef Name="TripID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashInAdvanceadminApprover">
+          <End Type="CIDvNEXtModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.CashInAdvance" Role="CashInAdvance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CashInAdvance">
+              <PropertyRef Name="OperationApproverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CashInAdvanceManagerApprover">
+          <End Type="CIDvNEXtModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.CashInAdvance" Role="CashInAdvance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CashInAdvance">
+              <PropertyRef Name="ManagerApproverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hotels_Cities">
+          <End Type="CIDvNEXtModel.City" Role="City" Multiplicity="1" />
+          <End Type="CIDvNEXtModel.Hotel" Role="Hotel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Hotel">
+              <PropertyRef Name="CityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Route_CitiesFrom">
+          <End Type="CIDvNEXtModel.City" Role="City" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.Route" Role="Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="CityFrom" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Route_CitiesTo">
+          <End Type="CIDvNEXtModel.City" Role="City" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.Route" Role="Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="CityTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeCountries_Countries">
+          <End Type="CIDvNEXtModel.Country" Role="Country" Multiplicity="1" />
+          <End Type="CIDvNEXtModel.EmployeeCountry" Role="EmployeeCountry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeeCountry">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesDetails_Countries">
+          <End Type="CIDvNEXtModel.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.ExpensesDetail" Role="ExpensesDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExpensesDetail">
+              <PropertyRef Name="GeoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Route_Countries">
+          <End Type="CIDvNEXtModel.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.Route" Role="Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="toCountry" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Route_Countries1">
+          <End Type="CIDvNEXtModel.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.Route" Role="Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="fromCountry" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesDetails_Currency">
+          <End Type="CIDvNEXtModel.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="CIDvNEXtModel.ExpensesDetail" Role="ExpensesDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ExpensesDetail">
+              <PropertyRef Name="Currency" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RouteVisa_Currencies">
+          <End Type="CIDvNEXtModel.Currency" Role="Currency" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.Route" Role="Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="VisaCostCurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelRequestsTotalFlightCost_Currencies">
+          <End Type="CIDvNEXtModel.Currency" Role="Currency" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.TravelRequest" Role="TravelRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TravelRequest">
+              <PropertyRef Name="TotalFlightCostCurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelRequestsTotalHotelCost_Currencies">
+          <End Type="CIDvNEXtModel.Currency" Role="Currency" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.TravelRequest" Role="TravelRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TravelRequest">
+              <PropertyRef Name="TotalHotelCostCurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRHotelInfo_Currencies">
+          <End Type="CIDvNEXtModel.Currency" Role="Currency" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.TRHotelInfo" Role="TRHotelInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TRHotelInfo">
+              <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TotalFlight2_Currency">
+          <End Type="CIDvNEXtModel.Currency" Role="Currency" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.TravelRequest" Role="TravelRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TravelRequest">
+              <PropertyRef Name="TotalFlightCostCurrencyID2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeCountries_Employees">
+          <End Type="CIDvNEXtModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="CIDvNEXtModel.EmployeeCountry" Role="EmployeeCountry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeeCountry">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesReport_Employees">
+          <End Type="CIDvNEXtModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.ExpensesReport" Role="ExpensesReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExpensesReport">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesReport_Employees1">
+          <End Type="CIDvNEXtModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.ExpensesReport" Role="ExpensesReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExpensesReport">
+              <PropertyRef Name="ValidatorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesReport_Employees2">
+          <End Type="CIDvNEXtModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.ExpensesReport" Role="ExpensesReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExpensesReport">
+              <PropertyRef Name="ApproverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Trips_Employees">
+          <End Type="CIDvNEXtModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.Trip" Role="Trip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Trip">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesDetails_ExpenseCategory">
+          <End Type="CIDvNEXtModel.ExpenseCategory" Role="ExpenseCategory" Multiplicity="1" />
+          <End Type="CIDvNEXtModel.ExpensesDetail" Role="ExpensesDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpenseCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ExpensesDetail">
+              <PropertyRef Name="ExpensesCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpenseReportStatus">
+          <End Type="CIDvNEXtModel.ExpenseReportStatu" Role="ExpenseReportStatu" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.ExpensesReport" Role="ExpensesReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpenseReportStatu">
+              <PropertyRef Name="StatusID" />
+            </Principal>
+            <Dependent Role="ExpensesReport">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesDetails_ExpensesReport">
+          <End Type="CIDvNEXtModel.ExpensesReport" Role="ExpensesReport" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CIDvNEXtModel.ExpensesDetail" Role="ExpensesDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpensesReport">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ExpensesDetail">
+              <PropertyRef Name="ExpenseReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesDetails_ExpenseSubTypeID">
+          <End Type="CIDvNEXtModel.ExpensesSubCategoryType" Role="ExpensesSubCategoryType" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.ExpensesDetail" Role="ExpensesDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExpensesSubCategoryType">
+              <PropertyRef Name="ExpensesSubCategoryTypesId" />
+            </Principal>
+            <Dependent Role="ExpensesDetail">
+              <PropertyRef Name="ExpenseSubTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesDetails_Route">
+          <End Type="CIDvNEXtModel.Route" Role="Route" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.ExpensesDetail" Role="ExpensesDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Route">
+              <PropertyRef Name="routeId" />
+            </Principal>
+            <Dependent Role="ExpensesDetail">
+              <PropertyRef Name="RouteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExpensesReport_Trips">
+          <End Type="CIDvNEXtModel.Trip" Role="Trip" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.ExpensesReport" Role="ExpensesReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trip">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExpensesReport">
+              <PropertyRef Name="TripID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRHotelInfo_Hotels">
+          <End Type="CIDvNEXtModel.Hotel" Role="Hotel" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.TRHotelInfo" Role="TRHotelInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hotel">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TRHotelInfo">
+              <PropertyRef Name="HotelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Route__HotelInfo">
+          <End Type="CIDvNEXtModel.TRHotelInfo" Role="TRHotelInfo" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.Route" Role="Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRHotelInfo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="HotelInfoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Route_Trips">
+          <End Type="CIDvNEXtModel.Trip" Role="Trip" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CIDvNEXtModel.Route" Role="Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trip">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="tripId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RouteVisaStatus_TRItemsStatus">
+          <End Type="CIDvNEXtModel.TRItemsStatu" Role="TRItemsStatu" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.Route" Role="Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="VisaStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TravelReq__Fligh__04BA9F53">
+          <End Type="CIDvNEXtModel.TRItemsStatu" Role="TRItemsStatu" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.TravelRequest" Role="TravelRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequest">
+              <PropertyRef Name="FlightStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TravelReq__Hotel__00EA0E6F">
+          <End Type="CIDvNEXtModel.TRItemsStatu" Role="TRItemsStatu" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.TravelRequest" Role="TravelRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequest">
+              <PropertyRef Name="HotelStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TravelReq__HRLet__02D256E1">
+          <End Type="CIDvNEXtModel.TRItemsStatu" Role="TRItemsStatu" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.TravelRequest" Role="TravelRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequest">
+              <PropertyRef Name="HRLetterStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TravelReq__Invit__03C67B1A">
+          <End Type="CIDvNEXtModel.TRItemsStatu" Role="TRItemsStatu" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.TravelRequest" Role="TravelRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequest">
+              <PropertyRef Name="InvitationLetterStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TravelReq__PoSta__5125ECB4">
+          <End Type="CIDvNEXtModel.TRItemsStatu" Role="TRItemsStatu" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.TravelRequest" Role="TravelRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequest">
+              <PropertyRef Name="PoStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TravelReq__VisaS__01DE32A8">
+          <End Type="CIDvNEXtModel.TRItemsStatu" Role="TRItemsStatu" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.TravelRequest" Role="TravelRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRItemsStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequest">
+              <PropertyRef Name="VisaStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TR_TRStatus">
+          <End Type="CIDvNEXtModel.TravelRequestStatu" Role="TravelRequestStatu" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.TravelRequest" Role="TravelRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelRequestStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TravelRequest">
+              <PropertyRef Name="TRStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TRHotelInfo_TravelRequests">
+          <End Type="CIDvNEXtModel.TravelRequest" Role="TravelRequest" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CIDvNEXtModel.TRHotelInfo" Role="TRHotelInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelRequest">
+              <PropertyRef Name="TRID" />
+            </Principal>
+            <Dependent Role="TRHotelInfo">
+              <PropertyRef Name="TRID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Trips_TRequests">
+          <End Type="CIDvNEXtModel.TravelRequest" Role="TravelRequest" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.Trip" Role="Trip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelRequest">
+              <PropertyRef Name="TRID" />
+            </Principal>
+            <Dependent Role="Trip">
+              <PropertyRef Name="TRID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CIA_ExpenseReport">
+          <End Type="CIDvNEXtModel.CashInAdvance" Role="CashInAdvance" Multiplicity="*" />
+          <End Type="CIDvNEXtModel.ExpensesReport" Role="ExpensesReport" Multiplicity="*" />
+        </Association>
+        <Association Name="CountriesCurrencies">
+          <End Type="CIDvNEXtModel.Country" Role="Country" Multiplicity="*" />
+          <End Type="CIDvNEXtModel.Currency" Role="Currency" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -1244,6 +3356,287 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CashInAdvances">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.CashInAdvance">
+              <MappingFragment StoreEntitySet="CashInAdvance">
+                <ScalarProperty Name="OperationsComment" ColumnName="OperationsComment" />
+                <ScalarProperty Name="SettlementDate" ColumnName="SettlementDate" />
+                <ScalarProperty Name="SettledAmount" ColumnName="SettledAmount" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="RejectionReason" ColumnName="RejectionReason" />
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="CashInAdvanceStatus" ColumnName="CashInAdvanceStatus" />
+                <ScalarProperty Name="OperationApprovalDate" ColumnName="OperationApprovalDate" />
+                <ScalarProperty Name="ManagerApprovalDate" ColumnName="ManagerApprovalDate" />
+                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+                <ScalarProperty Name="TripID" ColumnName="TripID" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="OperationApproverID" ColumnName="OperationApproverID" />
+                <ScalarProperty Name="ManagerApproverID" ColumnName="ManagerApproverID" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CashInAdvanceStatus">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.CashInAdvanceStatu">
+              <MappingFragment StoreEntitySet="CashInAdvanceStatus">
+                <ScalarProperty Name="CashInAdvanceStatus" ColumnName="CashInAdvanceStatus" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Currencies">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.Currency">
+              <MappingFragment StoreEntitySet="Currencies">
+                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="CurrencyName" ColumnName="CurrencyName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeCountries">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.EmployeeCountry">
+              <MappingFragment StoreEntitySet="EmployeeCountries">
+                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpenseCategories">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.ExpenseCategory">
+              <MappingFragment StoreEntitySet="ExpenseCategory">
+                <ScalarProperty Name="HasSubCategory" ColumnName="HasSubCategory" />
+                <ScalarProperty Name="NonTripType" ColumnName="NonTripType" />
+                <ScalarProperty Name="Opex" ColumnName="Opex" />
+                <ScalarProperty Name="ExpenseName" ColumnName="ExpenseName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpenseReportStatus">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.ExpenseReportStatu">
+              <MappingFragment StoreEntitySet="ExpenseReportStatus">
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpensesDetails">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.ExpensesDetail">
+              <MappingFragment StoreEntitySet="ExpensesDetails">
+                <ScalarProperty Name="RouteId" ColumnName="RouteId" />
+                <ScalarProperty Name="RejectionMessage" ColumnName="RejectionMessage" />
+                <ScalarProperty Name="RejectionReasonID" ColumnName="RejectionReasonID" />
+                <ScalarProperty Name="Validated" ColumnName="Validated" />
+                <ScalarProperty Name="Valid" ColumnName="Valid" />
+                <ScalarProperty Name="IOType" ColumnName="IOType" />
+                <ScalarProperty Name="GeoID" ColumnName="GeoID" />
+                <ScalarProperty Name="USDExchange" ColumnName="USDExchange" />
+                <ScalarProperty Name="SubmissionSourceID" ColumnName="SubmissionSourceID" />
+                <ScalarProperty Name="ExpensesCategoryID" ColumnName="ExpensesCategoryID" />
+                <ScalarProperty Name="ExpenseReportID" ColumnName="ExpenseReportID" />
+                <ScalarProperty Name="SubmissionDate" ColumnName="SubmissionDate" />
+                <ScalarProperty Name="HasRecipt" ColumnName="HasRecipt" />
+                <ScalarProperty Name="AmountInUSD" ColumnName="AmountInUSD" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="AmountInCurrency" ColumnName="AmountInCurrency" />
+                <ScalarProperty Name="ExpenseSubTypeID" ColumnName="ExpenseSubTypeID" />
+                <ScalarProperty Name="ExpensesDate" ColumnName="ExpensesDate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpensesReports">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.ExpensesReport">
+              <MappingFragment StoreEntitySet="ExpensesReport">
+                <ScalarProperty Name="OperationsComment" ColumnName="OperationsComment" />
+                <ScalarProperty Name="SettlementDate" ColumnName="SettlementDate" />
+                <ScalarProperty Name="SettledAmount" ColumnName="SettledAmount" />
+                <ScalarProperty Name="TotalAmountInEGP" ColumnName="TotalAmountInEGP" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ExceededLimitReason" ColumnName="ExceededLimitReason" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="ExpenseBrief" ColumnName="ExpenseBrief" />
+                <ScalarProperty Name="CashInAdvance" ColumnName="CashInAdvance" />
+                <ScalarProperty Name="ApproverID" ColumnName="ApproverID" />
+                <ScalarProperty Name="ValidatorID" ColumnName="ValidatorID" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="TripID" ColumnName="TripID" />
+                <ScalarProperty Name="USDExchange" ColumnName="USDExchange" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="SubmissionDate" ColumnName="SubmissionDate" />
+                <ScalarProperty Name="TotalAmountInUSD" ColumnName="TotalAmountInUSD" />
+                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpensesSubCategoryTypes">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.ExpensesSubCategoryType">
+              <MappingFragment StoreEntitySet="ExpensesSubCategoryTypes">
+                <ScalarProperty Name="ExpensesSubTypeName" ColumnName="ExpensesSubTypeName" />
+                <ScalarProperty Name="ExpensesCategoryTypesId" ColumnName="ExpensesCategoryTypesId" />
+                <ScalarProperty Name="ExpensesSubCategoryTypesId" ColumnName="ExpensesSubCategoryTypesId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Hotels">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.Hotel">
+              <MappingFragment StoreEntitySet="Hotels">
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Routes">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.Route">
+              <MappingFragment StoreEntitySet="Route">
+                <ScalarProperty Name="HotelRating" ColumnName="HotelRating" />
+                <ScalarProperty Name="ForecastedTotal" ColumnName="ForecastedTotal" />
+                <ScalarProperty Name="ForecastedExpenses" ColumnName="ForecastedExpenses" />
+                <ScalarProperty Name="ForecastedAccommodation" ColumnName="ForecastedAccommodation" />
+                <ScalarProperty Name="ForecastedFlight" ColumnName="ForecastedFlight" />
+                <ScalarProperty Name="VisaStatusID" ColumnName="VisaStatusID" />
+                <ScalarProperty Name="VisaCostCurrencyID" ColumnName="VisaCostCurrencyID" />
+                <ScalarProperty Name="VisaCost" ColumnName="VisaCost" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="HRLetterRequested" ColumnName="HRLetterRequested" />
+                <ScalarProperty Name="InvitationLetterRequested" ColumnName="InvitationLetterRequested" />
+                <ScalarProperty Name="FlightRequested" ColumnName="FlightRequested" />
+                <ScalarProperty Name="AccommodationRequested" ColumnName="AccommodationRequested" />
+                <ScalarProperty Name="HotelInfoId" ColumnName="HotelInfoId" />
+                <ScalarProperty Name="CityTo" ColumnName="CityTo" />
+                <ScalarProperty Name="CityFrom" ColumnName="CityFrom" />
+                <ScalarProperty Name="requireVisa" ColumnName="requireVisa" />
+                <ScalarProperty Name="fromCountry" ColumnName="fromCountry" />
+                <ScalarProperty Name="toCountry" ColumnName="toCountry" />
+                <ScalarProperty Name="arrivalDate" ColumnName="arrivalDate" />
+                <ScalarProperty Name="tripId" ColumnName="tripId" />
+                <ScalarProperty Name="routeId" ColumnName="routeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelRequests">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.TravelRequest">
+              <MappingFragment StoreEntitySet="TravelRequests">
+                <ScalarProperty Name="FlightRefundInvoiceStatus" ColumnName="FlightRefundInvoiceStatus" />
+                <ScalarProperty Name="PoStatus" ColumnName="PoStatus" />
+                <ScalarProperty Name="HoteInvoiceStatus" ColumnName="HoteInvoiceStatus" />
+                <ScalarProperty Name="VisaInvoiceStatus" ColumnName="VisaInvoiceStatus" />
+                <ScalarProperty Name="TotalReissueStatus3" ColumnName="TotalReissueStatus3" />
+                <ScalarProperty Name="TotalReissueStatus2" ColumnName="TotalReissueStatus2" />
+                <ScalarProperty Name="TotalReissueStatus" ColumnName="TotalReissueStatus" />
+                <ScalarProperty Name="FlightInvoiceStatus2" ColumnName="FlightInvoiceStatus2" />
+                <ScalarProperty Name="FlightInvoiceStatus" ColumnName="FlightInvoiceStatus" />
+                <ScalarProperty Name="TotalFlightCostCurrencyID2" ColumnName="TotalFlightCostCurrencyID2" />
+                <ScalarProperty Name="TotalFlightCost2" ColumnName="TotalFlightCost2" />
+                <ScalarProperty Name="ForcastedTotal" ColumnName="ForcastedTotal" />
+                <ScalarProperty Name="ForcastedExpenses" ColumnName="ForcastedExpenses" />
+                <ScalarProperty Name="ForcastedAccommodationCost" ColumnName="ForcastedAccommodationCost" />
+                <ScalarProperty Name="ForcastedFlightsCost" ColumnName="ForcastedFlightsCost" />
+                <ScalarProperty Name="FlightRefundCost" ColumnName="FlightRefundCost" />
+                <ScalarProperty Name="TotalReissueCost3" ColumnName="TotalReissueCost3" />
+                <ScalarProperty Name="TotalReissueCost2" ColumnName="TotalReissueCost2" />
+                <ScalarProperty Name="TotalHotelCostCurrencyID" ColumnName="TotalHotelCostCurrencyID" />
+                <ScalarProperty Name="TotalHotelCost" ColumnName="TotalHotelCost" />
+                <ScalarProperty Name="TotalFlightCostCurrencyID" ColumnName="TotalFlightCostCurrencyID" />
+                <ScalarProperty Name="RatingComment" ColumnName="RatingComment" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="TotalReissueCost" ColumnName="TotalReissueCost" />
+                <ScalarProperty Name="ExcelStatusId" ColumnName="ExcelStatusId" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="TravelRequestForm" ColumnName="TravelRequestForm" />
+                <ScalarProperty Name="ChangeRequestReason" ColumnName="ChangeRequestReason" />
+                <ScalarProperty Name="ChangeRequestDate" ColumnName="ChangeRequestDate" />
+                <ScalarProperty Name="OperationsNotes" ColumnName="OperationsNotes" />
+                <ScalarProperty Name="InvitationLetterStatus" ColumnName="InvitationLetterStatus" />
+                <ScalarProperty Name="HRLetterStatus" ColumnName="HRLetterStatus" />
+                <ScalarProperty Name="VisaStatus" ColumnName="VisaStatus" />
+                <ScalarProperty Name="HotelStatus" ColumnName="HotelStatus" />
+                <ScalarProperty Name="TotalFlightCost" ColumnName="TotalFlightCost" />
+                <ScalarProperty Name="FlightStatus" ColumnName="FlightStatus" />
+                <ScalarProperty Name="TRStatusID" ColumnName="TRStatusID" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="RequestedOn" ColumnName="RequestedOn" />
+                <ScalarProperty Name="RequesterNotes" ColumnName="RequesterNotes" />
+                <ScalarProperty Name="TRID" ColumnName="TRID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelRequestStatus">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.TravelRequestStatu">
+              <MappingFragment StoreEntitySet="TravelRequestStatus">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TRHotelInfoes">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.TRHotelInfo">
+              <MappingFragment StoreEntitySet="TRHotelInfo">
+                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+                <ScalarProperty Name="CheckOutDate" ColumnName="CheckOutDate" />
+                <ScalarProperty Name="CheckInDate" ColumnName="CheckInDate" />
+                <ScalarProperty Name="PaymentMethodID" ColumnName="PaymentMethodID" />
+                <ScalarProperty Name="HotelRate" ColumnName="HotelRate" />
+                <ScalarProperty Name="HotelId" ColumnName="HotelId" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="TRID" ColumnName="TRID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Trips">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.Trip">
+              <MappingFragment StoreEntitySet="Trips">
+                <ScalarProperty Name="TRID" ColumnName="TRID" />
+                <ScalarProperty Name="IsCanceled" ColumnName="IsCanceled" />
+                <ScalarProperty Name="Business" ColumnName="Business" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="NumberofWorkingDays" ColumnName="NumberofWorkingDays" />
+                <ScalarProperty Name="NumberofDays" ColumnName="NumberofDays" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TRItemsStatus">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.TRItemsStatu">
+              <MappingFragment StoreEntitySet="TRItemsStatus">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="CIA_ExpenseReport" TypeName="CIDvNEXtModel.CIA_ExpenseReport" StoreEntitySet="CIA_ExpenseReport">
+            <EndProperty Name="ExpensesReport">
+              <ScalarProperty Name="ID" ColumnName="ExpenseReportID" />
+            </EndProperty>
+            <EndProperty Name="CashInAdvance">
+              <ScalarProperty Name="Id" ColumnName="CashInAdvanceRequestID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="CountriesCurrencies" TypeName="CIDvNEXtModel.CountriesCurrencies" StoreEntitySet="CountriesCurrencies">
+            <EndProperty Name="Currency">
+              <ScalarProperty Name="ID" ColumnName="CurrencyID" />
+            </EndProperty>
+            <EndProperty Name="Country">
+              <ScalarProperty Name="Id" ColumnName="CountryID" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

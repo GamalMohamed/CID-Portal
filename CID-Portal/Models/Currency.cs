@@ -12,39 +12,41 @@ namespace VacationsPortal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Country
+    public partial class Currency
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Country()
+        public Currency()
         {
-            this.Cities = new HashSet<City>();
-            this.EmployeeCountries = new HashSet<EmployeeCountry>();
+            this.CashInAdvances = new HashSet<CashInAdvance>();
             this.ExpensesDetails = new HashSet<ExpensesDetail>();
             this.Routes = new HashSet<Route>();
-            this.Routes1 = new HashSet<Route>();
-            this.Currencies = new HashSet<Currency>();
+            this.TravelRequests = new HashSet<TravelRequest>();
+            this.TravelRequests1 = new HashSet<TravelRequest>();
+            this.TRHotelInfoes = new HashSet<TRHotelInfo>();
+            this.TravelRequests2 = new HashSet<TravelRequest>();
+            this.Countries = new HashSet<Country>();
         }
     
-        public int Id { get; set; }
-        public string CountryCode { get; set; }
-        public string CountryName { get; set; }
-        public Nullable<int> SubsidaryID { get; set; }
-        public Nullable<double> CIADollarAveragePerDay { get; set; }
-        public Nullable<double> HotelAveragePerNight { get; set; }
-        public Nullable<double> ExpressLimitPerDay { get; set; }
+        public int ID { get; set; }
+        public string CurrencyName { get; set; }
+        public Nullable<decimal> ExchangeRate { get; set; }
+        public string Symbol { get; set; }
     
-        public virtual Subsidary Subsidary { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<City> Cities { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EmployeeCountry> EmployeeCountries { get; set; }
+        public virtual ICollection<CashInAdvance> CashInAdvances { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExpensesDetail> ExpensesDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Route> Routes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Route> Routes1 { get; set; }
+        public virtual ICollection<TravelRequest> TravelRequests { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Currency> Currencies { get; set; }
+        public virtual ICollection<TravelRequest> TravelRequests1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TRHotelInfo> TRHotelInfoes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TravelRequest> TravelRequests2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Country> Countries { get; set; }
     }
 }

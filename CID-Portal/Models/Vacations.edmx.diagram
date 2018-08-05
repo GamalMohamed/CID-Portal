@@ -39,6 +39,67 @@
         <AssociationConnector Association="CIDvNEXtModel.FK_Contact_Cities" />
         <EntityTypeShape EntityType="CIDvNEXtModel.CIDW8RoleTypes" Width="1.5" PointX="10.625" PointY="8.875" />
         <AssociationConnector Association="CIDvNEXtModel.FK_Employees_CIDW8RoleTypes" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.CashInAdvance" Width="1.5" PointX="17.125" PointY="8.75" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.CashInAdvanceStatu" Width="1.5" PointX="14.875" PointY="10.875" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.Currency" Width="1.5" PointX="10.375" PointY="24.875" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.EmployeeCountry" Width="1.5" PointX="8.25" PointY="15.125" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.ExpenseCategory" Width="1.5" PointX="18.625" PointY="17.5" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.ExpenseReportStatu" Width="1.5" PointX="17.125" PointY="5.875" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.ExpensesDetail" Width="1.5" PointX="20.875" PointY="19.875" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.ExpensesReport" Width="1.5" PointX="19.375" PointY="8.75" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.ExpensesSubCategoryType" Width="1.5" PointX="18.625" PointY="25.375" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.Hotel" Width="1.5" PointX="15.625" PointY="27.25" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.Route" Width="1.5" PointX="15.625" PointY="19.375" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.TravelRequest" Width="1.5" PointX="12.625" PointY="16.625" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.TravelRequestStatu" Width="1.5" PointX="10.375" PointY="18.5" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.TRHotelInfo" Width="1.5" PointX="17.875" PointY="20.625" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.Trip" Width="1.5" PointX="14.875" PointY="13.625" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.TRItemsStatu" Width="1.5" PointX="10.375" PointY="21" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_CashInAdvance_CashInAdvanceStatus" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_CashInAdvance_Currencies" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_CashInAdvance_Employees" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_CashInAdvance_Trips" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_CashInAdvanceadminApprover" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_CashInAdvanceManagerApprover" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Hotels_Cities" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Route_CitiesFrom" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Route_CitiesTo" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_EmployeeCountries_Countries" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_ExpensesDetails_Countries" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Route_Countries" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Route_Countries1" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_ExpensesDetails_Currency" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_RouteVisa_Currencies" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_TravelRequestsTotalFlightCost_Currencies" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_TravelRequestsTotalHotelCost_Currencies" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_TRHotelInfo_Currencies" />
+        <AssociationConnector Association="CIDvNEXtModel.TotalFlight2_Currency" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_EmployeeCountries_Employees" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_ExpensesReport_Employees" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_ExpensesReport_Employees1" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_ExpensesReport_Employees2" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Trips_Employees" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_ExpensesDetails_ExpenseCategory" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_ExpenseReportStatus" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_ExpensesDetails_ExpensesReport" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_ExpensesDetails_ExpenseSubTypeID" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_ExpensesDetails_Route" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_ExpensesReport_Trips" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_TRHotelInfo_Hotels" />
+        <AssociationConnector Association="CIDvNEXtModel.FK__Route__HotelInfo" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_Route_Trips" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_RouteVisaStatus_TRItemsStatus" />
+        <AssociationConnector Association="CIDvNEXtModel.FK__TravelReq__Fligh__04BA9F53" />
+        <AssociationConnector Association="CIDvNEXtModel.FK__TravelReq__Hotel__00EA0E6F" />
+        <AssociationConnector Association="CIDvNEXtModel.FK__TravelReq__HRLet__02D256E1" />
+        <AssociationConnector Association="CIDvNEXtModel.FK__TravelReq__Invit__03C67B1A" />
+        <AssociationConnector Association="CIDvNEXtModel.FK__TravelReq__PoSta__5125ECB4" />
+        <AssociationConnector Association="CIDvNEXtModel.FK__TravelReq__VisaS__01DE32A8" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_TR_TRStatus" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_TRHotelInfo_TravelRequests" />
+        <AssociationConnector Association="CIDvNEXtModel.Trips_TRequests" />
+        <AssociationConnector Association="CIDvNEXtModel.CIA_ExpenseReport" />
+        <AssociationConnector Association="CIDvNEXtModel.CountriesCurrencies" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
