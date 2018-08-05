@@ -1,0 +1,74 @@
+﻿@model IEnumerable<VacationsPortal.Models.Trip>
+
+@{
+    ViewBag.Title = "Trips";
+}
+
+<h2>Trips @DateTime.Now.Year </h2>
+
+<table class="table" id="tb">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee.contact.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Routes)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee.contact.FullName)
+                </td>
+                <td>
+                    @if (item.StartDate != null)
+                    {
+                        @item.StartDate.Value.ToShortDateString()
+                    }
+                </td>
+                <td>
+                    @if (item.EndDate != null)
+                    {
+                        @item.EndDate.Value.ToShortDateString()
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Routes.ToList()[item.Routes.Count - 2].Country.CountryName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/datatables")
+    <script>
+        $(document).ready(function () {
+            $("#tb").DataTable();
+        });
+    </script>
+
+}
