@@ -20,16 +20,25 @@ namespace VacationsPortal
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js"));
+                      "~/Scripts/bootstrap.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/datatables").Include(
-                      "~/Scripts/Datatables/jquery.dataTables.js",
-                      "~/Scripts/Datatables/dataTables.bootstrap.js"));
+                "~/Scripts/Datatables/jquery.dataTables.min.js",
+                "~/Scripts/Datatables/dataTables.bootstrap.min.js",
+                "~/Scripts/DataTables/dataTables.buttons.min.js",
+                "~/Scripts/DataTables/buttons.flash.min.js",
+                "~/Scripts/DataTables/buttons.html5.min.js",
+                "~/Scripts/DataTables/buttons.print.min.js",
+                "~/Scripts/DataTables/dataTables.fixedHeader.min.js",
+                "~/Scripts/DataTables/dataTables.material.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/DataTables/css/dataTables.bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/bootstrap.min.css",
+                      "~/Content/Site.css",
+                      "~/Content/DataTables/css/dataTables.bootstrap.min.css",
+                      "~/Content/DataTables/css/buttons.dataTables.min.css",
+                      "~/Content/DataTables/css/fixedHeader.dataTables.min.css",
+                      "~/Content/DataTables/css/dataTables.material.min.css"));
         }
     }
 }

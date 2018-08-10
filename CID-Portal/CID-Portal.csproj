@@ -281,6 +281,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\EmployeeViewModel.cs" />
+    <Compile Include="ViewModels\TripViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -595,7 +596,6 @@
     <Content Include="Views\Employees\Edit.cshtml" />
     <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\Trips\Create.cshtml" />
-    <Content Include="Views\Trips\Delete.cshtml" />
     <Content Include="Views\Trips\Details.cshtml" />
     <Content Include="Views\Trips\Edit.cshtml" />
     <Content Include="Views\Trips\Index.cshtml" />

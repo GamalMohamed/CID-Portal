@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using VacationsPortal.Models;
+using VacationsPortal.ViewModels;
 
 namespace VacationsPortal.Controllers
 {
@@ -19,47 +20,91 @@ namespace VacationsPortal.Controllers
         {
             var trips = _db.Trips.Where(t => t.EndDate.Value.Month == DateTime.Now.Month - 1 &&
             t.EndDate.Value.Year == DateTime.Now.Year).ToList();
-            return View(trips);
-        }
-
-        // GET: Trips/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            var tripsvm = new List<TripViewModel>();
+            foreach (var trip in trips)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Trip trip = _db.Trips.Find(id);
-            if (trip == null)
-            {
-                return HttpNotFound();
-            }
-            return View(trip);
-        }
+                // Add trip basic data
+                var tripvm = new TripViewModel()
+                {
+                    Id = trip.Id,
+                    EmployeeName = trip.Employee.contact.FullName,
+                    StartDate = trip.StartDate,
+                    EndDate = trip.EndDate,
+                    Country = trip.Routes.ToList()[trip.Routes.Count - 2].Country.CountryName
+                };
 
-        // GET: Trips/Create
-        public ActionResult Create()
-        {
-            ViewBag.EmployeeId = new SelectList(_db.Employees, "Id", "employeeId");
-            ViewBag.TRID = new SelectList(_db.TravelRequests, "TRID", "RequesterNotes");
-            return View();
-        }
+                if (trip.CashInAdvances.Count > 0 || trip.ExpensesReports.Count > 0)
+                {
+                    // Fill Trip CIA, plus its Expenses (if exist)
+                    foreach (var cia in trip.CashInAdvances)
+                    {
+                        var tripvm2 = tripvm;
+                        tripvm2.CIA_Id = cia.Id;
+                        tripvm2.CIA_Status = cia.CashInAdvanceStatu.CashInAdvanceStatus;
+                        tripvm2.CurrencyName = cia.Currency.CurrencyName;
+                        tripvm2.CIA_Amount_InCurrency = cia.Amount ?? 0;
+                        tripvm2.CIA_ExchangeRate = cia.ExchangeRate ?? 0;
+                        tripvm2.CIA_Amount_InEGP = tripvm2.CIA_Amount_InCurrency *
+                                                       (decimal)tripvm2.CIA_ExchangeRate;
+                        tripvm2.CIA_Reason = cia.Reason;
+                        tripvm2.OperationsApprovalDate = cia.OperationApprovalDate;
 
-        // POST: Trips/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,EmployeeId,StartDate,EndDate,NumberofDays,NumberofWorkingDays,Status,ModifiedBy,ModifiedOn,Business,IsCanceled,TRID")] Trip trip)
-        {
-            if (ModelState.IsValid)
-            {
-                _db.Trips.Add(trip);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+
+                        if (cia.ExpensesReports.Count > 0)
+                        {
+                            foreach (var ciaExpensesReport in cia.ExpensesReports)
+                            {
+                                var tripvm3 = tripvm2;
+                                tripvm3.ExpenseReportId = ciaExpensesReport.ID;
+                                tripvm3.SubmissionDate = ciaExpensesReport.SubmissionDate;
+                                tripvm3.ApprovalDate = ciaExpensesReport.ApprovalDate;
+                                tripvm3.ExpenseReportStatus = ciaExpensesReport.ExpenseReportStatu.StatusName;
+                                tripvm3.TotalAmountInEGP = ciaExpensesReport.TotalAmountInUSD ?? 0;
+                                tripvm3.CIAExpenseReport = ciaExpensesReport.CashInAdvance ?? 0; //(double)tripvm3.CIA_Amount_InEGP;
+                                tripvm3.AmountToEmployeeInEGP = (tripvm3.TotalAmountInEGP - tripvm3.CIAExpenseReport) ?? 0;
+                                tripvm3.SettledAmount = ciaExpensesReport.SettledAmount ?? 0;
+                                tripvm3.SettlementDate = ciaExpensesReport.SettlementDate;
+                                tripvm3.RemainingBalance = Math.Abs((decimal)tripvm3.AmountToEmployeeInEGP) - tripvm3.SettledAmount;
+                                tripvm3.OperationsComment = ciaExpensesReport.OperationsComment;
+
+                                tripsvm.Add(tripvm3); // Trip with CIA and expenses
+                            }
+                        }
+                        else
+                        {
+                            tripsvm.Add(tripvm2); // Trip with CIA only
+                        }
+                    }
+
+                    // Fill Trip expenses without CIA
+                    foreach (var expense in trip.ExpensesReports)
+                    {
+                        if (expense.CashInAdvances.Count == 0)
+                        {
+                            var tripvm4 = tripvm;
+                            tripvm4.ExpenseReportId = expense.ID;
+                            tripvm4.SubmissionDate = expense.SubmissionDate;
+                            tripvm4.ApprovalDate = expense.ApprovalDate;
+                            tripvm4.ExpenseReportStatus = expense.ExpenseReportStatu.StatusName;
+                            tripvm4.TotalAmountInEGP = expense.TotalAmountInUSD ?? 0;
+                            tripvm4.CIAExpenseReport = expense.CashInAdvance ?? 0;
+                            tripvm4.AmountToEmployeeInEGP = (tripvm4.TotalAmountInEGP - tripvm4.CIAExpenseReport) ?? 0;
+                            tripvm4.SettledAmount = expense.SettledAmount ?? 0;
+                            tripvm4.SettlementDate = expense.SettlementDate;
+                            tripvm4.RemainingBalance = (decimal)tripvm4.AmountToEmployeeInEGP - tripvm4.SettledAmount;
+                            tripvm4.OperationsComment = expense.OperationsComment;
+
+                            tripsvm.Add(tripvm4); // Trip with Expenses only
+                        }
+                    }
+                }
+                else
+                {
+                    tripsvm.Add(tripvm); //Trip without any CIAs or Expenses
+                }
             }
 
-            ViewBag.EmployeeId = new SelectList(_db.Employees, "Id", "employeeId", trip.EmployeeId);
-            ViewBag.TRID = new SelectList(_db.TravelRequests, "TRID", "RequesterNotes", trip.TRID);
-            return View(trip);
+            return View(tripsvm);
         }
 
         // GET: Trips/Edit/5
@@ -69,29 +114,27 @@ namespace VacationsPortal.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Trip trip = _db.Trips.Find(id);
+            var trip = _db.Trips.Find(id);
             if (trip == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.EmployeeId = new SelectList(_db.Employees, "Id", "employeeId", trip.EmployeeId);
-            ViewBag.TRID = new SelectList(_db.TravelRequests, "TRID", "RequesterNotes", trip.TRID);
             return View(trip);
         }
 
         // POST: Trips/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,EmployeeId,StartDate,EndDate,NumberofDays,NumberofWorkingDays,Status,ModifiedBy,ModifiedOn,Business,IsCanceled,TRID")] Trip trip)
+        public ActionResult Edit(Trip trip)
         {
             if (ModelState.IsValid)
             {
                 _db.Entry(trip).State = EntityState.Modified;
+
+
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.EmployeeId = new SelectList(_db.Employees, "Id", "employeeId", trip.EmployeeId);
-            ViewBag.TRID = new SelectList(_db.TravelRequests, "TRID", "RequesterNotes", trip.TRID);
             return View(trip);
         }
 

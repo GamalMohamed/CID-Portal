@@ -21,7 +21,7 @@
         Clear CarryOver
     </a>
 </p>
-<hr/>
+<hr />
 <table class="table" id="tb">
     <thead>
         <tr>
@@ -47,8 +47,8 @@
                 @Html.DisplayName("CarryOver")
             </th>
             @*<th>
-                @Html.DisplayNameFor(model => model.DirectLine)
-            </th>*@
+                    @Html.DisplayNameFor(model => model.DirectLine)
+                </th>*@
 
             <th></th>
         </tr>
@@ -86,15 +86,15 @@
                     @Html.DisplayFor(modelItem => item.VacationsCarryOver)
                 </td>
                 @*<td>
-                    @Html.DisplayFor(modelItem => item.DirectLine)
-                </td>*@
+                        @Html.DisplayFor(modelItem => item.DirectLine)
+                    </td>*@
 
                 <td>
-                    @Html.ActionLink("Resigned", "MarkResigned", new { id = item.Id }) | 
+                    @Html.ActionLink("Resigned", "MarkResigned", new { id = item.Id }) |
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id })
                     @*<a type="button" class="btn btn-primary" href="@("/Employees/Edit/"+item.Id.ToString())">
-                        Edit
-                    </a>*@
+                            Edit
+                        </a>*@
                 </td>
             </tr>
         }
@@ -106,6 +106,7 @@
 @section Scripts
 {
     @Scripts.Render("~/bundles/datatables")
+    
     <script>
         $(document).ready(function () {
             $("#tb").DataTable();
