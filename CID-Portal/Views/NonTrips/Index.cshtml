@@ -1,0 +1,129 @@
+﻿@model IEnumerable<VacationsPortal.Models.CashInAdvance>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reason)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RequestDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ManagerApprovalDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OperationApprovalDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Paid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RejectionReason)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExchangeRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SettledAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SettlementDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OperationsComment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CashInAdvanceStatu.CashInAdvanceStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Currency.CurrencyName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employee.employeeId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Trip.ModifiedBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employee1.employeeId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employee2.employeeId)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Reason)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RequestDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ManagerApprovalDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OperationApprovalDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Paid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RejectionReason)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExchangeRate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SettledAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SettlementDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OperationsComment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CashInAdvanceStatu.CashInAdvanceStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Currency.CurrencyName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee.employeeId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Trip.ModifiedBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee1.employeeId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee2.employeeId)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

@@ -108,52 +108,87 @@ namespace VacationsPortal.Controllers
         }
 
         // GET: Trips/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? expid, int? ciaId)
         {
-            if (id == null)
+            if (expid == null && ciaId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var trip = _db.Trips.Find(id);
-            if (trip == null)
+
+            var settlementvm = new SettlementViewModel();
+            if (expid == null)
             {
-                return HttpNotFound();
+                var cia = _db.CashInAdvances.Find(ciaId);
+                if (cia == null)
+                {
+                    return HttpNotFound();
+                }
+                settlementvm.CashInAdvance = cia;
+                settlementvm.ExpensesReport = null;
             }
-            return View(trip);
+            else
+            {
+                var exp = _db.ExpensesReports.Find(expid);
+                if (exp == null)
+                {
+                    return HttpNotFound();
+                }
+                settlementvm.ExpensesReport = exp;
+            }
+
+            return View(settlementvm);
         }
 
         // POST: Trips/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Trip trip)
+        public ActionResult Edit(SettlementViewModel settlementvm)
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(trip).State = EntityState.Modified;
-
+                if (settlementvm.ExpensesReport == null)
+                {
+                    var cia = _db.CashInAdvances.Find(settlementvm.CashInAdvance.Id);
+                    if (cia == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    cia.SettledAmount = settlementvm.CashInAdvance.SettledAmount;
+                    cia.OperationsComment = settlementvm.CashInAdvance.OperationsComment;
+                }
+                else
+                {
+                    var exp = _db.ExpensesReports.Find(settlementvm.ExpensesReport.ID);
+                    if (exp == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    exp.SettledAmount = settlementvm.ExpensesReport.SettledAmount;
+                    exp.OperationsComment = settlementvm.ExpensesReport.OperationsComment;
+                }
 
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(trip);
+            return View(settlementvm);
         }
 
-        // GET: Trips/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var trip = _db.Trips.Find(id);
-            if (trip == null)
-            {
-                return HttpNotFound();
-            }
-            _db.Trips.Remove(trip);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        //// GET: Trips/Delete/5
+        //public ActionResult Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    var trip = _db.Trips.Find(id);
+        //    if (trip == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    _db.Trips.Remove(trip);
+        //    _db.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
 
         protected override void Dispose(bool disposing)
         {

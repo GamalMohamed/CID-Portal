@@ -186,7 +186,7 @@
                     @if (item.SettledAmount != null)
                     {
                         var s = Math.Round(item.SettledAmount.Value, 2).ToString(CultureInfo.InvariantCulture);
-                        @Html.ActionLink(s, "Edit", new { id = item.Id })
+                        @Html.ActionLink(s, "Edit", new { ExpId = item.ExpenseReportId, CIAId = item.CIA_Id })
                     }
                 </td>
                 <td>

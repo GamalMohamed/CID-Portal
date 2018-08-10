@@ -1,10 +1,10 @@
-﻿@model VacationsPortal.Models.Trip
+﻿@model VacationsPortal.ViewModels.SettlementViewModel
 
 @{
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit Settlement amount</h2>
+<h2>Edit Settlement</h2>
 
 
 @using (Html.BeginForm())
@@ -13,22 +13,43 @@
 <div class="form-horizontal">
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.Id)
+    @if (Model.ExpensesReport == null)
+    {
+        @Html.HiddenFor(model => model.CashInAdvance.Id)
+        <div class="form-group">
+            @Html.LabelFor(model => model.CashInAdvance.SettledAmount, "Settled Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CashInAdvance.SettledAmount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CashInAdvance.SettledAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CashInAdvance.OperationsComment, "Operations Comment", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CashInAdvance.OperationsComment, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CashInAdvance.OperationsComment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.ExpensesReport.ID)
+        <div class="form-group">
+            @Html.LabelFor(model => model.ExpensesReport.SettledAmount, "Settled Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ExpensesReport.SettledAmount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ExpensesReport.SettledAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ExpensesReport.OperationsComment, "Operations Comment", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ExpensesReport.OperationsComment, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ExpensesReport.OperationsComment, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
-        </div>
-    </div>
+    }
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
