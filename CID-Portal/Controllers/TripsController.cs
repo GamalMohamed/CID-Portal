@@ -76,7 +76,7 @@ namespace VacationsPortal.Controllers
                         }
                     }
 
-                    // Fill Trip expenses without CIA
+                    // Trip expenses without CIA
                     foreach (var expense in trip.ExpensesReports)
                     {
                         if (expense.CashInAdvances.Count == 0)
