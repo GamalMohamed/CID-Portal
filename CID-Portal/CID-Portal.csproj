@@ -159,6 +159,8 @@
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NonTripsController.cs" />
+    <Compile Include="Controllers\TravelRequestsController.cs" />
+    <Compile Include="Controllers\TRHotelInfosController.cs" />
     <Compile Include="Controllers\TripsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -284,6 +286,7 @@
     <Compile Include="ViewModels\EmployeeViewModel.cs" />
     <Compile Include="ViewModels\NonTripViewModel.cs" />
     <Compile Include="ViewModels\SettlementViewModel.cs" />
+    <Compile Include="ViewModels\TravelRequestViewModel.cs" />
     <Compile Include="ViewModels\TripViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -602,6 +605,13 @@
     <Content Include="Views\Trips\Index.cshtml" />
     <Content Include="Views\NonTrips\Edit.cshtml" />
     <Content Include="Views\NonTrips\Index.cshtml" />
+    <Content Include="Views\TravelRequests\Edit.cshtml" />
+    <Content Include="Views\TravelRequests\Index.cshtml" />
+    <Content Include="Views\TRHotelInfos\Create.cshtml" />
+    <Content Include="Views\TRHotelInfos\Delete.cshtml" />
+    <Content Include="Views\TRHotelInfos\Details.cshtml" />
+    <Content Include="Views\TRHotelInfos\Edit.cshtml" />
+    <Content Include="Views\TRHotelInfos\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
