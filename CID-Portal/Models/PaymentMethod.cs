@@ -12,29 +12,18 @@ namespace VacationsPortal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TRHotelInfo
+    public partial class PaymentMethod
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TRHotelInfo()
+        public PaymentMethod()
         {
-            this.Routes = new HashSet<Route>();
+            this.TRHotelInfoes = new HashSet<TRHotelInfo>();
         }
     
         public int Id { get; set; }
-        public Nullable<int> TRID { get; set; }
-        public string CountryName { get; set; }
-        public Nullable<int> HotelId { get; set; }
-        public Nullable<double> HotelRate { get; set; }
-        public Nullable<int> PaymentMethodID { get; set; }
-        public System.DateTime CheckInDate { get; set; }
-        public System.DateTime CheckOutDate { get; set; }
-        public Nullable<int> CurrencyID { get; set; }
+        public string MethodName { get; set; }
     
-        public virtual Currency Currency { get; set; }
-        public virtual Hotel Hotel { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Route> Routes { get; set; }
-        public virtual TravelRequest TravelRequest { get; set; }
-        public virtual PaymentMethod PaymentMethod { get; set; }
+        public virtual ICollection<TRHotelInfo> TRHotelInfoes { get; set; }
     }
 }

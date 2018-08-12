@@ -10,7 +10,7 @@ namespace VacationsPortal.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction("Index","TravelRequests");
+            return RedirectToAction("Index","TRHotelInfos");
         }
 
         //public ActionResult About()

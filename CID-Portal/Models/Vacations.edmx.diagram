@@ -100,6 +100,8 @@
         <AssociationConnector Association="CIDvNEXtModel.Trips_TRequests" />
         <AssociationConnector Association="CIDvNEXtModel.CIA_ExpenseReport" />
         <AssociationConnector Association="CIDvNEXtModel.CountriesCurrencies" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.PaymentMethod" Width="1.5" PointX="10.375" PointY="11.875" />
+        <AssociationConnector Association="CIDvNEXtModel.FK_TRHotelInfo_PaymentMethods" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

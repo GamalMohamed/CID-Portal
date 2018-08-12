@@ -162,6 +162,7 @@
     <Compile Include="Controllers\TravelRequestsController.cs" />
     <Compile Include="Controllers\TRHotelInfosController.cs" />
     <Compile Include="Controllers\TripsController.cs" />
+    <Compile Include="Controllers\VisasController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -223,6 +224,9 @@
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Hotel.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PaymentMethod.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">
@@ -607,11 +611,12 @@
     <Content Include="Views\NonTrips\Index.cshtml" />
     <Content Include="Views\TravelRequests\Edit.cshtml" />
     <Content Include="Views\TravelRequests\Index.cshtml" />
-    <Content Include="Views\TRHotelInfos\Create.cshtml" />
-    <Content Include="Views\TRHotelInfos\Delete.cshtml" />
-    <Content Include="Views\TRHotelInfos\Details.cshtml" />
     <Content Include="Views\TRHotelInfos\Edit.cshtml" />
     <Content Include="Views\TRHotelInfos\Index.cshtml" />
+    <Content Include="Views\TRHotelInfos\Details.cshtml" />
+    <Content Include="Views\Visas\Details.cshtml" />
+    <Content Include="Views\Visas\Edit.cshtml" />
+    <Content Include="Views\Visas\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -17,8 +17,10 @@ namespace VacationsPortal.Controllers
         // GET: TRHotelInfos
         public ActionResult Index()
         {
-            var tRHotelInfoes = _db.TRHotelInfoes.Include(t => t.Currency).Include(t => t.Hotel).Include(t => t.TravelRequest);
-            return View(tRHotelInfoes.ToList());
+            var tRHotelInfoes = _db.TRHotelInfoes.Where(
+                t => t.CheckOutDate.Month == DateTime.Now.Month - 1 &&
+                 t.CheckOutDate.Year == DateTime.Now.Year).ToList();
+            return View(tRHotelInfoes);
         }
 
         // GET: TRHotelInfos/Details/5

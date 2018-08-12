@@ -59,5 +59,6 @@ namespace VacationsPortal.Models
         public virtual DbSet<TRHotelInfo> TRHotelInfoes { get; set; }
         public virtual DbSet<Trip> Trips { get; set; }
         public virtual DbSet<TRItemsStatu> TRItemsStatus { get; set; }
+        public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
     }
 }

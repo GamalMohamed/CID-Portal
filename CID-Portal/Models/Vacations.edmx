@@ -280,6 +280,13 @@
           <Property Name="CityID" Type="int" Nullable="false" />
           <Property Name="Notes" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="PaymentMethods">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MethodName" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
         <EntityType Name="Roles">
           <Key>
             <PropertyRef Name="Id" />
@@ -1148,6 +1155,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TRHotelInfo_PaymentMethods">
+          <End Role="PaymentMethods" Type="Self.PaymentMethods" Multiplicity="0..1" />
+          <End Role="TRHotelInfo" Type="Self.TRHotelInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentMethods">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TRHotelInfo">
+              <PropertyRef Name="PaymentMethodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TRHotelInfo_TravelRequests">
           <End Role="TravelRequests" Type="Self.TravelRequests" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -1269,6 +1288,7 @@
           <EntitySet Name="ExpensesReport" EntityType="Self.ExpensesReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpensesSubCategoryTypes" EntityType="Self.ExpensesSubCategoryTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Hotels" EntityType="Self.Hotels" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentMethods" EntityType="Self.PaymentMethods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Route" EntityType="Self.Route" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subsidaries" EntityType="Self.Subsidaries" Schema="dbo" store:Type="Tables" />
@@ -1501,6 +1521,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_TRHotelInfo_Hotels" Association="Self.FK_TRHotelInfo_Hotels">
             <End Role="Hotels" EntitySet="Hotels" />
+            <End Role="TRHotelInfo" EntitySet="TRHotelInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TRHotelInfo_PaymentMethods" Association="Self.FK_TRHotelInfo_PaymentMethods">
+            <End Role="PaymentMethods" EntitySet="PaymentMethods" />
             <End Role="TRHotelInfo" EntitySet="TRHotelInfo" />
           </AssociationSet>
           <AssociationSet Name="FK_TRHotelInfo_TravelRequests" Association="Self.FK_TRHotelInfo_TravelRequests">
@@ -2153,6 +2177,11 @@
             <End Role="Country" EntitySet="Countries" />
             <End Role="Currency" EntitySet="Currencies" />
           </AssociationSet>
+          <EntitySet Name="PaymentMethods" EntityType="CIDvNEXtModel.PaymentMethod" />
+          <AssociationSet Name="FK_TRHotelInfo_PaymentMethods" Association="CIDvNEXtModel.FK_TRHotelInfo_PaymentMethods">
+            <End Role="PaymentMethod" EntitySet="PaymentMethods" />
+            <End Role="TRHotelInfo" EntitySet="TRHotelInfoes" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="EmployeesView">
           <Key>
@@ -2556,6 +2585,7 @@
           <NavigationProperty Name="Hotel" Relationship="CIDvNEXtModel.FK_TRHotelInfo_Hotels" FromRole="TRHotelInfo" ToRole="Hotel" />
           <NavigationProperty Name="Routes" Relationship="CIDvNEXtModel.FK__Route__HotelInfo" FromRole="TRHotelInfo" ToRole="Route" />
           <NavigationProperty Name="TravelRequest" Relationship="CIDvNEXtModel.FK_TRHotelInfo_TravelRequests" FromRole="TRHotelInfo" ToRole="TravelRequest" />
+          <NavigationProperty Name="PaymentMethod" Relationship="CIDvNEXtModel.FK_TRHotelInfo_PaymentMethods" FromRole="TRHotelInfo" ToRole="PaymentMethod" />
         </EntityType>
         <EntityType Name="Trip">
           <Key>
@@ -3123,6 +3153,26 @@
           <End Type="CIDvNEXtModel.Country" Role="Country" Multiplicity="*" />
           <End Type="CIDvNEXtModel.Currency" Role="Currency" Multiplicity="*" />
         </Association>
+        <EntityType Name="PaymentMethod">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MethodName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TRHotelInfoes" Relationship="CIDvNEXtModel.FK_TRHotelInfo_PaymentMethods" FromRole="PaymentMethod" ToRole="TRHotelInfo" />
+        </EntityType>
+        <Association Name="FK_TRHotelInfo_PaymentMethods">
+          <End Type="CIDvNEXtModel.PaymentMethod" Role="PaymentMethod" Multiplicity="0..1" />
+          <End Type="CIDvNEXtModel.TRHotelInfo" Role="TRHotelInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentMethod">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TRHotelInfo">
+              <PropertyRef Name="PaymentMethodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3637,6 +3687,14 @@
               <ScalarProperty Name="Id" ColumnName="CountryID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="PaymentMethods">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.PaymentMethod">
+              <MappingFragment StoreEntitySet="PaymentMethods">
+                <ScalarProperty Name="MethodName" ColumnName="MethodName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
