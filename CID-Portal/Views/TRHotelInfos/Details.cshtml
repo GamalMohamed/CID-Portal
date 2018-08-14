@@ -11,69 +11,56 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.CountryName)
+            @Html.DisplayNameFor(model => model.TravelRequest.TRID)
         </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TravelRequest.TRID)
+        </dd>
 
+        <dt>
+            @Html.DisplayName("Employee Name")
+        </dt>
+        <dd>
+            @if (Model.TravelRequest.Trips.Count > 0)
+            {
+                @Html.DisplayFor(model => model.TravelRequest.Trips.ToList()[0].Employee.contact.FullName)
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Country Name")
+        </dt>
         <dd>
             @Html.DisplayFor(model => model.CountryName)
         </dd>
 
         <dt>
+            @Html.DisplayName("Check in/out")
+        </dt>
+        <dd>
+            @Html.DisplayName(Model.CheckInDate.ToShortDateString() + " to " + Model.CheckOutDate.ToShortDateString())
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.HotelRate)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.HotelRate)
+            @Html.DisplayName(Model.HotelRate + " " + Model.Currency.CurrencyName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PaymentMethodID)
+            @Html.DisplayNameFor(model => model.Hotel)
         </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PaymentMethodID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CheckInDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CheckInDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CheckOutDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CheckOutDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Currency.CurrencyName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Currency.CurrencyName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Hotel.Name)
-        </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Hotel.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TravelRequest.RequesterNotes)
+            @Html.DisplayNameFor(model => model.PaymentMethod)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.TravelRequest.RequesterNotes)
+            @Html.DisplayFor(model => model.PaymentMethod.MethodName)
         </dd>
-
     </dl>
 </div>
 <p>

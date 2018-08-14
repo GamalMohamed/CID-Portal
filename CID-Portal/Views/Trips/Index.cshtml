@@ -7,6 +7,13 @@
 
 <h2>Trips @DateTime.Now.Year </h2>
 
+<style>
+    div.dt-buttons {
+        float: right;
+        margin-left: 10px;
+    }
+</style>
+
 <table class="mdl-data-table" id="tb">
     <thead>
         <tr>
@@ -227,7 +234,7 @@
     <script>
         $(document).ready(function () {
             $("#tb").DataTable({
-                dom: 'Bfrtip',
+                dom: 'lBfrtip',
                 buttons: [
                     'excel'
                 ],

@@ -39,7 +39,7 @@ namespace VacationsPortal.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Route route = _db.Routes.Find(id);
+            var route = _db.Routes.FirstOrDefault(v => v.Trip.TRID == id);
             if (route == null)
             {
                 return HttpNotFound();
@@ -54,12 +54,12 @@ namespace VacationsPortal.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Route route = _db.Routes.Find(id);
+            var route = _db.Routes.FirstOrDefault(v => v.routeId == id);
             if (route == null)
             {
                 return HttpNotFound();
             }
-            
+            ViewBag.Currencies = new SelectList(_db.Currencies.ToList(), "CurrencyName", "CurrencyName");
             return View(route);
         }
 
@@ -70,9 +70,19 @@ namespace VacationsPortal.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(route).State = EntityState.Modified;
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+                var rT = _db.Routes.Find(route.routeId);
+                if (rT != null)
+                {
+                    rT.VisaCost = route.VisaCost;
+                    if (route.Currency.CurrencyName != null)
+                        rT.Currency =
+                            _db.Currencies.FirstOrDefault(c => c.CurrencyName == route.Currency.CurrencyName);
+                    else
+                        rT.VisaCostCurrencyID = null;
+
+                    _db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
             return View(route);
         }
@@ -94,7 +104,7 @@ namespace VacationsPortal.Controllers
         //    return RedirectToAction("Index");
         //}
 
-         protected override void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing)
             {

@@ -15,6 +15,114 @@ namespace VacationsPortal.Controllers
     {
         private readonly CIDvNEXtEntities _db = new CIDvNEXtEntities();
 
+        public TravelRequestViewModel SetTRvmFields(TravelRequest travelRequest, Trip trip,
+                                                    Dictionary<int, string> statusesDic)
+        {
+            var tRvm = new TravelRequestViewModel
+            {
+                Id = travelRequest.TRID,
+                TRStatus = travelRequest.TravelRequestStatu.Status,
+                FlightCost = travelRequest.TotalFlightCost,
+                FlightCost2 = travelRequest.TotalFlightCost2,
+                ReissueCost = travelRequest.TotalReissueCost,
+                ReissueCost2 = travelRequest.TotalReissueCost2,
+                ReissueCost3 = travelRequest.TotalReissueCost3,
+                FlightRefund = travelRequest.FlightRefundCost,
+                HotelCost = travelRequest.TotalHotelCost,
+                RequesterNotes = travelRequest.RequesterNotes,
+                OperationsNotes = travelRequest.OperationsNotes,
+                TripType = trip.Business != null && (bool)trip.Business ? "Business" : "Training",
+                EmployeeName = trip.Employee.contact.FullName,
+                StartDate = trip.StartDate,
+                EndDate = trip.EndDate,
+                NumOfDays = trip.NumberofDays,
+                WorkingDays = trip.NumberofWorkingDays,
+                ModifiedOn = trip.ModifiedOn,
+                IsCanceled = trip.IsCanceled,
+                Routes = trip.Routes.ToList()[0].City.Name
+            };
+
+            for (var i = 1; i < trip.Routes.Count; i++)
+            {
+                tRvm.Routes += ',' + trip.Routes.ToList()[i].City.Name;
+            }
+            if (travelRequest.FlightStatus != null)
+            {
+                if (statusesDic.ContainsKey((int)travelRequest.FlightStatus))
+                {
+                    tRvm.FlightStatus = statusesDic[(int)travelRequest.FlightStatus];
+                }
+            }
+            if (travelRequest.HotelStatus != null)
+            {
+                if (statusesDic.ContainsKey((int)travelRequest.HotelStatus))
+                {
+                    tRvm.HotelStatus = statusesDic[(int)travelRequest.HotelStatus];
+                }
+            }
+            if (travelRequest.VisaStatus != null)
+            {
+                if (statusesDic.ContainsKey((int)travelRequest.VisaStatus))
+                {
+                    tRvm.VisaStatus = statusesDic[(int)travelRequest.VisaStatus];
+                }
+            }
+            if (travelRequest.HRLetterStatus != null)
+            {
+                if (statusesDic.ContainsKey((int)travelRequest.HRLetterStatus))
+                {
+                    tRvm.HRLetterStatus = statusesDic[(int)travelRequest.HRLetterStatus];
+                }
+            }
+            if (travelRequest.Currency != null)
+            {
+                tRvm.FlightCostCurrency = travelRequest.Currency.CurrencyName;
+            }
+            if (travelRequest.Currency2 != null)
+            {
+                tRvm.FlightCost2Currency = travelRequest.Currency2.CurrencyName;
+            }
+            if (travelRequest.Currency1 != null)
+            {
+                tRvm.HotelCostCurrency = travelRequest.Currency1.CurrencyName;
+            }
+
+            if (travelRequest.FlightInvoiceStatus != null)
+            {
+                tRvm.FlightInvoiceStatus = travelRequest.FlightInvoiceStatus == 0 ? "Not Invoiced" : "Invoiced";
+            }
+            if (travelRequest.FlightInvoiceStatus2 != null)
+            {
+                tRvm.FlightInvoiceStatus2 = travelRequest.FlightInvoiceStatus2 == 0 ? "Not Invoiced" : "Invoiced";
+            }
+            if (travelRequest.FlightRefundInvoiceStatus != null)
+            {
+                tRvm.FlightRefundInvoiceStatus = travelRequest.FlightRefundInvoiceStatus == 0 ? "Not Invoiced" : "Invoiced";
+            }
+            if (travelRequest.HoteInvoiceStatus != null)
+            {
+                tRvm.HotelInvoiceStatus = travelRequest.HoteInvoiceStatus == 0 ? "Not Invoiced" : "Invoiced";
+            }
+            if (travelRequest.VisaInvoiceStatus != null)
+            {
+                tRvm.VisaInvoiceStatus = travelRequest.VisaInvoiceStatus == 0 ? "Not Invoiced" : "Invoiced";
+            }
+            if (travelRequest.TotalReissueStatus != null)
+            {
+                tRvm.ReissueInvoiceStatus = travelRequest.TotalReissueStatus == 0 ? "Not Invoiced" : "Invoiced";
+            }
+            if (travelRequest.TotalReissueStatus2 != null)
+            {
+                tRvm.ReissueInvoiceStatus2 = travelRequest.TotalReissueStatus2 == 0 ? "Not Invoiced" : "Invoiced";
+            }
+            if (travelRequest.TotalReissueStatus3 != null)
+            {
+                tRvm.ReissueInvoiceStatus3 = travelRequest.TotalReissueStatus3 == 0 ? "Not Invoiced" : "Invoiced";
+            }
+
+            return tRvm;
+        }
+
         // GET: TravelRequests
         public ActionResult Index()
         {
@@ -29,75 +137,7 @@ namespace VacationsPortal.Controllers
             {
                 foreach (var trip in travelRequest.Trips.ToList())
                 {
-                    var tRvm = new TravelRequestViewModel();
-                    tRvm.Id = travelRequest.TRID;
-                    tRvm.EmployeeName = trip.Employee.contact.FullName;
-                    tRvm.StartDate = trip.StartDate;
-                    tRvm.EndDate = trip.EndDate;
-                    tRvm.NumOfDays = trip.NumberofDays;
-                    tRvm.WorkingDays = trip.NumberofWorkingDays;
-                    tRvm.ModifiedOn = trip.ModifiedOn;
-                    tRvm.IsCanceled = trip.IsCanceled;
-                    tRvm.Routes = trip.Routes.ToList()[0].City.Name;
-                    for (int i = 1; i < trip.Routes.Count; i++)
-                    {
-                        tRvm.Routes += ',' + trip.Routes.ToList()[i].City.Name;
-                    }
-                    tRvm.TRStatus = travelRequest.TravelRequestStatu.Status;
-                    if (travelRequest.FlightStatus != null)
-                    {
-                        if (statusesDic.ContainsKey((int)travelRequest.FlightStatus))
-                        {
-                            tRvm.FlightStatus = statusesDic[(int)travelRequest.FlightStatus];
-                        }
-                    }
-                    if (travelRequest.HotelStatus != null)
-                    {
-                        if (statusesDic.ContainsKey((int)travelRequest.HotelStatus))
-                        {
-                            tRvm.HotelStatus = statusesDic[(int)travelRequest.HotelStatus];
-                        }
-                    }
-                    if (travelRequest.VisaStatus != null)
-                    {
-                        if (statusesDic.ContainsKey((int)travelRequest.VisaStatus))
-                        {
-                            tRvm.VisaStatus = statusesDic[(int)travelRequest.VisaStatus];
-                        }
-                    }
-                    if (travelRequest.HRLetterStatus != null)
-                    {
-                        if (statusesDic.ContainsKey((int)travelRequest.HRLetterStatus))
-                        {
-                            tRvm.HRLetterStatus = statusesDic[(int)travelRequest.HRLetterStatus];
-                        }
-                    }
-
-                    tRvm.FlightCost = travelRequest.TotalFlightCost;
-                    if (travelRequest.Currency != null)
-                    {
-                        tRvm.FlightCostCurrency = travelRequest.Currency.CurrencyName;
-                    }
-                    if (travelRequest.Currency2 != null)
-                    {
-                        tRvm.FlightCost2Currency = travelRequest.Currency2.CurrencyName;
-                    }
-                    if (travelRequest.Currency1 != null)
-                    {
-                        tRvm.HotelCostCurrency = travelRequest.Currency1.CurrencyName;
-                    }
-
-                    tRvm.FlightCost2 = travelRequest.TotalFlightCost2;
-                    tRvm.ReissueCost = travelRequest.TotalReissueCost;
-                    tRvm.ReissueCost2 = travelRequest.TotalReissueCost2;
-                    tRvm.ReissueCost3 = travelRequest.TotalReissueCost3;
-                    tRvm.FlightRefund = travelRequest.FlightRefundCost;
-                    tRvm.HotelCost = travelRequest.TotalHotelCost;
-                    tRvm.RequesterNotes = travelRequest.RequesterNotes;
-                    tRvm.OperationsNotes = travelRequest.OperationsNotes;
-                    tRvm.TripType = trip.Business != null && (bool)trip.Business ? "Business" : "Training";
-
-                    travelRequestsvm.Add(tRvm);
+                    travelRequestsvm.Add(SetTRvmFields(travelRequest, trip, statusesDic));
                 }
             }
 
@@ -111,28 +151,108 @@ namespace VacationsPortal.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TravelRequest travelRequest = _db.TravelRequests.Find(id);
+            var travelRequest = _db.TravelRequests.Find(id);
             if (travelRequest == null)
             {
                 return HttpNotFound();
             }
-
-            return View(travelRequest);
+            var statuses = _db.TRItemsStatus;
+            var statusesDic = statuses.ToDictionary(status => status.Id, status => status.Status);
+            var tRvm = SetTRvmFields(travelRequest, travelRequest.Trips.ToList()[0], statusesDic);
+            ViewBag.Statuses = new SelectList(statuses.ToList(), "Status", "Status");
+            ViewBag.TRStatuses = new SelectList(_db.TravelRequestStatus.ToList(), "Status", "Status");
+            ViewBag.Currencies = new SelectList(_db.Currencies.ToList(), "CurrencyName", "CurrencyName");
+            ViewBag.InvoiceStatuses = new SelectList(new List<string>() { "Not Invoiced", "Invoiced" });
+            return View(tRvm);
         }
 
         // POST: TravelRequests/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(TravelRequest travelRequest)
+        public ActionResult Edit(TravelRequestViewModel travelRequestvm)
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(travelRequest).State = EntityState.Modified;
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+                var travelRequest = _db.TravelRequests.Find(travelRequestvm.Id);
+                if (travelRequest != null)
+                {
+                    var TRstatuses = _db.TravelRequestStatus.ToList();
+                    travelRequest.TravelRequestStatu = TRstatuses.FirstOrDefault(t => t.Status == travelRequestvm.TRStatus);
+
+                    var currencies = _db.Currencies.ToList();
+                    travelRequest.Currency = currencies.FirstOrDefault(t => t.CurrencyName == travelRequestvm.FlightCostCurrency);
+                    travelRequest.Currency2 = currencies.FirstOrDefault(t => t.CurrencyName == travelRequestvm.FlightCost2Currency);
+                    travelRequest.Currency1 = currencies.FirstOrDefault(t => t.CurrencyName == travelRequestvm.HotelCostCurrency);
+
+                    var statuses = _db.TRItemsStatus.ToList();
+                    var s1 = statuses.FirstOrDefault(s => s.Status == travelRequestvm.VisaStatus);
+                    if (s1 != null)
+                        travelRequest.VisaStatus = s1.Id;
+                    var s2 = statuses.FirstOrDefault(s => s.Status == travelRequestvm.HotelStatus);
+                    if (s2 != null)
+                        travelRequest.HotelStatus = s2.Id;
+                    var s3 = statuses.FirstOrDefault(s => s.Status == travelRequestvm.FlightStatus);
+                    if (s3 != null)
+                        travelRequest.FlightStatus = s3.Id;
+                    var s4 = statuses.FirstOrDefault(s => s.Status == travelRequestvm.HRLetterStatus);
+                    if (s4 != null)
+                        travelRequest.HRLetterStatus = s4.Id;
+
+                    travelRequest.TotalFlightCost = travelRequestvm.FlightCost;
+                    travelRequest.TotalFlightCost2 = travelRequestvm.FlightCost2;
+                    travelRequest.TotalHotelCost = travelRequestvm.HotelCost;
+                    travelRequest.OperationsNotes = travelRequestvm.OperationsNotes;
+                    travelRequest.TotalReissueCost = travelRequestvm.ReissueCost;
+                    travelRequest.TotalReissueCost2 = travelRequestvm.ReissueCost2;
+                    travelRequest.TotalReissueCost3 = travelRequestvm.ReissueCost3;
+                    travelRequest.FlightRefundCost = travelRequestvm.FlightRefund;
+
+                    if (travelRequestvm.FlightInvoiceStatus != null)
+                        travelRequest.FlightInvoiceStatus = travelRequestvm.FlightInvoiceStatus == "Invoiced" ? 1 : 0;
+                    else
+                        travelRequest.FlightInvoiceStatus = null;
+
+                    if (travelRequestvm.FlightInvoiceStatus2 != null)
+                        travelRequest.FlightInvoiceStatus2 = travelRequestvm.FlightInvoiceStatus2 == "Invoiced" ? 1 : 0;
+                    else
+                        travelRequest.FlightInvoiceStatus2 = null;
+
+                    if (travelRequestvm.ReissueInvoiceStatus != null)
+                        travelRequest.TotalReissueStatus = travelRequestvm.ReissueInvoiceStatus == "Invoiced" ? 1 : 0;
+                    else
+                        travelRequest.TotalReissueStatus = null;
+
+                    if (travelRequestvm.ReissueInvoiceStatus2 != null)
+                        travelRequest.TotalReissueStatus2 = travelRequestvm.ReissueInvoiceStatus2 == "Invoiced" ? 1 : 0;
+                    else
+                        travelRequest.TotalReissueStatus2 = null;
+
+                    if (travelRequestvm.ReissueInvoiceStatus3 != null)
+                        travelRequest.TotalReissueStatus3 = travelRequestvm.ReissueInvoiceStatus3 == "Invoiced" ? 1 : 0;
+                    else
+                        travelRequest.TotalReissueStatus3 = null;
+
+                    if (travelRequestvm.HotelInvoiceStatus != null)
+                        travelRequest.HoteInvoiceStatus = travelRequestvm.HotelInvoiceStatus == "Invoiced" ? 1 : 0;
+                    else
+                        travelRequest.HoteInvoiceStatus = null;
+
+                    if (travelRequestvm.VisaInvoiceStatus != null)
+                        travelRequest.VisaInvoiceStatus = travelRequestvm.VisaInvoiceStatus == "Invoiced" ? 1 : 0;
+                    else
+                        travelRequest.VisaInvoiceStatus = null;
+
+                    if (travelRequestvm.FlightRefundInvoiceStatus != null)
+                        travelRequest.FlightRefundInvoiceStatus = travelRequestvm.FlightRefundInvoiceStatus == "Invoiced" ? 1 : 0;
+                    else
+                        travelRequest.FlightRefundInvoiceStatus = null;
+
+                    _db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
 
-            return View(travelRequest);
+            return View(travelRequestvm);
         }
 
         //// GET: TravelRequests/Delete/5

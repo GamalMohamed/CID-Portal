@@ -4,7 +4,15 @@
     ViewBag.Title = "Hotels";
 }
 
+<style>
+    div.dt-buttons {
+        float: right;
+        margin-left: 10px;
+    }
+</style>
+
 <h2>Hotels @DateTime.Now.Year</h2>
+
 
 <table class="mdl-data-table" id="tb">
     <thead>
@@ -97,7 +105,7 @@
     <script>
         $(document).ready(function () {
             $("#tb").DataTable({
-                dom: 'Bfrtip',
+                dom: 'lBfrtip',
                 buttons: [
                     'excel'
                 ],

@@ -5,7 +5,12 @@
 }
 
 <h2>Travel Requests @DateTime.Now.Year </h2>
-
+<style>
+    div.dt-buttons {
+        float: right;
+        margin-left: 10px;
+    }
+</style>
 <table class="mdl-data-table" id="tb">
     <thead>
         <tr>
@@ -98,8 +103,10 @@
         {
             <tr>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-                    @* |@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Hotel", "../TRHotelInfos/Details/" + item.Id) |
+                    @Html.ActionLink("Visa", "../Visas/Details/" + item.Id)
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Id)
@@ -218,7 +225,7 @@
     <script>
         $(document).ready(function () {
             $("#tb").DataTable({
-                dom: 'Bfrtip',
+                dom: 'lBfrtip',
                 buttons: [
                     'excel'
                 ],
@@ -228,7 +235,7 @@
                     }
                 ],
                 fixedHeader: true,
-                "order": [[0, "desc"]]
+                "order": [[1, "desc"]]
             });
         });
     </script>

@@ -30,7 +30,7 @@ namespace VacationsPortal.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TRHotelInfo tRHotelInfo = _db.TRHotelInfoes.Find(id);
+            var tRHotelInfo = _db.TRHotelInfoes.FirstOrDefault(t => t.TRID == id);
             if (tRHotelInfo == null)
             {
                 return HttpNotFound();
@@ -45,14 +45,14 @@ namespace VacationsPortal.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TRHotelInfo tRHotelInfo = _db.TRHotelInfoes.Find(id);
+            var tRHotelInfo = _db.TRHotelInfoes.Find(id);
             if (tRHotelInfo == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CurrencyID = new SelectList(_db.Currencies, "ID", "CurrencyName", tRHotelInfo.CurrencyID);
-            ViewBag.HotelId = new SelectList(_db.Hotels, "Id", "Name", tRHotelInfo.HotelId);
-            ViewBag.TRID = new SelectList(_db.TravelRequests, "TRID", "RequesterNotes", tRHotelInfo.TRID);
+            ViewBag.Currencies = new SelectList(_db.Currencies.ToList(), "CurrencyName", "CurrencyName");
+            ViewBag.PaymentMethods = new SelectList(_db.PaymentMethods.ToList(), "MethodName", "MethodName");
+            ViewBag.Hotels = new SelectList(_db.Hotels.ToList(), "Name", "Name");
             return View(tRHotelInfo);
         }
 
@@ -63,13 +63,31 @@ namespace VacationsPortal.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(tRHotelInfo).State = EntityState.Modified;
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+                var trH = _db.TRHotelInfoes.Find(tRHotelInfo.Id);
+                if (trH != null)
+                {
+                    trH.HotelRate = tRHotelInfo.HotelRate;
+                    if (tRHotelInfo.Currency.CurrencyName != null)
+                        trH.Currency =
+                            _db.Currencies.FirstOrDefault(c => c.CurrencyName == tRHotelInfo.Currency.CurrencyName);
+                    else
+                        trH.CurrencyID = null;
+
+                    if (tRHotelInfo.PaymentMethod.MethodName != null)
+                        trH.PaymentMethod =
+                            _db.PaymentMethods.FirstOrDefault(p => p.MethodName == tRHotelInfo.PaymentMethod.MethodName);
+                    else
+                        trH.PaymentMethodID = null;
+
+                    if (tRHotelInfo.Hotel.Name != null)
+                        trH.Hotel = _db.Hotels.FirstOrDefault(h => h.Name == tRHotelInfo.Hotel.Name);
+                    else
+                        trH.HotelId = null;
+
+                    _db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
-            ViewBag.CurrencyID = new SelectList(_db.Currencies, "ID", "CurrencyName", tRHotelInfo.CurrencyID);
-            ViewBag.HotelId = new SelectList(_db.Hotels, "Id", "Name", tRHotelInfo.HotelId);
-            ViewBag.TRID = new SelectList(_db.TravelRequests, "TRID", "RequesterNotes", tRHotelInfo.TRID);
             return View(tRHotelInfo);
         }
 

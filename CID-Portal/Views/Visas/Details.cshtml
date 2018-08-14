@@ -11,171 +11,38 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.arrivalDate)
+            @Html.DisplayName("TRID")
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.arrivalDate)
+            @Html.DisplayFor(model => model.Trip.TRID)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.requireVisa)
+            @Html.DisplayName("Employeee Name")
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.requireVisa)
+            @Html.DisplayFor(model => model.Trip.Employee.contact.FullName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.AccommodationRequested)
+            @Html.DisplayName("Country")
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.AccommodationRequested)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FlightRequested)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FlightRequested)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.InvitationLetterRequested)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.InvitationLetterRequested)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.HRLetterRequested)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.HRLetterRequested)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Rating)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Rating)
+            @Html.DisplayFor(model => model.Country.CountryName)
         </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.VisaCost)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.VisaCost)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ForecastedFlight)
+            @Html.DisplayNameFor(model => model.Currency)
         </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ForecastedFlight)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ForecastedAccommodation)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ForecastedAccommodation)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ForecastedExpenses)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ForecastedExpenses)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ForecastedTotal)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ForecastedTotal)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.HotelRating)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.HotelRating)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.City.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.City.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.City1.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.City1.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Country.CountryCode)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Country.CountryCode)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Country1.CountryCode)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Country1.CountryCode)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Currency.CurrencyName)
-        </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Currency.CurrencyName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TRHotelInfo.CountryName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TRHotelInfo.CountryName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Trip.ModifiedBy)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Trip.ModifiedBy)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TRItemsStatu.Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TRItemsStatu.Status)
         </dd>
 
     </dl>

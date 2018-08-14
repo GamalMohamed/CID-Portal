@@ -48,6 +48,22 @@ namespace VacationsPortal.ViewModels
         [DisplayName("HR Letter Status")]
         public string HRLetterStatus { get; set; }
 
+        public string FlightInvoiceStatus { get; set; }
+
+        public string FlightInvoiceStatus2 { get; set; }
+
+        public string ReissueInvoiceStatus { get; set; }
+
+        public string ReissueInvoiceStatus2 { get; set; }
+
+        public string ReissueInvoiceStatus3 { get; set; }
+
+        public string HotelInvoiceStatus { get; set; }
+
+        public string VisaInvoiceStatus { get; set; }
+
+        public string FlightRefundInvoiceStatus { get; set; }
+        
         [DisplayName("Flight Cost")]
         public double? FlightCost { get; set; }
 

@@ -63,7 +63,7 @@ namespace VacationsPortal.Models
         public Nullable<int> HoteInvoiceStatus { get; set; }
         public Nullable<int> PoStatus { get; set; }
         public Nullable<int> FlightRefundInvoiceStatus { get; set; }
-    
+        
         public virtual Currency Currency { get; set; }
         public virtual Currency Currency1 { get; set; }
         public virtual Currency Currency2 { get; set; }
