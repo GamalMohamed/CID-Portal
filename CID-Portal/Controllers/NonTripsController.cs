@@ -15,14 +15,21 @@ namespace VacationsPortal.Controllers
     {
         private readonly CIDvNEXtEntities _db = new CIDvNEXtEntities();
 
-        // GET: NonTrips
-        public ActionResult Index()
+        public bool IsAuthorized()
         {
-            // Get all CIAs and Expenses
-            var cashInAdvances = _db.CashInAdvances.Where(c => c.RequestDate.Value.Month == DateTime.Now.Month - 1 &&
-            c.RequestDate.Value.Year == DateTime.Now.Year && c.TripID == null).ToList();
-            var expenses = _db.ExpensesReports.Where(e => e.SubmissionDate.Month == DateTime.Now.Month - 1 &&
-            e.SubmissionDate.Year == DateTime.Now.Year && e.TripID == null).ToList();
+            var loggedUserEmail = "v-gamoha@microsoft.com";
+            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
+            if (authUser?.Privilege != null && (Privilege.Admin == (Privilege)authUser.Privilege ||
+                                                Privilege.Travel == (Privilege)authUser.Privilege))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public List<NonTripViewModel> SetNonTripvmList(List<CashInAdvance> cashInAdvances, List<ExpensesReport> expenses)
+        {
             var nonTripsvm = new List<NonTripViewModel>();
             foreach (var cashInAdvance in cashInAdvances)
             {
@@ -92,7 +99,55 @@ namespace VacationsPortal.Controllers
                 }
             }
 
-            return View(nonTripsvm);
+            return nonTripsvm;
+        }
+
+        // GET: NonTrips
+        public ActionResult Index()
+        {
+            // Get all CIAs and Expenses
+            List<CashInAdvance> cashInAdvances;
+            List<ExpensesReport> expenses;
+            if (DateTime.Now.Month > 6)
+            {
+                cashInAdvances = _db.CashInAdvances.Where(c =>
+                    ((c.RequestDate.Value.Year == DateTime.Now.Year - 1 && c.RequestDate.Value.Month > 6) ||
+                    (c.RequestDate.Value.Year == DateTime.Now.Year)) && c.TripID == null
+                    ).ToList();
+                expenses = _db.ExpensesReports.Where(e =>
+                    ((e.SubmissionDate.Year == DateTime.Now.Year - 1 && e.SubmissionDate.Month > 6) ||
+                    (e.SubmissionDate.Year == DateTime.Now.Year)) && e.TripID == null
+                    ).ToList();
+            }
+            else
+            {
+                cashInAdvances = _db.CashInAdvances.Where(c =>
+                    ((c.RequestDate.Value.Year == DateTime.Now.Year - 2 && c.RequestDate.Value.Month > 6) ||
+                    (c.RequestDate.Value.Year == DateTime.Now.Year - 1) ||
+                    (c.RequestDate.Value.Year == DateTime.Now.Year)) && c.TripID == null
+                    ).ToList();
+
+                expenses = _db.ExpensesReports.Where(e =>
+                    ((e.SubmissionDate.Year == DateTime.Now.Year - 2 && e.SubmissionDate.Month > 6) ||
+                    (e.SubmissionDate.Year == DateTime.Now.Year - 1) ||
+                    (e.SubmissionDate.Year == DateTime.Now.Year)) && e.TripID == null
+                    ).ToList();
+            }
+
+            //var cashInAdvances = _db.CashInAdvances.Where(c => c.RequestDate.Value.Month == DateTime.Now.Month - 1 &&
+            //c.RequestDate.Value.Year == DateTime.Now.Year && c.TripID == null).ToList();
+            //var expenses = _db.ExpensesReports.Where(e => e.SubmissionDate.Month == DateTime.Now.Month - 1 &&
+            //e.SubmissionDate.Year == DateTime.Now.Year && e.TripID == null).ToList();
+            /*
+             var cashInAdvances = _db.CashInAdvances.Where(c => 
+            ((c.RequestDate.Value.Month > 6 && c.RequestDate.Value.Year == DateTime.Now.Year - 1) ||
+            (c.RequestDate.Value.Year == DateTime.Now.Year)) && (c.TripID == null)).ToList();
+            var expenses = _db.ExpensesReports.Where(e => 
+            ((e.SubmissionDate.Month > 6 && e.SubmissionDate.Year == DateTime.Now.Year - 1) ||
+            (e.SubmissionDate.Year == DateTime.Now.Year)) && (e.TripID == null)).ToList();
+            */
+
+            return View(SetNonTripvmList(cashInAdvances, expenses));
         }
 
         // GET: NonTrips/Edit/5
@@ -123,7 +178,7 @@ namespace VacationsPortal.Controllers
                 }
                 settlementvm.ExpensesReport = exp;
             }
-        
+
             return View(settlementvm);
         }
 
@@ -179,6 +234,26 @@ namespace VacationsPortal.Controllers
         //    _db.SaveChanges();
         //    return RedirectToAction("Index");
         //}
+
+        public ActionResult Archive(string id)
+        {
+            var seY = id.Split('-'); // e.g. 2018-2019
+            var startYear = seY[0];
+            var endYear = seY[1];
+            var cashInAdvances = _db.CashInAdvances.Where(c =>
+                    ((c.RequestDate.Value.Year.ToString() == startYear && c.RequestDate.Value.Month > 6) ||
+                    (c.RequestDate.Value.Year.ToString() == endYear && c.RequestDate.Value.Month < 7))
+                    && c.TripID == null
+                    ).ToList();
+            var expenses = _db.ExpensesReports.Where(e =>
+                ((e.SubmissionDate.Year.ToString() == startYear && e.SubmissionDate.Month > 6) ||
+                 (e.SubmissionDate.Year.ToString() == endYear && e.SubmissionDate.Month < 7))
+                 && e.TripID == null
+                ).ToList();
+
+
+            return View("Index", SetNonTripvmList(cashInAdvances, expenses));
+        }
 
         protected override void Dispose(bool disposing)
         {

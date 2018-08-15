@@ -14,22 +14,55 @@ namespace VacationsPortal.Controllers
     {
         private readonly CIDvNEXtEntities _db = new CIDvNEXtEntities();
 
-        // GET: Visas
-        public ActionResult Index()
+        public bool IsAuthorized()
         {
-            var routes = _db.Routes.Where(
-                t => t.arrivalDate.Value.Year == DateTime.Now.Year).ToList();
+            var loggedUserEmail = "v-gamoha@microsoft.com";
+            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
+            if (authUser?.Privilege != null && (Privilege.Admin == (Privilege)authUser.Privilege ||
+                                                Privilege.Travel == (Privilege)authUser.Privilege))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public List<Route> GetRoutesVisas(List<Route> routes)
+        {
             var routesV = new List<Route>();
             foreach (var r in routes)
             {
                 if (r.Country.CountryName !=
                             r.Trip.Routes.ToList()[r.Trip.Routes.Count - 1].Country.CountryName)
                 {
-                    routesV.Add(r);
+                    routesV.Add(r); // HACK: so as not to return the return route country
                 }
             }
 
-            return View(routesV);
+            return routesV;
+        }
+
+        // GET: Visas
+        public ActionResult Index()
+        {
+            List<Route> routes;
+            if (DateTime.Now.Month > 6)
+            {
+                routes = _db.Routes.Where(h =>
+                    ((h.arrivalDate.Value.Year == DateTime.Now.Year - 1 && h.arrivalDate.Value.Month > 6) ||
+                    (h.arrivalDate.Value.Year == DateTime.Now.Year)) && h.requireVisa.Value
+                    ).ToList();
+            }
+            else
+            {
+                routes = _db.Routes.Where(h =>
+                    ((h.arrivalDate.Value.Year == DateTime.Now.Year - 2 && h.arrivalDate.Value.Month > 6) ||
+                    (h.arrivalDate.Value.Year == DateTime.Now.Year - 1) ||
+                    (h.arrivalDate.Value.Year == DateTime.Now.Year)) && h.requireVisa.Value
+                    ).ToList();
+            }
+
+            return View(GetRoutesVisas(routes));
         }
 
         // GET: Visas/Details/5
@@ -85,6 +118,20 @@ namespace VacationsPortal.Controllers
                 }
             }
             return View(route);
+        }
+
+        public ActionResult Archive(string id)
+        {
+            var seY = id.Split('-'); // e.g. 2018-2019
+            var startYear = seY[0];
+            var endYear = seY[1];
+            var routes = _db.Routes.Where(t =>
+                    ((t.arrivalDate.Value.Year.ToString() == startYear && t.arrivalDate.Value.Month > 6) ||
+                    (t.arrivalDate.Value.Year.ToString() == endYear && t.arrivalDate.Value.Month < 7))
+                    && t.requireVisa.Value
+                    ).ToList();
+
+            return RedirectToAction("Index", routes);
         }
 
         //// GET: Visas/Delete/5

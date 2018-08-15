@@ -15,6 +15,19 @@ namespace VacationsPortal.Controllers
     {
         private readonly CIDvNEXtEntities _db = new CIDvNEXtEntities();
 
+        public bool IsAuthorized()
+        {
+            var loggedUserEmail = "v-gamoha@microsoft.com";
+            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
+            if (authUser?.Privilege != null && (Privilege.Admin == (Privilege)authUser.Privilege ||
+                                                Privilege.Travel == (Privilege)authUser.Privilege))
+            {
+                return true;
+            }
+            return false;
+        }
+
         public TravelRequestViewModel SetTRvmFields(TravelRequest travelRequest, Trip trip,
                                                     Dictionary<int, string> statusesDic)
         {
@@ -123,15 +136,9 @@ namespace VacationsPortal.Controllers
             return tRvm;
         }
 
-        // GET: TravelRequests
-        public ActionResult Index()
+        public List<TravelRequestViewModel> SetTRvmList(List<TravelRequest> travelRequests)
         {
-            var travelRequests = _db.TravelRequests.Where(
-                 t => t.RequestedOn.Month == DateTime.Now.Month - 1 &&
-                 t.RequestedOn.Year == DateTime.Now.Year).ToList();
-
             var statusesDic = _db.TRItemsStatus.ToDictionary(status => status.Id, status => status.Status);
-
             var travelRequestsvm = new List<TravelRequestViewModel>();
             foreach (var travelRequest in travelRequests)
             {
@@ -140,8 +147,30 @@ namespace VacationsPortal.Controllers
                     travelRequestsvm.Add(SetTRvmFields(travelRequest, trip, statusesDic));
                 }
             }
+            return travelRequestsvm;
+        }
 
-            return View(travelRequestsvm);
+        // GET: TravelRequests
+        public ActionResult Index()
+        {
+            List<TravelRequest> travelRequests;
+            if (DateTime.Now.Month > 6)
+            {
+                travelRequests = _db.TravelRequests.Where(t =>
+                    (t.RequestedOn.Year == DateTime.Now.Year - 1 && t.RequestedOn.Month > 6) ||
+                    (t.RequestedOn.Year == DateTime.Now.Year)
+                    ).ToList();
+            }
+            else
+            {
+                travelRequests = _db.TravelRequests.Where(t =>
+                    (t.RequestedOn.Year == DateTime.Now.Year - 2 && t.RequestedOn.Month > 6) ||
+                    (t.RequestedOn.Year == DateTime.Now.Year - 1) ||
+                    (t.RequestedOn.Year == DateTime.Now.Year)
+                    ).ToList();
+            }
+
+            return View(SetTRvmList(travelRequests));
         }
 
         // GET: TravelRequests/Edit/5
@@ -271,6 +300,19 @@ namespace VacationsPortal.Controllers
         //    _db.SaveChanges();
         //    return RedirectToAction("Index");
         //}
+
+        public ActionResult Archive(string id)
+        {
+            var seY = id.Split('-'); // e.g. 2018-2019
+            var startYear = seY[0];
+            var endYear = seY[1];
+            var travelRequests = _db.TravelRequests.Where(t =>
+                    ((t.RequestedOn.Year.ToString() == startYear && t.RequestedOn.Month > 6) ||
+                    (t.RequestedOn.Year.ToString() == endYear && t.RequestedOn.Month < 7))
+                    ).ToList();
+
+            return View("Index", SetTRvmList(travelRequests));
+        }
 
         protected override void Dispose(bool disposing)
         {

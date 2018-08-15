@@ -14,12 +14,39 @@ namespace VacationsPortal.Controllers
     {
         private readonly CIDvNEXtEntities _db = new CIDvNEXtEntities();
 
+        public bool IsAuthorized()
+        {
+            var loggedUserEmail = "v-gamoha@microsoft.com";
+            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
+            if (authUser?.Privilege != null && (Privilege.Admin == (Privilege)authUser.Privilege ||
+                                                Privilege.Travel == (Privilege)authUser.Privilege))
+            {
+                return true;
+            }
+            return false;
+        }
+
         // GET: TRHotelInfos
         public ActionResult Index()
         {
-            var tRHotelInfoes = _db.TRHotelInfoes.Where(
-                t => t.CheckOutDate.Month == DateTime.Now.Month - 1 &&
-                 t.CheckOutDate.Year == DateTime.Now.Year).ToList();
+            List<TRHotelInfo> tRHotelInfoes;
+            if (DateTime.Now.Month > 6)
+            {
+                tRHotelInfoes = _db.TRHotelInfoes.Where(h =>
+                    (h.CheckInDate.Year == DateTime.Now.Year - 1 && h.CheckInDate.Month > 6) ||
+                    (h.CheckInDate.Year == DateTime.Now.Year)
+                    ).ToList();
+            }
+            else
+            {
+                tRHotelInfoes = _db.TRHotelInfoes.Where(h =>
+                    (h.CheckInDate.Year == DateTime.Now.Year - 2 && h.CheckInDate.Month > 6) ||
+                    (h.CheckInDate.Year == DateTime.Now.Year - 1) ||
+                    (h.CheckInDate.Year == DateTime.Now.Year)
+                    ).ToList();
+            }
+
             return View(tRHotelInfoes);
         }
 
@@ -107,6 +134,20 @@ namespace VacationsPortal.Controllers
         //    db.SaveChanges();
         //    return RedirectToAction("Index");
         //}
+
+
+        public ActionResult Archive(string id)
+        {
+            var seY = id.Split('-'); // e.g. 2018-2019
+            var startYear = seY[0];
+            var endYear = seY[1];
+            var tRHotelInfoes = _db.TRHotelInfoes.Where(t =>
+                    (t.CheckInDate.Year.ToString() == startYear && t.CheckInDate.Month > 6) ||
+                    (t.CheckInDate.Year.ToString() == endYear && t.CheckInDate.Month < 7)
+                    ).ToList();
+            return View("Index", tRHotelInfoes);
+        }
+
 
         protected override void Dispose(bool disposing)
         {

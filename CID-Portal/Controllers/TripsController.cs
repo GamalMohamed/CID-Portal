@@ -15,11 +15,21 @@ namespace VacationsPortal.Controllers
     {
         private readonly CIDvNEXtEntities _db = new CIDvNEXtEntities();
 
-        // GET: Trips
-        public ActionResult Index()
+        public bool IsAuthorized()
         {
-            var trips = _db.Trips.Where(t => t.EndDate.Value.Month == DateTime.Now.Month - 1 &&
-            t.EndDate.Value.Year == DateTime.Now.Year).ToList();
+            var loggedUserEmail = "v-gamoha@microsoft.com";
+            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
+            if (authUser?.Privilege != null && (Privilege.Admin == (Privilege) authUser.Privilege ||
+                                                Privilege.Travel == (Privilege) authUser.Privilege))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public List<TripViewModel> SetTripvmList(List<Trip> trips)
+        {
             var tripsvm = new List<TripViewModel>();
             foreach (var trip in trips)
             {
@@ -103,8 +113,40 @@ namespace VacationsPortal.Controllers
                     tripsvm.Add(tripvm); //Trip without any CIAs or Expenses
                 }
             }
+            return tripsvm;
+        }
 
-            return View(tripsvm);
+        // GET: Trips
+        public ActionResult Index()
+        {
+            if (IsAuthorized())
+            {
+                List<Trip> trips;
+                //if (DateTime.Now.Month > 6)
+                //{
+                //    trips = _db.Trips.Where(t =>
+                //        (t.StartDate.Value.Year == DateTime.Now.Year - 1 && t.StartDate.Value.Month > 6) ||
+                //        (t.StartDate.Value.Year == DateTime.Now.Year)
+                //        ).ToList();
+                //}
+                //else
+                //{
+                //    trips = _db.Trips.Where(t =>
+                //        (t.StartDate.Value.Year == DateTime.Now.Year - 2 && t.StartDate.Value.Month > 6) ||
+                //        (t.StartDate.Value.Year == DateTime.Now.Year - 1) ||
+                //        (t.StartDate.Value.Year == DateTime.Now.Year)
+                //        ).ToList();
+                //}
+
+                trips = _db.Trips.Where(t =>
+                t.EndDate.Value.Month == DateTime.Now.Month - 1 &&
+                t.EndDate.Value.Year == DateTime.Now.Year).ToList();
+
+                return View(SetTripvmList(trips));
+            }
+
+            ViewBag.ErrorMsg = "Not authenticated user.";
+            return View("Error");
         }
 
         // GET: Trips/Edit/5
@@ -171,6 +213,20 @@ namespace VacationsPortal.Controllers
                 return RedirectToAction("Index");
             }
             return View(settlementvm);
+        }
+
+        public ActionResult Archive(string id)
+        {
+            var seY = id.Split('-'); // e.g. 2018-2019
+            var startYear = seY[0];
+            var endYear = seY[1];
+            var trips = _db.Trips.Where(t =>
+                    (t.StartDate.Value.Year.ToString() == startYear && t.StartDate.Value.Month > 6) ||
+                    (t.StartDate.Value.Year.ToString() == endYear && t.StartDate.Value.Month < 7)
+                    ).ToList();
+
+
+            return View("Index", SetTripvmList(trips));
         }
 
         //// GET: Trips/Delete/5
