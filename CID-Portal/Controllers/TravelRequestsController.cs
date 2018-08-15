@@ -153,24 +153,29 @@ namespace VacationsPortal.Controllers
         // GET: TravelRequests
         public ActionResult Index()
         {
-            List<TravelRequest> travelRequests;
-            if (DateTime.Now.Month > 6)
+            if (IsAuthorized())
             {
-                travelRequests = _db.TravelRequests.Where(t =>
-                    (t.RequestedOn.Year == DateTime.Now.Year - 1 && t.RequestedOn.Month > 6) ||
-                    (t.RequestedOn.Year == DateTime.Now.Year)
-                    ).ToList();
-            }
-            else
-            {
-                travelRequests = _db.TravelRequests.Where(t =>
-                    (t.RequestedOn.Year == DateTime.Now.Year - 2 && t.RequestedOn.Month > 6) ||
-                    (t.RequestedOn.Year == DateTime.Now.Year - 1) ||
-                    (t.RequestedOn.Year == DateTime.Now.Year)
-                    ).ToList();
-            }
+                List<TravelRequest> travelRequests;
+                if (DateTime.Now.Month > 6)
+                {
+                    travelRequests = _db.TravelRequests.Where(t =>
+                        (t.RequestedOn.Year == DateTime.Now.Year - 1 && t.RequestedOn.Month > 6) ||
+                        (t.RequestedOn.Year == DateTime.Now.Year)
+                        ).ToList();
+                }
+                else
+                {
+                    travelRequests = _db.TravelRequests.Where(t =>
+                        (t.RequestedOn.Year == DateTime.Now.Year - 2 && t.RequestedOn.Month > 6) ||
+                        (t.RequestedOn.Year == DateTime.Now.Year - 1) ||
+                        (t.RequestedOn.Year == DateTime.Now.Year)
+                        ).ToList();
+                }
 
-            return View(SetTRvmList(travelRequests));
+                return View(SetTRvmList(travelRequests));
+            }
+            ViewBag.ErrorMsg = "Not authenticated user.";
+            return View("Error");
         }
 
         // GET: TravelRequests/Edit/5

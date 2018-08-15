@@ -45,24 +45,30 @@ namespace VacationsPortal.Controllers
         // GET: Visas
         public ActionResult Index()
         {
-            List<Route> routes;
-            if (DateTime.Now.Month > 6)
+            if (IsAuthorized())
             {
-                routes = _db.Routes.Where(h =>
-                    ((h.arrivalDate.Value.Year == DateTime.Now.Year - 1 && h.arrivalDate.Value.Month > 6) ||
-                    (h.arrivalDate.Value.Year == DateTime.Now.Year)) && h.requireVisa.Value
-                    ).ToList();
-            }
-            else
-            {
-                routes = _db.Routes.Where(h =>
-                    ((h.arrivalDate.Value.Year == DateTime.Now.Year - 2 && h.arrivalDate.Value.Month > 6) ||
-                    (h.arrivalDate.Value.Year == DateTime.Now.Year - 1) ||
-                    (h.arrivalDate.Value.Year == DateTime.Now.Year)) && h.requireVisa.Value
-                    ).ToList();
+                List<Route> routes;
+                if (DateTime.Now.Month > 6)
+                {
+                    routes = _db.Routes.Where(h =>
+                        ((h.arrivalDate.Value.Year == DateTime.Now.Year - 1 && h.arrivalDate.Value.Month > 6) ||
+                        (h.arrivalDate.Value.Year == DateTime.Now.Year)) && h.requireVisa.Value
+                        ).ToList();
+                }
+                else
+                {
+                    routes = _db.Routes.Where(h =>
+                        ((h.arrivalDate.Value.Year == DateTime.Now.Year - 2 && h.arrivalDate.Value.Month > 6) ||
+                        (h.arrivalDate.Value.Year == DateTime.Now.Year - 1) ||
+                        (h.arrivalDate.Value.Year == DateTime.Now.Year)) && h.requireVisa.Value
+                        ).ToList();
+                }
+
+                return View(GetRoutesVisas(routes));
             }
 
-            return View(GetRoutesVisas(routes));
+            ViewBag.ErrorMsg = "Not authenticated user.";
+            return View("Error");
         }
 
         // GET: Visas/Details/5

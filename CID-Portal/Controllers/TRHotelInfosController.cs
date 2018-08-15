@@ -30,24 +30,30 @@ namespace VacationsPortal.Controllers
         // GET: TRHotelInfos
         public ActionResult Index()
         {
-            List<TRHotelInfo> tRHotelInfoes;
-            if (DateTime.Now.Month > 6)
+            if (IsAuthorized())
             {
-                tRHotelInfoes = _db.TRHotelInfoes.Where(h =>
-                    (h.CheckInDate.Year == DateTime.Now.Year - 1 && h.CheckInDate.Month > 6) ||
-                    (h.CheckInDate.Year == DateTime.Now.Year)
-                    ).ToList();
-            }
-            else
-            {
-                tRHotelInfoes = _db.TRHotelInfoes.Where(h =>
-                    (h.CheckInDate.Year == DateTime.Now.Year - 2 && h.CheckInDate.Month > 6) ||
-                    (h.CheckInDate.Year == DateTime.Now.Year - 1) ||
-                    (h.CheckInDate.Year == DateTime.Now.Year)
-                    ).ToList();
+                List<TRHotelInfo> tRHotelInfoes;
+                if (DateTime.Now.Month > 6)
+                {
+                    tRHotelInfoes = _db.TRHotelInfoes.Where(h =>
+                        (h.CheckInDate.Year == DateTime.Now.Year - 1 && h.CheckInDate.Month > 6) ||
+                        (h.CheckInDate.Year == DateTime.Now.Year)
+                        ).ToList();
+                }
+                else
+                {
+                    tRHotelInfoes = _db.TRHotelInfoes.Where(h =>
+                        (h.CheckInDate.Year == DateTime.Now.Year - 2 && h.CheckInDate.Month > 6) ||
+                        (h.CheckInDate.Year == DateTime.Now.Year - 1) ||
+                        (h.CheckInDate.Year == DateTime.Now.Year)
+                        ).ToList();
+                }
+
+                return View(tRHotelInfoes);
             }
 
-            return View(tRHotelInfoes);
+            ViewBag.ErrorMsg = "Not authenticated user.";
+            return View("Error");
         }
 
         // GET: TRHotelInfos/Details/5

@@ -17,12 +17,17 @@ namespace VacationsPortal.Controllers
     {
         private readonly CIDvNEXtEntities _db = new CIDvNEXtEntities();
 
-        private bool IsUserAuthenticated()
+        public bool IsAuthorized()
         {
+            var loggedUserEmail = "v-gamoha@microsoft.com";
             //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
-            //var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
-            //return authUser != null;
-            return true;
+            var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
+            if (authUser?.Privilege != null && (Privilege.Admin == (Privilege)authUser.Privilege ||
+                                                Privilege.Travel == (Privilege)authUser.Privilege))
+            {
+                return true;
+            }
+            return false;
         }
 
         public ActionResult MarkResigned(int? id)
@@ -59,7 +64,7 @@ namespace VacationsPortal.Controllers
         // GET: Employees
         public ActionResult Index()
         {
-            if (IsUserAuthenticated())
+            if (IsAuthorized())
             {
                 return View(_db.EmployeesViews.Where(e => e.Resigned.Value == false).ToList());
             }
@@ -70,7 +75,7 @@ namespace VacationsPortal.Controllers
 
         public ActionResult Resigned()
         {
-            if (IsUserAuthenticated())
+            if (IsAuthorized())
             {
                 return View("Index",_db.EmployeesViews.Where(e => e.Resigned.Value).ToList());
             }
@@ -81,7 +86,7 @@ namespace VacationsPortal.Controllers
 
         public ActionResult NullResigned()
         {
-            if (IsUserAuthenticated())
+            if (IsAuthorized())
             {
                 return View("Index", _db.EmployeesViews.Where(e => e.Resigned == null).ToList());
             }
@@ -169,7 +174,7 @@ namespace VacationsPortal.Controllers
         // GET: Employees/Create
         public ActionResult Create()
         {
-            if (IsUserAuthenticated())
+            if (IsAuthorized())
             {
                 ViewBag.EmployeesList = new SelectList(_db.contacts.ToList(), "Id", "FullName");
                 ViewBag.RolesList = new SelectList(_db.Roles.ToList(), "Id", "roleName");
