@@ -138,6 +138,13 @@ namespace VacationsPortal.Controllers
                 //        ).ToList();
                 //}
 
+                /*
+                 * 1. Check the audit table for new records from Trips table
+                 * 2. If records found, fetch this record fro the trips table and insert it in
+                 *    the TripView table
+                 * 3. If nothing found, just return the TripView table records as they are   
+                 */
+
                 trips = _db.Trips.Where(t =>
                 t.EndDate.Value.Month == DateTime.Now.Month - 1 &&
                 t.EndDate.Value.Year == DateTime.Now.Year).ToList();

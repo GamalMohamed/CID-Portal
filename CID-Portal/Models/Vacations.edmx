@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="CIDvNEXtModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Audit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Ref_Table" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="RecordID" Type="int" Nullable="false" />
+          <Property Name="Operation" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
         <EntityType Name="AuthUsers">
           <Key>
             <PropertyRef Name="Id" />
@@ -414,6 +423,35 @@
           <Property Name="Business" Type="bit" />
           <Property Name="IsCanceled" Type="bit" />
           <Property Name="TRID" Type="int" />
+        </EntityType>
+        <EntityType Name="TripsView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="EmployeeName" Type="nvarchar(max)" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="CIA_Id" Type="int" />
+          <Property Name="CIA_Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="CIA_Amount_InCurrency" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="CurrencyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CIA_ExchangeRate" Type="float" />
+          <Property Name="CIA_Amount_InEGP" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="CIA_Reason" Type="nvarchar(max)" />
+          <Property Name="OperationsApprovalDate" Type="datetime" />
+          <Property Name="ExpenseReportId" Type="int" />
+          <Property Name="SubmissionDate" Type="datetime" />
+          <Property Name="ApprovalDate" Type="datetime" />
+          <Property Name="ExpenseReportStatus" Type="nvarchar(max)" />
+          <Property Name="TotalAmountInEGP" Type="float" />
+          <Property Name="CIAExpenseReport" Type="float" />
+          <Property Name="AmountToEmployeeInEGP" Type="float" />
+          <Property Name="SettledAmount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="SettlementDate" Type="datetime" />
+          <Property Name="RemainingBalance" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="OperationsComment" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="TRItemsStatus">
           <Key>
@@ -1266,6 +1304,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="CIDvNEXtModelStoreContainer">
+          <EntitySet Name="Audit" EntityType="Self.Audit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AuthUsers" EntityType="Self.AuthUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CashInAdvance" EntityType="Self.CashInAdvance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CashInAdvanceStatus" EntityType="Self.CashInAdvanceStatus" Schema="dbo" store:Type="Tables" />
@@ -1296,6 +1335,7 @@
           <EntitySet Name="TravelRequestStatus" EntityType="Self.TravelRequestStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TRHotelInfo" EntityType="Self.TRHotelInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Trips" EntityType="Self.Trips" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TripsView" EntityType="Self.TripsView" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TRItemsStatus" EntityType="Self.TRItemsStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VacationBalanceBackUp" EntityType="Self.VacationBalanceBackUp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VacationsHistory" EntityType="Self.VacationsHistory" Schema="dbo" store:Type="Tables" />
@@ -2182,6 +2222,8 @@
             <End Role="PaymentMethod" EntitySet="PaymentMethods" />
             <End Role="TRHotelInfo" EntitySet="TRHotelInfoes" />
           </AssociationSet>
+          <EntitySet Name="Audits" EntityType="CIDvNEXtModel.Audit" />
+          <EntitySet Name="TripsViews" EntityType="CIDvNEXtModel.TripsView" />
         </EntityContainer>
         <EntityType Name="EmployeesView">
           <Key>
@@ -3173,6 +3215,44 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Audit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Ref_Table" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RecordID" Type="Int32" Nullable="false" />
+          <Property Name="Operation" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="TripsView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CIA_Id" Type="Int32" />
+          <Property Name="CIA_Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CIA_Amount_InCurrency" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CurrencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CIA_ExchangeRate" Type="Double" />
+          <Property Name="CIA_Amount_InEGP" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CIA_Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OperationsApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpenseReportId" Type="Int32" />
+          <Property Name="SubmissionDate" Type="DateTime" Precision="3" />
+          <Property Name="ApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpenseReportStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TotalAmountInEGP" Type="Double" />
+          <Property Name="CIAExpenseReport" Type="Double" />
+          <Property Name="AmountToEmployeeInEGP" Type="Double" />
+          <Property Name="SettledAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="SettlementDate" Type="DateTime" Precision="3" />
+          <Property Name="RemainingBalance" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="OperationsComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3691,6 +3771,46 @@
             <EntityTypeMapping TypeName="CIDvNEXtModel.PaymentMethod">
               <MappingFragment StoreEntitySet="PaymentMethods">
                 <ScalarProperty Name="MethodName" ColumnName="MethodName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Audits">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.Audit">
+              <MappingFragment StoreEntitySet="Audit">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Operation" ColumnName="Operation" />
+                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
+                <ScalarProperty Name="Ref_Table" ColumnName="Ref_Table" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TripsViews">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.TripsView">
+              <MappingFragment StoreEntitySet="TripsView">
+                <ScalarProperty Name="OperationsComment" ColumnName="OperationsComment" />
+                <ScalarProperty Name="RemainingBalance" ColumnName="RemainingBalance" />
+                <ScalarProperty Name="SettlementDate" ColumnName="SettlementDate" />
+                <ScalarProperty Name="SettledAmount" ColumnName="SettledAmount" />
+                <ScalarProperty Name="AmountToEmployeeInEGP" ColumnName="AmountToEmployeeInEGP" />
+                <ScalarProperty Name="CIAExpenseReport" ColumnName="CIAExpenseReport" />
+                <ScalarProperty Name="TotalAmountInEGP" ColumnName="TotalAmountInEGP" />
+                <ScalarProperty Name="ExpenseReportStatus" ColumnName="ExpenseReportStatus" />
+                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+                <ScalarProperty Name="SubmissionDate" ColumnName="SubmissionDate" />
+                <ScalarProperty Name="ExpenseReportId" ColumnName="ExpenseReportId" />
+                <ScalarProperty Name="OperationsApprovalDate" ColumnName="OperationsApprovalDate" />
+                <ScalarProperty Name="CIA_Reason" ColumnName="CIA_Reason" />
+                <ScalarProperty Name="CIA_Amount_InEGP" ColumnName="CIA_Amount_InEGP" />
+                <ScalarProperty Name="CIA_ExchangeRate" ColumnName="CIA_ExchangeRate" />
+                <ScalarProperty Name="CurrencyName" ColumnName="CurrencyName" />
+                <ScalarProperty Name="CIA_Amount_InCurrency" ColumnName="CIA_Amount_InCurrency" />
+                <ScalarProperty Name="CIA_Status" ColumnName="CIA_Status" />
+                <ScalarProperty Name="CIA_Id" ColumnName="CIA_Id" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
