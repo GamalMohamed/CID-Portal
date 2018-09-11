@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Mvc;
 using VacationsPortal.Models;
@@ -20,21 +21,22 @@ namespace VacationsPortal.Controllers
             var loggedUserEmail = "v-gamoha@microsoft.com";
             //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
             var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
-            if (authUser?.Privilege != null && (Privilege.Admin == (Privilege) authUser.Privilege ||
-                                                Privilege.Travel == (Privilege) authUser.Privilege))
+            if (authUser?.Privilege != null && (Privilege.Admin == (Privilege)authUser.Privilege ||
+                                                Privilege.Travel == (Privilege)authUser.Privilege))
             {
                 return true;
             }
             return false;
         }
 
-        public List<TripViewModel> SetTripvmList(List<Trip> trips)
+        // Form the Trips View list
+        public List<TripsView> SetTripsViewList(List<Trip> trips)
         {
-            var tripsvm = new List<TripViewModel>();
+            var tripsvm = new List<TripsView>();
             foreach (var trip in trips)
             {
                 // Add trip basic data
-                var tripvm = new TripViewModel()
+                var tripvm = new TripsView()
                 {
                     Id = trip.Id,
                     EmployeeName = trip.Employee.contact.FullName,
@@ -116,40 +118,85 @@ namespace VacationsPortal.Controllers
             return tripsvm;
         }
 
+        // IMP NOTE: THIS ROUTE IS FOR DEVELOPMENT PURPOSES ONLY!!
+        public ActionResult FillTripsView()
+        {
+            var tripViews = SetTripsViewList(_db.Trips.ToList());
+            _db.TripsViews.AddRange(tripViews);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
         // GET: Trips
         public ActionResult Index()
         {
             if (IsAuthorized())
             {
-                List<Trip> trips;
-                //if (DateTime.Now.Month > 6)
-                //{
-                //    trips = _db.Trips.Where(t =>
-                //        (t.StartDate.Value.Year == DateTime.Now.Year - 1 && t.StartDate.Value.Month > 6) ||
-                //        (t.StartDate.Value.Year == DateTime.Now.Year)
-                //        ).ToList();
-                //}
-                //else
-                //{
-                //    trips = _db.Trips.Where(t =>
-                //        (t.StartDate.Value.Year == DateTime.Now.Year - 2 && t.StartDate.Value.Month > 6) ||
-                //        (t.StartDate.Value.Year == DateTime.Now.Year - 1) ||
-                //        (t.StartDate.Value.Year == DateTime.Now.Year)
-                //        ).ToList();
-                //}
+                // 1. Get new Trips IDs added from the audit table
+                var audits = _db.Audits.Where(a => a.Ref_Table == "Trips").ToList();
+                List<TripsView> tripsView;
 
-                /*
-                 * 1. Check the audit table for new records from Trips table
-                 * 2. If records found, fetch this record fro the trips table and insert it in
-                 *    the TripView table
-                 * 3. If nothing found, just return the TripView table records as they are   
-                 */
+                // If the audits isn't empty, then new Trips are either added, deleted or updated
+                if (audits.Count > 0)
+                {
+                    var trips = new List<Trip>();
+                    // 2. Get each Trip record from the Trips table
+                    foreach (var audit in audits)
+                    {
+                        if (audit.Operation == "Delete")
+                        {
+                            var tripV = _db.TripsViews.Find(audit.RecordID);
+                            if (tripV != null)
+                            {
+                                _db.TripsViews.Remove(tripV);
+                                _db.SaveChanges();
+                            }
+                        }
+                        else if(audit.Operation == "Insert" || audit.Operation == "Update")
+                        {
+                            if (audit.Operation == "Update")
+                            {
+                                var tripV = _db.TripsViews.Find(audit.RecordID);
+                                if (tripV != null)
+                                {
+                                    _db.TripsViews.Remove(tripV);
+                                    _db.SaveChanges();
+                                }
+                            }
+                            var trip = _db.Trips.Find(audit.RecordID);
+                            trips.Add(trip);
+                        }
+                    }
+                    if (trips.Count > 0)
+                    {
+                        _db.TripsViews.AddRange(SetTripsViewList(trips)); // Contains added records
+                        _db.SaveChanges();
+                    }
+                }
 
-                trips = _db.Trips.Where(t =>
-                t.EndDate.Value.Month == DateTime.Now.Month - 1 &&
-                t.EndDate.Value.Year == DateTime.Now.Year).ToList();
+                if (DateTime.Now.Month > 6)
+                {
+                    tripsView = _db.TripsViews.Where(t =>
+                        (t.StartDate.Value.Year == DateTime.Now.Year - 1 && t.StartDate.Value.Month > 6) ||
+                        (t.StartDate.Value.Year == DateTime.Now.Year)
+                        ).ToList();
+                }
+                else
+                {
+                    tripsView = _db.TripsViews.Where(t =>
+                        (t.StartDate.Value.Year == DateTime.Now.Year - 2 && t.StartDate.Value.Month > 6) ||
+                        (t.StartDate.Value.Year == DateTime.Now.Year - 1) ||
+                        (t.StartDate.Value.Year == DateTime.Now.Year)
+                        ).ToList();
+                }
 
-                return View(SetTripvmList(trips));
+                //tripsView = _db.TripsViews.Where(t =>
+                //t.EndDate.Value.Month == DateTime.Now.Month - 1 &&
+                //t.EndDate.Value.Year == DateTime.Now.Year).ToList();
+
+                return View(tripsView); // If nothing new added, just return the TripsView as it is
+
             }
 
             ViewBag.ErrorMsg = "Not authenticated user.";
@@ -227,13 +274,12 @@ namespace VacationsPortal.Controllers
             var seY = id.Split('-'); // e.g. 2018-2019
             var startYear = seY[0];
             var endYear = seY[1];
-            var trips = _db.Trips.Where(t =>
+            var trips = _db.TripsViews.Where(t =>
                     (t.StartDate.Value.Year.ToString() == startYear && t.StartDate.Value.Month > 6) ||
                     (t.StartDate.Value.Year.ToString() == endYear && t.StartDate.Value.Month < 7)
                     ).ToList();
-
-
-            return View("Index", SetTripvmList(trips));
+            
+            return View("Index", trips);
         }
 
         //// GET: Trips/Delete/5

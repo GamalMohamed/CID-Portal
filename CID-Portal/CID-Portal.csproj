@@ -297,7 +297,6 @@
     <Compile Include="ViewModels\NonTripViewModel.cs" />
     <Compile Include="ViewModels\SettlementViewModel.cs" />
     <Compile Include="ViewModels\TravelRequestViewModel.cs" />
-    <Compile Include="ViewModels\TripViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
