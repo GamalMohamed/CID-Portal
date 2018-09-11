@@ -229,6 +229,9 @@
     <Compile Include="Models\Hotel.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\NonTripsView.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PaymentMethod.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
@@ -245,6 +248,9 @@
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TravelRequestStatu.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TravelRequestView.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TRHotelInfo.cs">

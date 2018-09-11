@@ -289,6 +289,33 @@
           <Property Name="CityID" Type="int" Nullable="false" />
           <Property Name="Notes" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="NonTripsView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="EmployeeName" Type="nvarchar(max)" />
+          <Property Name="CIA_Id" Type="int" />
+          <Property Name="CIA_Amount_InEGP" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="CIA_Amount_InCurrency" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="CurrencyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CIA_ExchangeRate" Type="float" />
+          <Property Name="CIA_Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="CIA_Reason" Type="nvarchar(max)" />
+          <Property Name="OperationsApprovalDate" Type="datetime" />
+          <Property Name="ExpenseReportId" Type="int" />
+          <Property Name="Title" Type="nvarchar(max)" />
+          <Property Name="SubmissionDate" Type="datetime" Nullable="false" />
+          <Property Name="ApprovalDate" Type="datetime" />
+          <Property Name="ExpenseReportStatus" Type="nvarchar(max)" />
+          <Property Name="TotalAmountInEGP" Type="float" />
+          <Property Name="CIAExpenseReport" Type="float" />
+          <Property Name="AmountToEmployeeInEGP" Type="float" />
+          <Property Name="SettledAmount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="SettlementDate" Type="datetime" />
+          <Property Name="RemainingBalance" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="OperationsComment" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="PaymentMethods">
           <Key>
             <PropertyRef Name="Id" />
@@ -392,6 +419,46 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Status" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TravelRequestView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="EmployeeName" Type="nvarchar(max)" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="NumOfDays" Type="int" />
+          <Property Name="WorkingDays" Type="int" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="IsCanceled" Type="bit" />
+          <Property Name="Routes" Type="nvarchar(max)" />
+          <Property Name="TRStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="FlightStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="HotelStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="VisaStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="HRLetterStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="FlightInvoiceStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="FlightInvoiceStatus2" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReissueInvoiceStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReissueInvoiceStatus2" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReissueInvoiceStatus3" Type="nvarchar" MaxLength="50" />
+          <Property Name="HotelInvoiceStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="VisaInvoiceStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="FlightRefundInvoiceStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="FlightCost" Type="float" />
+          <Property Name="FlightCostCurrency" Type="nvarchar" MaxLength="50" />
+          <Property Name="FlightCost2" Type="float" />
+          <Property Name="FlightCost2Currency" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReissueCost" Type="float" />
+          <Property Name="ReissueCost2" Type="float" />
+          <Property Name="ReissueCost3" Type="float" />
+          <Property Name="FlightRefund" Type="float" />
+          <Property Name="HotelCost" Type="float" />
+          <Property Name="HotelCostCurrency" Type="nvarchar" MaxLength="50" />
+          <Property Name="RequesterNotes" Type="nvarchar(max)" />
+          <Property Name="OperationsNotes" Type="nvarchar(max)" />
+          <Property Name="TripType" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="TRHotelInfo">
           <Key>
@@ -1327,12 +1394,14 @@
           <EntitySet Name="ExpensesReport" EntityType="Self.ExpensesReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpensesSubCategoryTypes" EntityType="Self.ExpensesSubCategoryTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Hotels" EntityType="Self.Hotels" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NonTripsView" EntityType="Self.NonTripsView" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentMethods" EntityType="Self.PaymentMethods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Route" EntityType="Self.Route" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subsidaries" EntityType="Self.Subsidaries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TravelRequests" EntityType="Self.TravelRequests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TravelRequestStatus" EntityType="Self.TravelRequestStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TravelRequestView" EntityType="Self.TravelRequestView" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TRHotelInfo" EntityType="Self.TRHotelInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Trips" EntityType="Self.Trips" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TripsView" EntityType="Self.TripsView" Schema="dbo" store:Type="Tables" />
@@ -2224,6 +2293,8 @@
           </AssociationSet>
           <EntitySet Name="Audits" EntityType="CIDvNEXtModel.Audit" />
           <EntitySet Name="TripsViews" EntityType="CIDvNEXtModel.TripsView" />
+          <EntitySet Name="NonTripsViews" EntityType="CIDvNEXtModel.NonTripsView" />
+          <EntitySet Name="TravelRequestViews" EntityType="CIDvNEXtModel.TravelRequestView" />
         </EntityContainer>
         <EntityType Name="EmployeesView">
           <Key>
@@ -3253,6 +3324,73 @@
           <Property Name="RemainingBalance" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="OperationsComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="NonTripsView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CIA_Id" Type="Int32" />
+          <Property Name="CIA_Amount_InEGP" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CIA_Amount_InCurrency" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CurrencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CIA_ExchangeRate" Type="Double" />
+          <Property Name="CIA_Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CIA_Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OperationsApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpenseReportId" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SubmissionDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpenseReportStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TotalAmountInEGP" Type="Double" />
+          <Property Name="CIAExpenseReport" Type="Double" />
+          <Property Name="AmountToEmployeeInEGP" Type="Double" />
+          <Property Name="SettledAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="SettlementDate" Type="DateTime" Precision="3" />
+          <Property Name="RemainingBalance" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="OperationsComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TravelRequestView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="NumOfDays" Type="Int32" />
+          <Property Name="WorkingDays" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="IsCanceled" Type="Boolean" />
+          <Property Name="Routes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TRStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HotelStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VisaStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HRLetterStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightInvoiceStatus2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReissueInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReissueInvoiceStatus2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReissueInvoiceStatus3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HotelInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VisaInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightRefundInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightCost" Type="Double" />
+          <Property Name="FlightCostCurrency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightCost2" Type="Double" />
+          <Property Name="FlightCost2Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReissueCost" Type="Double" />
+          <Property Name="ReissueCost2" Type="Double" />
+          <Property Name="ReissueCost3" Type="Double" />
+          <Property Name="FlightRefund" Type="Double" />
+          <Property Name="HotelCost" Type="Double" />
+          <Property Name="HotelCostCurrency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RequesterNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OperationsNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TripType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3808,6 +3946,75 @@
                 <ScalarProperty Name="CIA_Status" ColumnName="CIA_Status" />
                 <ScalarProperty Name="CIA_Id" ColumnName="CIA_Id" />
                 <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NonTripsViews">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.NonTripsView">
+              <MappingFragment StoreEntitySet="NonTripsView">
+                <ScalarProperty Name="OperationsComment" ColumnName="OperationsComment" />
+                <ScalarProperty Name="RemainingBalance" ColumnName="RemainingBalance" />
+                <ScalarProperty Name="SettlementDate" ColumnName="SettlementDate" />
+                <ScalarProperty Name="SettledAmount" ColumnName="SettledAmount" />
+                <ScalarProperty Name="AmountToEmployeeInEGP" ColumnName="AmountToEmployeeInEGP" />
+                <ScalarProperty Name="CIAExpenseReport" ColumnName="CIAExpenseReport" />
+                <ScalarProperty Name="TotalAmountInEGP" ColumnName="TotalAmountInEGP" />
+                <ScalarProperty Name="ExpenseReportStatus" ColumnName="ExpenseReportStatus" />
+                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+                <ScalarProperty Name="SubmissionDate" ColumnName="SubmissionDate" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ExpenseReportId" ColumnName="ExpenseReportId" />
+                <ScalarProperty Name="OperationsApprovalDate" ColumnName="OperationsApprovalDate" />
+                <ScalarProperty Name="CIA_Reason" ColumnName="CIA_Reason" />
+                <ScalarProperty Name="CIA_Status" ColumnName="CIA_Status" />
+                <ScalarProperty Name="CIA_ExchangeRate" ColumnName="CIA_ExchangeRate" />
+                <ScalarProperty Name="CurrencyName" ColumnName="CurrencyName" />
+                <ScalarProperty Name="CIA_Amount_InCurrency" ColumnName="CIA_Amount_InCurrency" />
+                <ScalarProperty Name="CIA_Amount_InEGP" ColumnName="CIA_Amount_InEGP" />
+                <ScalarProperty Name="CIA_Id" ColumnName="CIA_Id" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelRequestViews">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.TravelRequestView">
+              <MappingFragment StoreEntitySet="TravelRequestView">
+                <ScalarProperty Name="TripType" ColumnName="TripType" />
+                <ScalarProperty Name="OperationsNotes" ColumnName="OperationsNotes" />
+                <ScalarProperty Name="RequesterNotes" ColumnName="RequesterNotes" />
+                <ScalarProperty Name="HotelCostCurrency" ColumnName="HotelCostCurrency" />
+                <ScalarProperty Name="HotelCost" ColumnName="HotelCost" />
+                <ScalarProperty Name="FlightRefund" ColumnName="FlightRefund" />
+                <ScalarProperty Name="ReissueCost3" ColumnName="ReissueCost3" />
+                <ScalarProperty Name="ReissueCost2" ColumnName="ReissueCost2" />
+                <ScalarProperty Name="ReissueCost" ColumnName="ReissueCost" />
+                <ScalarProperty Name="FlightCost2Currency" ColumnName="FlightCost2Currency" />
+                <ScalarProperty Name="FlightCost2" ColumnName="FlightCost2" />
+                <ScalarProperty Name="FlightCostCurrency" ColumnName="FlightCostCurrency" />
+                <ScalarProperty Name="FlightCost" ColumnName="FlightCost" />
+                <ScalarProperty Name="FlightRefundInvoiceStatus" ColumnName="FlightRefundInvoiceStatus" />
+                <ScalarProperty Name="VisaInvoiceStatus" ColumnName="VisaInvoiceStatus" />
+                <ScalarProperty Name="HotelInvoiceStatus" ColumnName="HotelInvoiceStatus" />
+                <ScalarProperty Name="ReissueInvoiceStatus3" ColumnName="ReissueInvoiceStatus3" />
+                <ScalarProperty Name="ReissueInvoiceStatus2" ColumnName="ReissueInvoiceStatus2" />
+                <ScalarProperty Name="ReissueInvoiceStatus" ColumnName="ReissueInvoiceStatus" />
+                <ScalarProperty Name="FlightInvoiceStatus2" ColumnName="FlightInvoiceStatus2" />
+                <ScalarProperty Name="FlightInvoiceStatus" ColumnName="FlightInvoiceStatus" />
+                <ScalarProperty Name="HRLetterStatus" ColumnName="HRLetterStatus" />
+                <ScalarProperty Name="VisaStatus" ColumnName="VisaStatus" />
+                <ScalarProperty Name="HotelStatus" ColumnName="HotelStatus" />
+                <ScalarProperty Name="FlightStatus" ColumnName="FlightStatus" />
+                <ScalarProperty Name="TRStatus" ColumnName="TRStatus" />
+                <ScalarProperty Name="Routes" ColumnName="Routes" />
+                <ScalarProperty Name="IsCanceled" ColumnName="IsCanceled" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="WorkingDays" ColumnName="WorkingDays" />
+                <ScalarProperty Name="NumOfDays" ColumnName="NumOfDays" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
