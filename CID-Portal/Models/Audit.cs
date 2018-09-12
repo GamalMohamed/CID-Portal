@@ -14,9 +14,10 @@ namespace VacationsPortal.Models
     
     public partial class Audit
     {
+        public int Id { get; set; }
+        public System.DateTime Timestamp { get; set; }
         public string Ref_Table { get; set; }
         public int RecordID { get; set; }
         public string Operation { get; set; }
-        public int Id { get; set; }
     }
 }

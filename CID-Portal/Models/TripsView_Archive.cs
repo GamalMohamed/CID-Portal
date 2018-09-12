@@ -12,7 +12,7 @@ namespace VacationsPortal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TripsView
+    public partial class TripsView_Archive
     {
         public int Id { get; set; }
         public int TripID { get; set; }

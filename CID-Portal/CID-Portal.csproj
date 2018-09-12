@@ -262,6 +262,9 @@
     <Compile Include="Models\TripsView.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TripsView_Archive.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TRItemsStatu.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
@@ -628,6 +631,7 @@
     <Content Include="Views\Visas\Details.cshtml" />
     <Content Include="Views\Visas\Edit.cshtml" />
     <Content Include="Views\Visas\Index.cshtml" />
+    <Content Include="Views\Trips\Archive.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

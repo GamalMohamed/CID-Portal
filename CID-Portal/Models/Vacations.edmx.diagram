@@ -9,7 +9,7 @@
         <EntityTypeShape EntityType="CIDvNEXtModel.Employee" Width="1.5" PointX="3" PointY="5.5" IsExpanded="true" />
         <EntityTypeShape EntityType="CIDvNEXtModel.EmployeesVacationDay" Width="1.5" PointX="5.25" PointY="6.875" IsExpanded="true" />
         <EntityTypeShape EntityType="CIDvNEXtModel.EmployeesWeekendDay" Width="1.5" PointX="5.25" PointY="9.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CIDvNEXtModel.EmployeeVacation" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.EmployeeVacation" Width="1.5" PointX="1" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="CIDvNEXtModel.Role" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CIDvNEXtModel.Subsidary" Width="1.5" PointX="2.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="CIDvNEXtModel.VacationBalanceBackUp" Width="1.5" PointX="7.75" PointY="4.25" IsExpanded="true" />
@@ -102,10 +102,11 @@
         <AssociationConnector Association="CIDvNEXtModel.CountriesCurrencies" />
         <EntityTypeShape EntityType="CIDvNEXtModel.PaymentMethod" Width="1.5" PointX="10.375" PointY="11.875" />
         <AssociationConnector Association="CIDvNEXtModel.FK_TRHotelInfo_PaymentMethods" />
-        <EntityTypeShape EntityType="CIDvNEXtModel.Audit" Width="1.5" PointX="13.5" PointY="0.75" />
-        <EntityTypeShape EntityType="CIDvNEXtModel.TripsView" Width="1.5" PointX="14.5" PointY="3.125" />
         <EntityTypeShape EntityType="CIDvNEXtModel.NonTripsView" Width="1.5" PointX="0.75" PointY="16.75" />
         <EntityTypeShape EntityType="CIDvNEXtModel.TravelRequestView" Width="1.5" PointX="21.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.TripsView" Width="1.5" PointX="13.375" PointY="3.75" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.Audit" Width="1.5" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.TripsView_Archive" Width="1.5" PointX="21.375" PointY="9.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
