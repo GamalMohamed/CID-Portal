@@ -28,12 +28,12 @@ namespace VacationsPortal.Controllers
             return false;
         }
 
-        public List<NonTripViewModel> SetNonTripvmList(List<CashInAdvance> cashInAdvances, List<ExpensesReport> expenses)
+        public List<NonTripsView> SetNonTripsViewList(List<CashInAdvance> cashInAdvances, List<ExpensesReport> expenses)
         {
-            var nonTripsvm = new List<NonTripViewModel>();
+            var nonTripsvm = new List<NonTripsView>();
             foreach (var cashInAdvance in cashInAdvances)
             {
-                var nontripvm = new NonTripViewModel();
+                var nontripvm = new NonTripsView();
                 nontripvm.EmployeeName = cashInAdvance.Employee.contact.FullName;
                 nontripvm.CIA_Id = cashInAdvance.Id;
                 nontripvm.CIA_Status = cashInAdvance.CashInAdvanceStatu.CashInAdvanceStatus;
@@ -70,9 +70,6 @@ namespace VacationsPortal.Controllers
                 {
                     nonTripsvm.Add(nontripvm); // CIA only
                 }
-
-
-
             }
 
             // Expenses without CIA
@@ -80,7 +77,7 @@ namespace VacationsPortal.Controllers
             {
                 if (expense.CashInAdvances.Count == 0)
                 {
-                    var nontripvm3 = new NonTripViewModel();
+                    var nontripvm3 = new NonTripsView();
                     nontripvm3.EmployeeName = expense.Employee.contact.FullName;
                     nontripvm3.ExpenseReportId = expense.ID;
                     nontripvm3.Title = expense.Title;
@@ -102,54 +99,113 @@ namespace VacationsPortal.Controllers
             return nonTripsvm;
         }
 
+        // IMP NOTE: THESE ROUTES ARE FOR DEVELOPMENT PURPOSES ONLY!!
+        public ActionResult FillNonTripsView()
+        {
+            // Get all CIAs and Expenses
+            List<CashInAdvance> cashInAdvances;
+            List<ExpensesReport> expenses;
+            if (DateTime.Now.Month > 6)
+            {
+                cashInAdvances = _db.CashInAdvances.Where(c =>
+                    ((c.RequestDate.Value.Year == DateTime.Now.Year - 1 && c.RequestDate.Value.Month > 6) ||
+                    (c.RequestDate.Value.Year == DateTime.Now.Year)) && c.TripID == null
+                    ).ToList();
+                expenses = _db.ExpensesReports.Where(e =>
+                    ((e.SubmissionDate.Year == DateTime.Now.Year - 1 && e.SubmissionDate.Month > 6) ||
+                    (e.SubmissionDate.Year == DateTime.Now.Year)) && e.TripID == null
+                    ).ToList();
+            }
+            else
+            {
+                cashInAdvances = _db.CashInAdvances.Where(c =>
+                    ((c.RequestDate.Value.Year == DateTime.Now.Year - 2 && c.RequestDate.Value.Month > 6) ||
+                    (c.RequestDate.Value.Year == DateTime.Now.Year - 1) ||
+                    (c.RequestDate.Value.Year == DateTime.Now.Year)) && c.TripID == null
+                    ).ToList();
+
+                expenses = _db.ExpensesReports.Where(e =>
+                    ((e.SubmissionDate.Year == DateTime.Now.Year - 2 && e.SubmissionDate.Month > 6) ||
+                    (e.SubmissionDate.Year == DateTime.Now.Year - 1) ||
+                    (e.SubmissionDate.Year == DateTime.Now.Year)) && e.TripID == null
+                    ).ToList();
+            }
+
+            var nonTripViews = SetNonTripsViewList(
+                cashInAdvances.OrderByDescending(c => c.RequestDate).ToList(),
+                expenses.OrderByDescending(e => e.SubmissionDate).ToList());
+
+            _db.NonTripsViews.AddRange(nonTripViews);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index","Employees");
+        }
+
         // GET: NonTrips
         public ActionResult Index()
         {
             if (IsAuthorized())
             {
-                // Get all CIAs and Expenses
-                List<CashInAdvance> cashInAdvances;
-                List<ExpensesReport> expenses;
-                if (DateTime.Now.Month > 6)
+                var audits = _db.Audits.Where(a => a.Ref_Table == "CIA" ||
+                                              a.Ref_Table == "ExpensesReport").ToList();
+
+                // SYNCING UPDATES: If the audits isn't empty, then new records are either added, deleted or updated
+                if (audits.Count > 0)
                 {
-                    cashInAdvances = _db.CashInAdvances.Where(c =>
-                        ((c.RequestDate.Value.Year == DateTime.Now.Year - 1 && c.RequestDate.Value.Month > 6) ||
-                        (c.RequestDate.Value.Year == DateTime.Now.Year)) && c.TripID == null
-                        ).ToList();
-                    expenses = _db.ExpensesReports.Where(e =>
-                        ((e.SubmissionDate.Year == DateTime.Now.Year - 1 && e.SubmissionDate.Month > 6) ||
-                        (e.SubmissionDate.Year == DateTime.Now.Year)) && e.TripID == null
-                        ).ToList();
+                    foreach (var audit in audits)
+                    {
+                        if (audit.Operation == "Deleted")
+                        {
+                            var nonTripV = new List<NonTripsView>();
+                            if (audit.Ref_Table == "CIA")
+                            {
+                                nonTripV = _db.NonTripsViews.Where(t => t.CIA_Id == audit.RecordID).ToList();
+                            }
+                            else if (audit.Ref_Table == "ExpensesReport")
+                            {
+                                nonTripV = _db.NonTripsViews.Where(t => t.ExpenseReportId == audit.RecordID).ToList();
+                            }
+                            if (nonTripV.Count > 0)
+                            {
+                                _db.NonTripsViews.RemoveRange(nonTripV);
+                                _db.SaveChanges();
+                            }
+                        }
+                        else if (audit.Operation == "Insert" || audit.Operation == "Update")
+                        {
+                            if (audit.Operation == "Update")
+                            {
+                                var nonTripV = new List<NonTripsView>();
+                                if (audit.Ref_Table == "CIA")
+                                {
+                                    nonTripV = _db.NonTripsViews.Where(t => t.CIA_Id == audit.RecordID).ToList();
+                                }
+                                else if (audit.Ref_Table == "ExpensesReport")
+                                {
+                                    nonTripV = _db.NonTripsViews.Where(t => t.ExpenseReportId == audit.RecordID).ToList();
+                                }
+                                if (nonTripV.Count > 0)
+                                {
+                                    _db.NonTripsViews.RemoveRange(nonTripV);
+                                    _db.SaveChanges();
+                                }
+                            }
+
+                            //var cia = _db.CashInAdvances.Where(a => a.Id == audit.RecordID).ToList();
+                            //if (cia.Count > 0)
+                            //{
+                            //    _db.TripsViews.AddRange(SetNonTripsViewList(trip));
+                            //    _db.SaveChanges();
+                            //}
+                        }
+                    }
+
+                    // Clear the related audit table records after syncing
+                    _db.Audits.RemoveRange(audits);
+                    _db.SaveChanges();
                 }
-                else
-                {
-                    cashInAdvances = _db.CashInAdvances.Where(c =>
-                        ((c.RequestDate.Value.Year == DateTime.Now.Year - 2 && c.RequestDate.Value.Month > 6) ||
-                        (c.RequestDate.Value.Year == DateTime.Now.Year - 1) ||
-                        (c.RequestDate.Value.Year == DateTime.Now.Year)) && c.TripID == null
-                        ).ToList();
 
-                    expenses = _db.ExpensesReports.Where(e =>
-                        ((e.SubmissionDate.Year == DateTime.Now.Year - 2 && e.SubmissionDate.Month > 6) ||
-                        (e.SubmissionDate.Year == DateTime.Now.Year - 1) ||
-                        (e.SubmissionDate.Year == DateTime.Now.Year)) && e.TripID == null
-                        ).ToList();
-                }
-
-                //var cashInAdvances = _db.CashInAdvances.Where(c => c.RequestDate.Value.Month == DateTime.Now.Month - 1 &&
-                //c.RequestDate.Value.Year == DateTime.Now.Year && c.TripID == null).ToList();
-                //var expenses = _db.ExpensesReports.Where(e => e.SubmissionDate.Month == DateTime.Now.Month - 1 &&
-                //e.SubmissionDate.Year == DateTime.Now.Year && e.TripID == null).ToList();
-                /*
-                 var cashInAdvances = _db.CashInAdvances.Where(c => 
-                ((c.RequestDate.Value.Month > 6 && c.RequestDate.Value.Year == DateTime.Now.Year - 1) ||
-                (c.RequestDate.Value.Year == DateTime.Now.Year)) && (c.TripID == null)).ToList();
-                var expenses = _db.ExpensesReports.Where(e => 
-                ((e.SubmissionDate.Month > 6 && e.SubmissionDate.Year == DateTime.Now.Year - 1) ||
-                (e.SubmissionDate.Year == DateTime.Now.Year)) && (e.TripID == null)).ToList();
-                */
-
-                return View(SetNonTripvmList(cashInAdvances, expenses));
+                return View(_db.NonTripsViews.ToList());
             }
             ViewBag.ErrorMsg = "Not authenticated user.";
             return View("Error");
@@ -257,7 +313,7 @@ namespace VacationsPortal.Controllers
                 ).ToList();
 
 
-            return View("Index", SetNonTripvmList(cashInAdvances, expenses));
+            return View("Index", SetNonTripsViewList(cashInAdvances, expenses));
         }
 
         protected override void Dispose(bool disposing)
