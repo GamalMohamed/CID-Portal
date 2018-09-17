@@ -28,71 +28,82 @@ namespace VacationsPortal.Controllers
             return false;
         }
 
-        public List<NonTripsView> SetNonTripsViewList(List<CashInAdvance> cashInAdvances, List<ExpensesReport> expenses)
+        public List<NonTripsView> SetNonTripsViewList(List<CashInAdvance> cashInAdvances = null, List<ExpensesReport> expenses = null)
         {
             var nonTripsvm = new List<NonTripsView>();
-            foreach (var cashInAdvance in cashInAdvances)
+            if (cashInAdvances != null)
             {
-                var nontripvm = new NonTripsView();
-                nontripvm.EmployeeName = cashInAdvance.Employee.contact.FullName;
-                nontripvm.CIA_Id = cashInAdvance.Id;
-                nontripvm.CIA_Status = cashInAdvance.CashInAdvanceStatu.CashInAdvanceStatus;
-                nontripvm.CurrencyName = cashInAdvance.Currency.CurrencyName;
-                nontripvm.CIA_Amount_InCurrency = cashInAdvance.Amount ?? 0;
-                nontripvm.CIA_ExchangeRate = cashInAdvance.ExchangeRate ?? 0;
-                nontripvm.CIA_Amount_InEGP = nontripvm.CIA_Amount_InCurrency *
-                                                        (decimal)nontripvm.CIA_ExchangeRate;
-                nontripvm.CIA_Reason = cashInAdvance.Reason;
-                nontripvm.OperationsApprovalDate = cashInAdvance.OperationApprovalDate;
-
-                if (cashInAdvance.ExpensesReports.Count > 0)
+                foreach (var cashInAdvance in cashInAdvances)
                 {
-                    foreach (var ciaExpensesReport in cashInAdvance.ExpensesReports)
+                    var nontripvm = new NonTripsView
                     {
-                        var nontripvm2 = nontripvm;
-                        nontripvm2.ExpenseReportId = ciaExpensesReport.ID;
-                        nontripvm2.SubmissionDate = ciaExpensesReport.SubmissionDate;
-                        nontripvm2.Title = ciaExpensesReport.Title;
-                        nontripvm2.ApprovalDate = ciaExpensesReport.ApprovalDate;
-                        nontripvm2.ExpenseReportStatus = ciaExpensesReport.ExpenseReportStatu.StatusName;
-                        nontripvm2.TotalAmountInEGP = ciaExpensesReport.TotalAmountInUSD ?? 0;
-                        nontripvm2.CIAExpenseReport = ciaExpensesReport.CashInAdvance ?? 0; //(double)nontripvm2.CIA_Amount_InEGP;
-                        nontripvm2.AmountToEmployeeInEGP = (nontripvm2.TotalAmountInEGP - nontripvm2.CIAExpenseReport) ?? 0;
-                        nontripvm2.SettledAmount = ciaExpensesReport.SettledAmount ?? 0;
-                        nontripvm2.SettlementDate = ciaExpensesReport.SettlementDate;
-                        nontripvm2.RemainingBalance = Math.Abs((decimal)nontripvm2.AmountToEmployeeInEGP) - nontripvm2.SettledAmount;
-                        nontripvm2.OperationsComment = ciaExpensesReport.OperationsComment;
+                        EmployeeName = cashInAdvance.Employee.contact.FullName,
+                        CIA_Id = cashInAdvance.Id,
+                        CIA_Status = cashInAdvance.CashInAdvanceStatu.CashInAdvanceStatus,
+                        CIA_Reason = cashInAdvance.Reason,
+                        OperationsApprovalDate = cashInAdvance.OperationApprovalDate,
+                        CurrencyName = cashInAdvance.Currency.CurrencyName,
+                        CIA_Amount_InCurrency = cashInAdvance.Amount ?? 0,
+                        CIA_ExchangeRate = cashInAdvance.ExchangeRate ?? 0
+                    };
+                    if (nontripvm.CIA_ExchangeRate != null)
+                        nontripvm.CIA_Amount_InEGP = nontripvm.CIA_Amount_InCurrency *
+                                                     (decimal)nontripvm.CIA_ExchangeRate;
 
-                        nonTripsvm.Add(nontripvm2); // CIA + Expenses
+                    if (cashInAdvance.ExpensesReports.Count > 0)
+                    {
+                        foreach (var ciaExpensesReport in cashInAdvance.ExpensesReports)
+                        {
+                            var nontripvm2 = nontripvm;
+                            nontripvm2.ExpenseReportId = ciaExpensesReport.ID;
+                            nontripvm2.SubmissionDate = ciaExpensesReport.SubmissionDate;
+                            nontripvm2.Title = ciaExpensesReport.Title;
+                            nontripvm2.ApprovalDate = ciaExpensesReport.ApprovalDate;
+                            nontripvm2.ExpenseReportStatus = ciaExpensesReport.ExpenseReportStatu.StatusName;
+                            nontripvm2.TotalAmountInEGP = ciaExpensesReport.TotalAmountInUSD ?? 0;
+                            nontripvm2.CIAExpenseReport = ciaExpensesReport.CashInAdvance ?? 0; //(double)nontripvm2.CIA_Amount_InEGP;
+                            nontripvm2.AmountToEmployeeInEGP = (nontripvm2.TotalAmountInEGP - nontripvm2.CIAExpenseReport) ?? 0;
+                            nontripvm2.SettledAmount = ciaExpensesReport.SettledAmount ?? 0;
+                            nontripvm2.SettlementDate = ciaExpensesReport.SettlementDate;
+                            nontripvm2.RemainingBalance = Math.Abs((decimal)nontripvm2.AmountToEmployeeInEGP) - nontripvm2.SettledAmount;
+                            nontripvm2.OperationsComment = ciaExpensesReport.OperationsComment;
+
+                            nonTripsvm.Add(nontripvm2); // CIA + Expenses
+                        }
+                    }
+                    else
+                    {
+                        nonTripsvm.Add(nontripvm); // CIA only
                     }
                 }
-                else
-                {
-                    nonTripsvm.Add(nontripvm); // CIA only
-                }
             }
-
-            // Expenses without CIA
-            foreach (var expense in expenses)
+            
+            if (expenses != null)
             {
-                if (expense.CashInAdvances.Count == 0)
+                // Expenses without CIA
+                foreach (var expense in expenses)
                 {
-                    var nontripvm3 = new NonTripsView();
-                    nontripvm3.EmployeeName = expense.Employee.contact.FullName;
-                    nontripvm3.ExpenseReportId = expense.ID;
-                    nontripvm3.Title = expense.Title;
-                    nontripvm3.SubmissionDate = expense.SubmissionDate;
-                    nontripvm3.ApprovalDate = expense.ApprovalDate;
-                    nontripvm3.ExpenseReportStatus = expense.ExpenseReportStatu.StatusName;
-                    nontripvm3.TotalAmountInEGP = expense.TotalAmountInUSD ?? 0;
-                    nontripvm3.CIAExpenseReport = expense.CashInAdvance ?? 0;
-                    nontripvm3.AmountToEmployeeInEGP = (nontripvm3.TotalAmountInEGP - nontripvm3.CIAExpenseReport) ?? 0;
-                    nontripvm3.SettledAmount = expense.SettledAmount ?? 0;
-                    nontripvm3.SettlementDate = expense.SettlementDate;
-                    nontripvm3.RemainingBalance = (decimal)nontripvm3.AmountToEmployeeInEGP - nontripvm3.SettledAmount;
-                    nontripvm3.OperationsComment = expense.OperationsComment;
+                    if (expense.CashInAdvances.Count == 0)
+                    {
+                        var nontripvm3 = new NonTripsView
+                        {
+                            EmployeeName = expense.Employee.contact.FullName,
+                            ExpenseReportId = expense.ID,
+                            Title = expense.Title,
+                            SubmissionDate = expense.SubmissionDate,
+                            ApprovalDate = expense.ApprovalDate,
+                            ExpenseReportStatus = expense.ExpenseReportStatu.StatusName,
+                            TotalAmountInEGP = expense.TotalAmountInUSD ?? 0,
+                            CIAExpenseReport = expense.CashInAdvance ?? 0,
+                            OperationsComment = expense.OperationsComment,
+                            SettledAmount = expense.SettledAmount ?? 0,
+                            SettlementDate = expense.SettlementDate
+                        };
+                        nontripvm3.AmountToEmployeeInEGP = (nontripvm3.TotalAmountInEGP - nontripvm3.CIAExpenseReport) ?? 0;
+                        nontripvm3.RemainingBalance = (decimal)nontripvm3.AmountToEmployeeInEGP - nontripvm3.SettledAmount;
 
-                    nonTripsvm.Add(nontripvm3); // Expense only
+                        nonTripsvm.Add(nontripvm3); // Expense only
+                    }
                 }
             }
 
@@ -138,7 +149,7 @@ namespace VacationsPortal.Controllers
             _db.NonTripsViews.AddRange(nonTripViews);
             _db.SaveChanges();
 
-            return RedirectToAction("Index","Employees");
+            return RedirectToAction("Index", "NonTrips");
         }
 
         // GET: NonTrips
@@ -146,64 +157,96 @@ namespace VacationsPortal.Controllers
         {
             if (IsAuthorized())
             {
-                var audits = _db.Audits.Where(a => a.Ref_Table == "CIA" ||
-                                              a.Ref_Table == "ExpensesReport").ToList();
+                //var audits = _db.Audits.Where(a => a.Ref_Table == "CIA" ||
+                //                              a.Ref_Table == "ExpensesReport").ToList();
 
-                // SYNCING UPDATES: If the audits isn't empty, then new records are either added, deleted or updated
-                if (audits.Count > 0)
-                {
-                    foreach (var audit in audits)
-                    {
-                        if (audit.Operation == "Deleted")
-                        {
-                            var nonTripV = new List<NonTripsView>();
-                            if (audit.Ref_Table == "CIA")
-                            {
-                                nonTripV = _db.NonTripsViews.Where(t => t.CIA_Id == audit.RecordID).ToList();
-                            }
-                            else if (audit.Ref_Table == "ExpensesReport")
-                            {
-                                nonTripV = _db.NonTripsViews.Where(t => t.ExpenseReportId == audit.RecordID).ToList();
-                            }
-                            if (nonTripV.Count > 0)
-                            {
-                                _db.NonTripsViews.RemoveRange(nonTripV);
-                                _db.SaveChanges();
-                            }
-                        }
-                        else if (audit.Operation == "Insert" || audit.Operation == "Update")
-                        {
-                            if (audit.Operation == "Update")
-                            {
-                                var nonTripV = new List<NonTripsView>();
-                                if (audit.Ref_Table == "CIA")
-                                {
-                                    nonTripV = _db.NonTripsViews.Where(t => t.CIA_Id == audit.RecordID).ToList();
-                                }
-                                else if (audit.Ref_Table == "ExpensesReport")
-                                {
-                                    nonTripV = _db.NonTripsViews.Where(t => t.ExpenseReportId == audit.RecordID).ToList();
-                                }
-                                if (nonTripV.Count > 0)
-                                {
-                                    _db.NonTripsViews.RemoveRange(nonTripV);
-                                    _db.SaveChanges();
-                                }
-                            }
+                //if (audits.Count > 0)
+                //{
+                //    foreach (var audit in audits)
+                //    {
+                //        if (audit.Operation == "Deleted")
+                //        {
+                //            if (audit.Ref_Table == "CIA")
+                //            {
+                //                // Get all tripViews records containing this CIA
+                //                var nontripVcia = _db.NonTripsViews.Where(t => t.CIA_Id == audit.RecordID).ToList();
+                //                if (nontripVcia.Count > 0)
+                //                {
+                //                    // Remove all nontripViews of this trip
+                //                    _db.NonTripsViews.RemoveRange(nontripVcia);
+                //                    _db.SaveChanges();
+                //                    //Recreate the tripView again
+                //                    _db.NonTripsViews.AddRange(SetNonTripsViewList());
+                //                    _db.SaveChanges();
+                //                }
+                //                else
+                //                {
+                //                    audits.Remove(audit);
+                //                }
+                //            }
+                //            else if (audit.Ref_Table == "ExpensesReport")
+                //            {
+                //                // Delete the Expenses Fields in each related TripView
+                //                var nontripVexp = _db.NonTripsViews.Where(t => t.ExpenseReportId == audit.RecordID).ToList();
+                //                if (nontripVexp.Count > 0)
+                //                {
+                //                    _db.NonTripsViews.RemoveRange(nontripVexp);
+                //                    _db.SaveChanges();
 
-                            //var cia = _db.CashInAdvances.Where(a => a.Id == audit.RecordID).ToList();
-                            //if (cia.Count > 0)
-                            //{
-                            //    _db.TripsViews.AddRange(SetNonTripsViewList(trip));
-                            //    _db.SaveChanges();
-                            //}
-                        }
-                    }
+                //                    _db.NonTripsViews.AddRange(SetNonTripsViewList());
+                //                    _db.SaveChanges();
+                //                }
+                //                else
+                //                {
+                //                    audits.Remove(audit);
+                //                }
+                //            }
+                //        }
+                //        else if (audit.Operation == "Insert" || audit.Operation == "Update")
+                //        {
+                //            if (audit.Ref_Table == "CIA")
+                //            {
+                //                var cia = _db.CashInAdvances.Find(audit.RecordID);
+                //                if (cia?.TripID == null)
+                //                {
+                //                    // Delete Outdated tripView records
+                //                    var nontripV = _db.NonTripsViews.Where(t => t.CIA_Id == cia.Id).ToList();
+                //                    _db.NonTripsViews.RemoveRange(nontripV);
+                //                    _db.SaveChanges();
 
-                    // Clear the related audit table records after syncing
-                    _db.Audits.RemoveRange(audits);
-                    _db.SaveChanges();
-                }
+                //                    // Re-create the tripView again
+                //                    _db.NonTripsViews.AddRange(SetNonTripsViewList());
+                //                    _db.SaveChanges();
+                //                }
+                //                else
+                //                {
+                //                    audits.Remove(audit);
+                //                }
+                //            }
+                //            else if (audit.Ref_Table == "ExpensesReport")
+                //            {
+                //                var exp = _db.ExpensesReports.Find(audit.RecordID);
+                //                if (exp?.TripID == null)
+                //                {
+                //                    var nontripV = _db.NonTripsViews.Where(t => t.ExpenseReportId == exp.ID).ToList();
+                //                    _db.NonTripsViews.RemoveRange(nontripV);
+                //                    _db.SaveChanges();
+
+                //                    _db.NonTripsViews.AddRange(SetNonTripsViewList());
+                //                    _db.SaveChanges();
+                //                }
+                //                else
+                //                {
+                //                    audits.Remove(audit);
+                //                }
+                //            }
+                //        }
+                //    }
+
+                //    // Clear the related audit table records after syncing
+                //    _db.Audits.RemoveRange(audits);
+                //    _db.SaveChanges();
+                //}
 
                 return View(_db.NonTripsViews.ToList());
             }

@@ -303,7 +303,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\EmployeeViewModel.cs" />
-    <Compile Include="ViewModels\NonTripViewModel.cs" />
     <Compile Include="ViewModels\SettlementViewModel.cs" />
     <Compile Include="ViewModels\TravelRequestViewModel.cs" />
   </ItemGroup>

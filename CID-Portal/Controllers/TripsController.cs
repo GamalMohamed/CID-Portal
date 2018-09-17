@@ -293,7 +293,7 @@ namespace VacationsPortal.Controllers
                                               a.Ref_Table == "CIA" ||
                                               a.Ref_Table == "ExpensesReport" ||
                                               a.Ref_Table == "Route").ToList();
-
+                var auditsClone = new List<Audit>(audits);
                 if (audits.Count > 0)
                 {
                     foreach (var audit in audits)
@@ -327,6 +327,10 @@ namespace VacationsPortal.Controllers
                                     _db.TripsViews.AddRange(SetTripsViewList(new List<Trip>() { trip }));
                                     _db.SaveChanges();
                                 }
+                                else
+                                {
+                                    auditsClone.Remove(audit);
+                                }
                             }
                             else if (audit.Ref_Table == "ExpensesReport")
                             {
@@ -341,6 +345,10 @@ namespace VacationsPortal.Controllers
 
                                     _db.TripsViews.AddRange(SetTripsViewList(new List<Trip>() { trip }));
                                     _db.SaveChanges();
+                                }
+                                else
+                                {
+                                    auditsClone.Remove(audit);
                                 }
                             }
                             else if (audit.Ref_Table == "Route")
@@ -413,6 +421,10 @@ namespace VacationsPortal.Controllers
                                     _db.TripsViews.AddRange(SetTripsViewList(new List<Trip>() { cia.Trip }));
                                     _db.SaveChanges();
                                 }
+                                else
+                                {
+                                    auditsClone.Remove(audit);
+                                }
                             }
                             else if (audit.Ref_Table == "ExpensesReport")
                             {
@@ -425,6 +437,10 @@ namespace VacationsPortal.Controllers
                                     
                                     _db.TripsViews.AddRange(SetTripsViewList(new List<Trip>() { exp.Trip }));
                                     _db.SaveChanges();
+                                }
+                                else
+                                {
+                                    auditsClone.Remove(audit);
                                 }
                             }
                             else if (audit.Ref_Table == "Route")
@@ -447,7 +463,7 @@ namespace VacationsPortal.Controllers
                     }
 
                     // Clear the related audit table records after syncing
-                    _db.Audits.RemoveRange(audits);
+                    _db.Audits.RemoveRange(auditsClone);
                     _db.SaveChanges();
                 }
 
