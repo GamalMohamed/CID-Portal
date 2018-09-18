@@ -2355,9 +2355,9 @@
           <EntitySet Name="TripsViews" EntityType="CIDvNEXtModel.TripsView" />
           <EntitySet Name="Audits" EntityType="CIDvNEXtModel.Audit" />
           <EntitySet Name="TripsView_Archive" EntityType="CIDvNEXtModel.TripsView_Archive" />
-          <EntitySet Name="TravelRequestViews" EntityType="CIDvNEXtModel.TravelRequestView" />
           <EntitySet Name="NonTripsViews" EntityType="CIDvNEXtModel.NonTripsView" />
           <EntitySet Name="NonTripsView_Archive" EntityType="CIDvNEXtModel.NonTripsView_Archive" />
+          <EntitySet Name="TravelRequestViews" EntityType="CIDvNEXtModel.TravelRequestView" />
         </EntityContainer>
         <EntityType Name="EmployeesView">
           <Key>
@@ -3419,46 +3419,6 @@
           <Property Name="RemainingBalance" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="OperationsComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="TravelRequestView">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="EmployeeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="StartDate" Type="DateTime" Precision="7" />
-          <Property Name="EndDate" Type="DateTime" Precision="7" />
-          <Property Name="NumOfDays" Type="Int32" />
-          <Property Name="WorkingDays" Type="Int32" />
-          <Property Name="ModifiedOn" Type="DateTime" Precision="7" />
-          <Property Name="IsCanceled" Type="Boolean" />
-          <Property Name="Routes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="TRStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FlightStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="HotelStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="VisaStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="HRLetterStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FlightInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FlightInvoiceStatus2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ReissueInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ReissueInvoiceStatus2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ReissueInvoiceStatus3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="HotelInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="VisaInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FlightRefundInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FlightCost" Type="Double" />
-          <Property Name="FlightCostCurrency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FlightCost2" Type="Double" />
-          <Property Name="FlightCost2Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ReissueCost" Type="Double" />
-          <Property Name="ReissueCost2" Type="Double" />
-          <Property Name="ReissueCost3" Type="Double" />
-          <Property Name="FlightRefund" Type="Double" />
-          <Property Name="HotelCost" Type="Double" />
-          <Property Name="HotelCostCurrency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="RequesterNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OperationsNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="TripType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="NonTripsView">
           <Key>
             <PropertyRef Name="Id" />
@@ -3512,6 +3472,46 @@
           <Property Name="SettlementDate" Type="DateTime" Precision="7" />
           <Property Name="RemainingBalance" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="OperationsComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TravelRequestView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="7" />
+          <Property Name="EndDate" Type="DateTime" Precision="7" />
+          <Property Name="NumOfDays" Type="Int32" />
+          <Property Name="WorkingDays" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="7" />
+          <Property Name="IsCanceled" Type="Boolean" />
+          <Property Name="Routes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TRStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HotelStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VisaStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HRLetterStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightInvoiceStatus2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReissueInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReissueInvoiceStatus2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReissueInvoiceStatus3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HotelInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VisaInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightRefundInvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightCost" Type="Double" />
+          <Property Name="FlightCostCurrency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FlightCost2" Type="Double" />
+          <Property Name="FlightCost2Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReissueCost" Type="Double" />
+          <Property Name="ReissueCost2" Type="Double" />
+          <Property Name="ReissueCost3" Type="Double" />
+          <Property Name="FlightRefund" Type="Double" />
+          <Property Name="HotelCost" Type="Double" />
+          <Property Name="HotelCostCurrency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RequesterNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OperationsNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TripType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4108,47 +4108,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="TravelRequestViews">
-            <EntityTypeMapping TypeName="CIDvNEXtModel.TravelRequestView">
-              <MappingFragment StoreEntitySet="TravelRequestView">
-                <ScalarProperty Name="TripType" ColumnName="TripType" />
-                <ScalarProperty Name="OperationsNotes" ColumnName="OperationsNotes" />
-                <ScalarProperty Name="RequesterNotes" ColumnName="RequesterNotes" />
-                <ScalarProperty Name="HotelCostCurrency" ColumnName="HotelCostCurrency" />
-                <ScalarProperty Name="HotelCost" ColumnName="HotelCost" />
-                <ScalarProperty Name="FlightRefund" ColumnName="FlightRefund" />
-                <ScalarProperty Name="ReissueCost3" ColumnName="ReissueCost3" />
-                <ScalarProperty Name="ReissueCost2" ColumnName="ReissueCost2" />
-                <ScalarProperty Name="ReissueCost" ColumnName="ReissueCost" />
-                <ScalarProperty Name="FlightCost2Currency" ColumnName="FlightCost2Currency" />
-                <ScalarProperty Name="FlightCost2" ColumnName="FlightCost2" />
-                <ScalarProperty Name="FlightCostCurrency" ColumnName="FlightCostCurrency" />
-                <ScalarProperty Name="FlightCost" ColumnName="FlightCost" />
-                <ScalarProperty Name="FlightRefundInvoiceStatus" ColumnName="FlightRefundInvoiceStatus" />
-                <ScalarProperty Name="VisaInvoiceStatus" ColumnName="VisaInvoiceStatus" />
-                <ScalarProperty Name="HotelInvoiceStatus" ColumnName="HotelInvoiceStatus" />
-                <ScalarProperty Name="ReissueInvoiceStatus3" ColumnName="ReissueInvoiceStatus3" />
-                <ScalarProperty Name="ReissueInvoiceStatus2" ColumnName="ReissueInvoiceStatus2" />
-                <ScalarProperty Name="ReissueInvoiceStatus" ColumnName="ReissueInvoiceStatus" />
-                <ScalarProperty Name="FlightInvoiceStatus2" ColumnName="FlightInvoiceStatus2" />
-                <ScalarProperty Name="FlightInvoiceStatus" ColumnName="FlightInvoiceStatus" />
-                <ScalarProperty Name="HRLetterStatus" ColumnName="HRLetterStatus" />
-                <ScalarProperty Name="VisaStatus" ColumnName="VisaStatus" />
-                <ScalarProperty Name="HotelStatus" ColumnName="HotelStatus" />
-                <ScalarProperty Name="FlightStatus" ColumnName="FlightStatus" />
-                <ScalarProperty Name="TRStatus" ColumnName="TRStatus" />
-                <ScalarProperty Name="Routes" ColumnName="Routes" />
-                <ScalarProperty Name="IsCanceled" ColumnName="IsCanceled" />
-                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
-                <ScalarProperty Name="WorkingDays" ColumnName="WorkingDays" />
-                <ScalarProperty Name="NumOfDays" ColumnName="NumOfDays" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="NonTripsViews">
             <EntityTypeMapping TypeName="CIDvNEXtModel.NonTripsView">
               <MappingFragment StoreEntitySet="NonTripsView">
@@ -4200,6 +4159,47 @@
                 <ScalarProperty Name="CIA_Amount_InCurrency" ColumnName="CIA_Amount_InCurrency" />
                 <ScalarProperty Name="CIA_Amount_InEGP" ColumnName="CIA_Amount_InEGP" />
                 <ScalarProperty Name="CIA_Id" ColumnName="CIA_Id" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelRequestViews">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.TravelRequestView">
+              <MappingFragment StoreEntitySet="TravelRequestView">
+                <ScalarProperty Name="TripType" ColumnName="TripType" />
+                <ScalarProperty Name="OperationsNotes" ColumnName="OperationsNotes" />
+                <ScalarProperty Name="RequesterNotes" ColumnName="RequesterNotes" />
+                <ScalarProperty Name="HotelCostCurrency" ColumnName="HotelCostCurrency" />
+                <ScalarProperty Name="HotelCost" ColumnName="HotelCost" />
+                <ScalarProperty Name="FlightRefund" ColumnName="FlightRefund" />
+                <ScalarProperty Name="ReissueCost3" ColumnName="ReissueCost3" />
+                <ScalarProperty Name="ReissueCost2" ColumnName="ReissueCost2" />
+                <ScalarProperty Name="ReissueCost" ColumnName="ReissueCost" />
+                <ScalarProperty Name="FlightCost2Currency" ColumnName="FlightCost2Currency" />
+                <ScalarProperty Name="FlightCost2" ColumnName="FlightCost2" />
+                <ScalarProperty Name="FlightCostCurrency" ColumnName="FlightCostCurrency" />
+                <ScalarProperty Name="FlightCost" ColumnName="FlightCost" />
+                <ScalarProperty Name="FlightRefundInvoiceStatus" ColumnName="FlightRefundInvoiceStatus" />
+                <ScalarProperty Name="VisaInvoiceStatus" ColumnName="VisaInvoiceStatus" />
+                <ScalarProperty Name="HotelInvoiceStatus" ColumnName="HotelInvoiceStatus" />
+                <ScalarProperty Name="ReissueInvoiceStatus3" ColumnName="ReissueInvoiceStatus3" />
+                <ScalarProperty Name="ReissueInvoiceStatus2" ColumnName="ReissueInvoiceStatus2" />
+                <ScalarProperty Name="ReissueInvoiceStatus" ColumnName="ReissueInvoiceStatus" />
+                <ScalarProperty Name="FlightInvoiceStatus2" ColumnName="FlightInvoiceStatus2" />
+                <ScalarProperty Name="FlightInvoiceStatus" ColumnName="FlightInvoiceStatus" />
+                <ScalarProperty Name="HRLetterStatus" ColumnName="HRLetterStatus" />
+                <ScalarProperty Name="VisaStatus" ColumnName="VisaStatus" />
+                <ScalarProperty Name="HotelStatus" ColumnName="HotelStatus" />
+                <ScalarProperty Name="FlightStatus" ColumnName="FlightStatus" />
+                <ScalarProperty Name="TRStatus" ColumnName="TRStatus" />
+                <ScalarProperty Name="Routes" ColumnName="Routes" />
+                <ScalarProperty Name="IsCanceled" ColumnName="IsCanceled" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="WorkingDays" ColumnName="WorkingDays" />
+                <ScalarProperty Name="NumOfDays" ColumnName="NumOfDays" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

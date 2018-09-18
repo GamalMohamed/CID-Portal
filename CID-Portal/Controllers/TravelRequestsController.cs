@@ -28,10 +28,10 @@ namespace VacationsPortal.Controllers
             return false;
         }
 
-        public TravelRequestViewModel SetTRvmFields(TravelRequest travelRequest, Trip trip,
+        public TravelRequestView SetTRvmFields(TravelRequest travelRequest, Trip trip,
                                                     Dictionary<int, string> statusesDic)
         {
-            var tRvm = new TravelRequestViewModel
+            var tRvm = new TravelRequestView
             {
                 Id = travelRequest.TRID,
                 TRStatus = travelRequest.TravelRequestStatu.Status,
@@ -136,10 +136,10 @@ namespace VacationsPortal.Controllers
             return tRvm;
         }
 
-        public List<TravelRequestViewModel> SetTRvmList(List<TravelRequest> travelRequests)
+        public List<TravelRequestView> SetTRvmList(List<TravelRequest> travelRequests)
         {
             var statusesDic = _db.TRItemsStatus.ToDictionary(status => status.Id, status => status.Status);
-            var travelRequestsvm = new List<TravelRequestViewModel>();
+            var travelRequestsvm = new List<TravelRequestView>();
             foreach (var travelRequest in travelRequests)
             {
                 foreach (var trip in travelRequest.Trips.ToList())
@@ -150,29 +150,148 @@ namespace VacationsPortal.Controllers
             return travelRequestsvm;
         }
 
+
+        // IMP NOTE: THESE ROUTES ARE FOR DEVELOPMENT PURPOSES ONLY!!
+        public ActionResult FillTravelRequestsView()
+        {
+            List<TravelRequest> travelRequests;
+            if (DateTime.Now.Month > 6)
+            {
+                travelRequests = _db.TravelRequests.Where(t =>
+                    (t.RequestedOn.Year == DateTime.Now.Year - 1 && t.RequestedOn.Month > 6) ||
+                    (t.RequestedOn.Year == DateTime.Now.Year)
+                    ).ToList();
+            }
+            else
+            {
+                travelRequests = _db.TravelRequests.Where(t =>
+                    (t.RequestedOn.Year == DateTime.Now.Year - 2 && t.RequestedOn.Month > 6) ||
+                    (t.RequestedOn.Year == DateTime.Now.Year - 1) ||
+                    (t.RequestedOn.Year == DateTime.Now.Year)
+                    ).ToList();
+            }
+            var trViews = SetTRvmList(travelRequests);
+            _db.TravelRequestViews.AddRange(trViews);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
         // GET: TravelRequests
         public ActionResult Index()
         {
             if (IsAuthorized())
             {
-                List<TravelRequest> travelRequests;
-                if (DateTime.Now.Month > 6)
+                var audits = _db.Audits.Where(a => a.Ref_Table == "Trips" ||
+                                             a.Ref_Table == "TravelRequests" ||
+                                             a.Ref_Table == "Route").ToList();
+
+                var auditsClone = new List<Audit>(audits);
+                if (audits.Count > 0)
                 {
-                    travelRequests = _db.TravelRequests.Where(t =>
-                        (t.RequestedOn.Year == DateTime.Now.Year - 1 && t.RequestedOn.Month > 6) ||
-                        (t.RequestedOn.Year == DateTime.Now.Year)
-                        ).ToList();
-                }
-                else
-                {
-                    travelRequests = _db.TravelRequests.Where(t =>
-                        (t.RequestedOn.Year == DateTime.Now.Year - 2 && t.RequestedOn.Month > 6) ||
-                        (t.RequestedOn.Year == DateTime.Now.Year - 1) ||
-                        (t.RequestedOn.Year == DateTime.Now.Year)
-                        ).ToList();
+                    foreach (var audit in audits)
+                    {
+                        if (audit.Operation == "Deleted")
+                        {
+                            if (audit.Ref_Table == "TravelRequests")
+                            {
+                                var trV = _db.TravelRequestViews.Where(t => t.Id == audit.RecordID).ToList();
+                                _db.TravelRequestViews.RemoveRange(trV);
+                                _db.SaveChanges();
+                            }
+                            else if (audit.Ref_Table == "Trips")
+                            {
+                                auditsClone.Remove(audit); // Leave it to be consumed by the tripView table
+                            }
+                            else if (audit.Ref_Table == "Route")
+                            {
+                                // TODO: Same code as in the insert or the update route!
+                                var trip = _db.Routes.Find(audit.RecordID)?.Trip;
+                                if (trip != null)
+                                {
+                                    var tripV = _db.TripsViews.Where(t => t.TripID == trip.Id).ToList();
+                                    if (tripV.Count > 0)
+                                    {
+                                        foreach (var trv in tripV)
+                                        {
+                                            trv.Country = trip.Routes.ToList()[trip.Routes.Count - 2].Country.CountryName;
+                                        }
+                                    }
+                                    _db.SaveChanges();
+                                }
+                            }
+                        }
+                        else if (audit.Operation == "Insert" || audit.Operation == "Update")
+                        {
+                            if (audit.Ref_Table == "TravelRequests")
+                            {
+                                var tr = _db.TravelRequests.Find(audit.RecordID);
+                                if (audit.Operation == "Update")
+                                {
+                                    var trV = _db.TravelRequestViews.Where(t => t.Id == audit.RecordID).ToList();
+                                    _db.TravelRequestViews.RemoveRange(trV);
+                                    _db.SaveChanges();
+                                }
+
+                                _db.TravelRequestViews.AddRange(SetTRvmList(new List<TravelRequest>() { tr }));
+                                _db.SaveChanges();
+                            }
+                            else if (audit.Ref_Table == "Trips")
+                            {
+                                if (audit.Operation == "Update")
+                                {
+                                    var trip = _db.Trips.Find(audit.RecordID);
+                                    if (trip != null)
+                                    {
+                                        var tripV = _db.TravelRequestViews.Where(t => t.Id == trip.TRID).ToList();
+                                        if (tripV.Count > 0)
+                                        {
+                                            foreach (var trv in tripV)
+                                            {
+                                                if (trip.StartDate != null)
+                                                {
+                                                    trv.StartDate = trip.StartDate.Value;
+                                                }
+                                                if (trip.EndDate != null)
+                                                {
+                                                    trv.EndDate = trip.EndDate.Value;
+                                                }
+                                            }
+                                        }
+                                        _db.SaveChanges();
+                                    }
+                                }
+                                else if(audit.Operation == "Insert")
+                                {
+                                    auditsClone.Remove(audit); // Leave it to be consumed by the tripView table
+                                }
+                            }
+                            else if (audit.Ref_Table == "Route")
+                            {
+                                // TODO: Need to update both routes in TR and trips views
+                                var trip = _db.Routes.Find(audit.RecordID)?.Trip;
+                                if (trip != null)
+                                {
+                                    var tripV = _db.TripsViews.Where(t => t.TripID == trip.Id).ToList();
+                                    if (tripV.Count > 0)
+                                    {
+                                        foreach (var trv in tripV)
+                                        {
+                                            trv.Country = trip.Routes.ToList()[trip.Routes.Count - 2].Country.CountryName;
+                                        }
+                                    }
+                                    _db.SaveChanges();
+                                }
+                            }
+                        }
+                    }
+
+                    // Clear the related audit table records after syncing
+                    _db.Audits.RemoveRange(auditsClone);
+                    _db.SaveChanges();
                 }
 
-                return View(SetTRvmList(travelRequests));
+                return View(_db.TravelRequestViews.ToList());
             }
             ViewBag.ErrorMsg = "Not authenticated user.";
             return View("Error");
@@ -203,7 +322,7 @@ namespace VacationsPortal.Controllers
         // POST: TravelRequests/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(TravelRequestViewModel travelRequestvm)
+        public ActionResult Edit(TravelRequestView travelRequestvm)
         {
             if (ModelState.IsValid)
             {
