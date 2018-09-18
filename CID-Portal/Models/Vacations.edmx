@@ -294,7 +294,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmployeeName" Type="nvarchar(max)" />
           <Property Name="CIA_Id" Type="int" />
           <Property Name="CIA_Amount_InEGP" Type="decimal" Precision="18" Scale="4" />
@@ -305,10 +305,37 @@
           <Property Name="CIA_Reason" Type="nvarchar(max)" />
           <Property Name="OperationsApprovalDate" Type="datetime2" Precision="7" />
           <Property Name="ExpenseReportId" Type="int" />
-          <Property Name="Title" Type="nvarchar(max)" />
+          <Property Name="Title" Type="nvarchar" MaxLength="150" />
           <Property Name="SubmissionDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="ApprovalDate" Type="datetime2" Precision="7" />
-          <Property Name="ExpenseReportStatus" Type="nvarchar(max)" />
+          <Property Name="ExpenseReportStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="TotalAmountInEGP" Type="float" />
+          <Property Name="CIAExpenseReport" Type="float" />
+          <Property Name="AmountToEmployeeInEGP" Type="float" />
+          <Property Name="SettledAmount" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="SettlementDate" Type="datetime2" Precision="7" />
+          <Property Name="RemainingBalance" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="OperationsComment" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="NonTripsView_Archive">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeName" Type="nvarchar(max)" />
+          <Property Name="CIA_Id" Type="int" />
+          <Property Name="CIA_Amount_InEGP" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="CIA_Amount_InCurrency" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="CurrencyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CIA_ExchangeRate" Type="float" />
+          <Property Name="CIA_Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="CIA_Reason" Type="nvarchar(max)" />
+          <Property Name="OperationsApprovalDate" Type="datetime2" Precision="7" />
+          <Property Name="ExpenseReportId" Type="int" />
+          <Property Name="Title" Type="nvarchar" MaxLength="150" />
+          <Property Name="SubmissionDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="ApprovalDate" Type="datetime2" Precision="7" />
+          <Property Name="ExpenseReportStatus" Type="nvarchar" MaxLength="50" />
           <Property Name="TotalAmountInEGP" Type="float" />
           <Property Name="CIAExpenseReport" Type="float" />
           <Property Name="AmountToEmployeeInEGP" Type="float" />
@@ -1427,6 +1454,7 @@
           <EntitySet Name="ExpensesSubCategoryTypes" EntityType="Self.ExpensesSubCategoryTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Hotels" EntityType="Self.Hotels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NonTripsView" EntityType="Self.NonTripsView" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NonTripsView_Archive" EntityType="Self.NonTripsView_Archive" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentMethods" EntityType="Self.PaymentMethods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Route" EntityType="Self.Route" Schema="dbo" store:Type="Tables" />
@@ -2327,8 +2355,9 @@
           <EntitySet Name="TripsViews" EntityType="CIDvNEXtModel.TripsView" />
           <EntitySet Name="Audits" EntityType="CIDvNEXtModel.Audit" />
           <EntitySet Name="TripsView_Archive" EntityType="CIDvNEXtModel.TripsView_Archive" />
-          <EntitySet Name="NonTripsViews" EntityType="CIDvNEXtModel.NonTripsView" />
           <EntitySet Name="TravelRequestViews" EntityType="CIDvNEXtModel.TravelRequestView" />
+          <EntitySet Name="NonTripsViews" EntityType="CIDvNEXtModel.NonTripsView" />
+          <EntitySet Name="NonTripsView_Archive" EntityType="CIDvNEXtModel.NonTripsView_Archive" />
         </EntityContainer>
         <EntityType Name="EmployeesView">
           <Key>
@@ -3390,33 +3419,6 @@
           <Property Name="RemainingBalance" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="OperationsComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="NonTripsView">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="EmployeeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CIA_Id" Type="Int32" />
-          <Property Name="CIA_Amount_InEGP" Type="Decimal" Precision="18" Scale="4" />
-          <Property Name="CIA_Amount_InCurrency" Type="Decimal" Precision="18" Scale="4" />
-          <Property Name="CurrencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CIA_ExchangeRate" Type="Double" />
-          <Property Name="CIA_Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CIA_Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OperationsApprovalDate" Type="DateTime" Precision="7" />
-          <Property Name="ExpenseReportId" Type="Int32" />
-          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SubmissionDate" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="ApprovalDate" Type="DateTime" Precision="7" />
-          <Property Name="ExpenseReportStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="TotalAmountInEGP" Type="Double" />
-          <Property Name="CIAExpenseReport" Type="Double" />
-          <Property Name="AmountToEmployeeInEGP" Type="Double" />
-          <Property Name="SettledAmount" Type="Decimal" Precision="18" Scale="4" />
-          <Property Name="SettlementDate" Type="DateTime" Precision="7" />
-          <Property Name="RemainingBalance" Type="Decimal" Precision="18" Scale="4" />
-          <Property Name="OperationsComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="TravelRequestView">
           <Key>
             <PropertyRef Name="Id" />
@@ -3456,6 +3458,60 @@
           <Property Name="RequesterNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="OperationsNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TripType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="NonTripsView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CIA_Id" Type="Int32" />
+          <Property Name="CIA_Amount_InEGP" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="CIA_Amount_InCurrency" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="CurrencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CIA_ExchangeRate" Type="Double" />
+          <Property Name="CIA_Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CIA_Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OperationsApprovalDate" Type="DateTime" Precision="7" />
+          <Property Name="ExpenseReportId" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="SubmissionDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="ApprovalDate" Type="DateTime" Precision="7" />
+          <Property Name="ExpenseReportStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TotalAmountInEGP" Type="Double" />
+          <Property Name="CIAExpenseReport" Type="Double" />
+          <Property Name="AmountToEmployeeInEGP" Type="Double" />
+          <Property Name="SettledAmount" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="SettlementDate" Type="DateTime" Precision="7" />
+          <Property Name="RemainingBalance" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="OperationsComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="NonTripsView_Archive">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CIA_Id" Type="Int32" />
+          <Property Name="CIA_Amount_InEGP" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="CIA_Amount_InCurrency" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="CurrencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CIA_ExchangeRate" Type="Double" />
+          <Property Name="CIA_Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CIA_Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OperationsApprovalDate" Type="DateTime" Precision="7" />
+          <Property Name="ExpenseReportId" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="SubmissionDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="ApprovalDate" Type="DateTime" Precision="7" />
+          <Property Name="ExpenseReportStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TotalAmountInEGP" Type="Double" />
+          <Property Name="CIAExpenseReport" Type="Double" />
+          <Property Name="AmountToEmployeeInEGP" Type="Double" />
+          <Property Name="SettledAmount" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="SettlementDate" Type="DateTime" Precision="7" />
+          <Property Name="RemainingBalance" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="OperationsComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4052,34 +4108,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="NonTripsViews">
-            <EntityTypeMapping TypeName="CIDvNEXtModel.NonTripsView">
-              <MappingFragment StoreEntitySet="NonTripsView">
-                <ScalarProperty Name="OperationsComment" ColumnName="OperationsComment" />
-                <ScalarProperty Name="RemainingBalance" ColumnName="RemainingBalance" />
-                <ScalarProperty Name="SettlementDate" ColumnName="SettlementDate" />
-                <ScalarProperty Name="SettledAmount" ColumnName="SettledAmount" />
-                <ScalarProperty Name="AmountToEmployeeInEGP" ColumnName="AmountToEmployeeInEGP" />
-                <ScalarProperty Name="CIAExpenseReport" ColumnName="CIAExpenseReport" />
-                <ScalarProperty Name="TotalAmountInEGP" ColumnName="TotalAmountInEGP" />
-                <ScalarProperty Name="ExpenseReportStatus" ColumnName="ExpenseReportStatus" />
-                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
-                <ScalarProperty Name="SubmissionDate" ColumnName="SubmissionDate" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="ExpenseReportId" ColumnName="ExpenseReportId" />
-                <ScalarProperty Name="OperationsApprovalDate" ColumnName="OperationsApprovalDate" />
-                <ScalarProperty Name="CIA_Reason" ColumnName="CIA_Reason" />
-                <ScalarProperty Name="CIA_Status" ColumnName="CIA_Status" />
-                <ScalarProperty Name="CIA_ExchangeRate" ColumnName="CIA_ExchangeRate" />
-                <ScalarProperty Name="CurrencyName" ColumnName="CurrencyName" />
-                <ScalarProperty Name="CIA_Amount_InCurrency" ColumnName="CIA_Amount_InCurrency" />
-                <ScalarProperty Name="CIA_Amount_InEGP" ColumnName="CIA_Amount_InEGP" />
-                <ScalarProperty Name="CIA_Id" ColumnName="CIA_Id" />
-                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="TravelRequestViews">
             <EntityTypeMapping TypeName="CIDvNEXtModel.TravelRequestView">
               <MappingFragment StoreEntitySet="TravelRequestView">
@@ -4116,6 +4144,62 @@
                 <ScalarProperty Name="NumOfDays" ColumnName="NumOfDays" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NonTripsViews">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.NonTripsView">
+              <MappingFragment StoreEntitySet="NonTripsView">
+                <ScalarProperty Name="OperationsComment" ColumnName="OperationsComment" />
+                <ScalarProperty Name="RemainingBalance" ColumnName="RemainingBalance" />
+                <ScalarProperty Name="SettlementDate" ColumnName="SettlementDate" />
+                <ScalarProperty Name="SettledAmount" ColumnName="SettledAmount" />
+                <ScalarProperty Name="AmountToEmployeeInEGP" ColumnName="AmountToEmployeeInEGP" />
+                <ScalarProperty Name="CIAExpenseReport" ColumnName="CIAExpenseReport" />
+                <ScalarProperty Name="TotalAmountInEGP" ColumnName="TotalAmountInEGP" />
+                <ScalarProperty Name="ExpenseReportStatus" ColumnName="ExpenseReportStatus" />
+                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+                <ScalarProperty Name="SubmissionDate" ColumnName="SubmissionDate" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ExpenseReportId" ColumnName="ExpenseReportId" />
+                <ScalarProperty Name="OperationsApprovalDate" ColumnName="OperationsApprovalDate" />
+                <ScalarProperty Name="CIA_Reason" ColumnName="CIA_Reason" />
+                <ScalarProperty Name="CIA_Status" ColumnName="CIA_Status" />
+                <ScalarProperty Name="CIA_ExchangeRate" ColumnName="CIA_ExchangeRate" />
+                <ScalarProperty Name="CurrencyName" ColumnName="CurrencyName" />
+                <ScalarProperty Name="CIA_Amount_InCurrency" ColumnName="CIA_Amount_InCurrency" />
+                <ScalarProperty Name="CIA_Amount_InEGP" ColumnName="CIA_Amount_InEGP" />
+                <ScalarProperty Name="CIA_Id" ColumnName="CIA_Id" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NonTripsView_Archive">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.NonTripsView_Archive">
+              <MappingFragment StoreEntitySet="NonTripsView_Archive">
+                <ScalarProperty Name="OperationsComment" ColumnName="OperationsComment" />
+                <ScalarProperty Name="RemainingBalance" ColumnName="RemainingBalance" />
+                <ScalarProperty Name="SettlementDate" ColumnName="SettlementDate" />
+                <ScalarProperty Name="SettledAmount" ColumnName="SettledAmount" />
+                <ScalarProperty Name="AmountToEmployeeInEGP" ColumnName="AmountToEmployeeInEGP" />
+                <ScalarProperty Name="CIAExpenseReport" ColumnName="CIAExpenseReport" />
+                <ScalarProperty Name="TotalAmountInEGP" ColumnName="TotalAmountInEGP" />
+                <ScalarProperty Name="ExpenseReportStatus" ColumnName="ExpenseReportStatus" />
+                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+                <ScalarProperty Name="SubmissionDate" ColumnName="SubmissionDate" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ExpenseReportId" ColumnName="ExpenseReportId" />
+                <ScalarProperty Name="OperationsApprovalDate" ColumnName="OperationsApprovalDate" />
+                <ScalarProperty Name="CIA_Reason" ColumnName="CIA_Reason" />
+                <ScalarProperty Name="CIA_Status" ColumnName="CIA_Status" />
+                <ScalarProperty Name="CIA_ExchangeRate" ColumnName="CIA_ExchangeRate" />
+                <ScalarProperty Name="CurrencyName" ColumnName="CurrencyName" />
+                <ScalarProperty Name="CIA_Amount_InCurrency" ColumnName="CIA_Amount_InCurrency" />
+                <ScalarProperty Name="CIA_Amount_InEGP" ColumnName="CIA_Amount_InEGP" />
+                <ScalarProperty Name="CIA_Id" ColumnName="CIA_Id" />
                 <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

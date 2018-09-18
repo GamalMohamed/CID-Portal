@@ -1,11 +1,11 @@
 ﻿@using System.Globalization
-@model IEnumerable<VacationsPortal.Models.TripsView_Archive>
+@model IEnumerable<VacationsPortal.Models.NonTripsView_Archive>
 
 @{
-    ViewBag.Title = "Trips Archive";
+    ViewBag.Title = "Non-Trips Archive";
 }
 
-<h2>Trips Archive</h2>
+<h2>Non-Trips Archive</h2>
 
 <style>
     div.dt-buttons {
@@ -17,27 +17,15 @@
 <table class="mdl-data-table" id="tb">
     <thead>
         <tr>
-            <th>TRIP</th>
-            <th colspan="6">CASH IN ADVANCE</th>
+            <th></th>
+            <th colspan="2">CASH IN ADVANCE</th>
             <th colspan="7">EXPENSE</th>
             <th colspan="7">SETTLEMENT</th>
         </tr>
 
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.EmployeeName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Country)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CIA_Id)
@@ -65,6 +53,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ExpenseReportId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.SubmissionDate)
@@ -96,7 +87,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.OperationsComment)
             </th>
-            @*<th></th>*@
         </tr>
     </thead>
     <tbody>
@@ -104,25 +94,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.TripID)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.EmployeeName)
-                </td>
-                <td>
-                    @if (item.StartDate != null)
-                    {
-                        @item.StartDate.Value.ToShortDateString()
-                    }
-                </td>
-                <td>
-                    @if (item.EndDate != null)
-                    {
-                        @item.EndDate.Value.ToShortDateString()
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Country)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CIA_Id)
@@ -155,10 +127,10 @@
                     @Html.DisplayFor(modelItem => item.ExpenseReportId)
                 </td>
                 <td>
-                    @if (item.SubmissionDate.ToShortDateString() != "1/1/0001")
-                    {
-                        @item.SubmissionDate.ToShortDateString()
-                    }
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @item.SubmissionDate.ToShortDateString()
                 </td>
                 <td>
                     @if (item.ApprovalDate != null)
@@ -220,11 +192,6 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.OperationsComment)
                 </td>
-                @*<td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                    </td>*@
             </tr>
         }
     </tbody>
@@ -252,11 +219,12 @@
                     }
                 ],
                 fixedHeader: true,
-                "order": [[0, "desc"]]
+                "order": false
             });
         });
     </script>
 
 }
+
 
 

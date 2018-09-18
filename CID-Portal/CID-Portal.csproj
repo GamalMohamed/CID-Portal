@@ -232,6 +232,9 @@
     <Compile Include="Models\NonTripsView.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\NonTripsView_Archive.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PaymentMethod.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
@@ -631,6 +634,7 @@
     <Content Include="Views\Visas\Edit.cshtml" />
     <Content Include="Views\Visas\Index.cshtml" />
     <Content Include="Views\Trips\Archive.cshtml" />
+    <Content Include="Views\NonTrips\Archive.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

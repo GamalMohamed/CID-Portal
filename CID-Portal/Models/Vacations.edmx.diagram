@@ -105,8 +105,9 @@
         <EntityTypeShape EntityType="CIDvNEXtModel.TripsView" Width="1.5" PointX="13.375" PointY="3.75" />
         <EntityTypeShape EntityType="CIDvNEXtModel.Audit" Width="1.5" PointX="12.375" PointY="0.75" />
         <EntityTypeShape EntityType="CIDvNEXtModel.TripsView_Archive" Width="1.5" PointX="21.375" PointY="9.75" />
-        <EntityTypeShape EntityType="CIDvNEXtModel.NonTripsView" Width="1.5" PointX="0.75" PointY="16.75" />
         <EntityTypeShape EntityType="CIDvNEXtModel.TravelRequestView" Width="1.5" PointX="21.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.NonTripsView" Width="1.5" PointX="0.75" PointY="16.75" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.NonTripsView_Archive" Width="1.5" PointX="0.75" PointY="22.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

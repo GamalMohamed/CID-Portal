@@ -205,40 +205,6 @@ namespace VacationsPortal.Controllers
             return tripsvm;
         }
 
-        public void ManipulateTripView(string operation, ref List<TripsView> tripsViewList, Trip trip = null, CashInAdvance cia = null, ExpensesReport exp = null)
-        {
-            foreach (var tripsView in tripsViewList)
-            {
-                if (operation == "Delete CIA")
-                {
-                    // Clear all CIA fields
-                    tripsView.CIA_Id = null;
-                    tripsView.CIA_Status = "";
-                    tripsView.CIA_Amount_InCurrency = null;
-                    tripsView.CurrencyName = "";
-                    tripsView.CIA_ExchangeRate = null;
-                    tripsView.CIA_Amount_InEGP = null;
-                    tripsView.CIA_Reason = "";
-                    tripsView.OperationsApprovalDate = null;
-                }
-                else if (operation == "Delete Expense")
-                {
-                    // Clear all Expenses fields
-                    tripsView.ExpenseReportId = null;
-                    tripsView.SubmissionDate = new DateTime(0001, 1, 1); // set it to the default value
-                    tripsView.ApprovalDate = null;
-                    tripsView.ExpenseReportStatus = "";
-                    tripsView.TotalAmountInEGP = null;
-                    tripsView.CIAExpenseReport = null;
-                    tripsView.AmountToEmployeeInEGP = null;
-                    tripsView.SettledAmount = null;
-                    tripsView.SettlementDate = null;
-                    tripsView.RemainingBalance = null;
-                    tripsView.OperationsComment = "";
-                }
-            }
-        }
-
         // IMP NOTE: THESE ROUTES ARE FOR DEVELOPMENT PURPOSES ONLY!!
         //public ActionResult FillTripsView()
         //{
