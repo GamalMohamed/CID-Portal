@@ -66,5 +66,6 @@ namespace VacationsPortal.Models
         public virtual DbSet<NonTripsView> NonTripsViews { get; set; }
         public virtual DbSet<NonTripsView_Archive> NonTripsView_Archive { get; set; }
         public virtual DbSet<TravelRequestView> TravelRequestViews { get; set; }
+        public virtual DbSet<TravelRequestView_Archive> TravelRequestView_Archive { get; set; }
     }
 }
