@@ -27,6 +27,31 @@ namespace VacationsPortal.Controllers
             return false;
         }
 
+        public ActionResult FillTRHotelInfoView()
+        {
+            List<TravelRequest> travelRequests;
+            if (DateTime.Now.Month > 6)
+            {
+                travelRequests = _db.TravelRequests.Where(t =>
+                    (t.RequestedOn.Year == DateTime.Now.Year - 1 && t.RequestedOn.Month > 6) ||
+                    (t.RequestedOn.Year == DateTime.Now.Year)
+                    ).ToList();
+            }
+            else
+            {
+                travelRequests = _db.TravelRequests.Where(t =>
+                    (t.RequestedOn.Year == DateTime.Now.Year - 2 && t.RequestedOn.Month > 6) ||
+                    (t.RequestedOn.Year == DateTime.Now.Year - 1) ||
+                    (t.RequestedOn.Year == DateTime.Now.Year)
+                    ).ToList();
+            }
+            var trViews = SetTRvmList(travelRequests);
+            _db.TravelRequestViews.AddRange(trViews);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
         // GET: TRHotelInfos
         public ActionResult Index()
         {

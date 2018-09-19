@@ -5,6 +5,18 @@
 }
 
 <h2>Travel Requests</h2>
+<p>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index","Trips")'">
+        Trips
+    </button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index","NonTrips")'">
+        Non-Trips
+    </button>
+    <a class="btn btn-primary" onclick="return GetArchiveYears()">
+        Archive
+    </a>
+</p>
+
 <style>
     div.dt-buttons {
         float: right;
@@ -238,6 +250,13 @@
                 "order": [[1, "desc"]]
             });
         });
+
+        function GetArchiveYears() {
+            var id = prompt("Enter Fiscal Year (e.g. 2016-2017)");
+            var url = '@Url.Action("Archive", "TravelRequests", new { id = "__id__" })';
+            location.href = url.replace('__id__', id);
+        }
+
     </script>
 
 }
