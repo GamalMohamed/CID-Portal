@@ -109,6 +109,8 @@
         <EntityTypeShape EntityType="CIDvNEXtModel.NonTripsView_Archive" Width="1.5" PointX="0.75" PointY="22.75" />
         <EntityTypeShape EntityType="CIDvNEXtModel.TravelRequestView" Width="1.5" PointX="21.375" PointY="0.75" />
         <EntityTypeShape EntityType="CIDvNEXtModel.TravelRequestView_Archive" Width="1.5" PointX="23.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.TRHotelInfoView" Width="1.5" PointX="15.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.TRHotelInfoView_Archive" Width="1.5" PointX="17.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

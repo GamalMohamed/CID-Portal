@@ -1,7 +1,7 @@
-﻿@model IEnumerable<VacationsPortal.Models.TRHotelInfoView>
+﻿@model IEnumerable<VacationsPortal.Models.TRHotelInfoView_Archive>
 
 @{
-    ViewBag.Title = "Hotels";
+    ViewBag.Title = "Hotels Archive";
 }
 
 <style>
@@ -11,7 +11,7 @@
     }
 </style>
 
-<h2>Hotels</h2>
+<h2>Hotels Archive</h2>
 
 
 <table class="mdl-data-table" id="tb">
@@ -50,44 +50,44 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TRID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HotelRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Currency)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentMethod)
-            </td>
-            <td>
-                @if (item.CheckInDate != null)
-                {
-                    @item.CheckInDate.Value.ToShortDateString()
-                }
-            </td>
-            <td>
-                @if (item.CheckOutDate != null)
-                {
-                    @item.CheckOutDate.Value.ToShortDateString()
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Hotel)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TRID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Country)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HotelRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Currency)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentMethod)
+                </td>
+                <td>
+                    @if (item.CheckInDate != null)
+                    {
+                        @item.CheckInDate.Value.ToShortDateString()
+                    }
+                </td>
+                <td>
+                    @if (item.CheckOutDate != null)
+                    {
+                        @item.CheckOutDate.Value.ToShortDateString()
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Hotel)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                </td>
+            </tr>
 
         }
     </tbody>

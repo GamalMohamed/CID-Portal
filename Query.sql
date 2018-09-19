@@ -1,1 +1,1 @@
-﻿SELECT * FROM Currencies
+﻿SELECT * FROM Audit

@@ -542,6 +542,36 @@
           <Property Name="CheckOutDate" Type="datetime" Nullable="false" />
           <Property Name="CurrencyID" Type="int" />
         </EntityType>
+        <EntityType Name="TRHotelInfoView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TRID" Type="int" />
+          <Property Name="Country" Type="nchar" MaxLength="400" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="HotelRate" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="50" />
+          <Property Name="PaymentMethod" Type="nvarchar" MaxLength="50" />
+          <Property Name="CheckInDate" Type="datetime2" Precision="7" />
+          <Property Name="CheckOutDate" Type="datetime2" Precision="7" />
+          <Property Name="Hotel" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="TRHotelInfoView_Archive">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TRID" Type="int" />
+          <Property Name="Country" Type="nchar" MaxLength="400" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="HotelRate" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="50" />
+          <Property Name="PaymentMethod" Type="nvarchar" MaxLength="50" />
+          <Property Name="CheckInDate" Type="datetime2" Precision="7" />
+          <Property Name="CheckOutDate" Type="datetime2" Precision="7" />
+          <Property Name="Hotel" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="Trips">
           <Key>
             <PropertyRef Name="Id" />
@@ -1504,6 +1534,8 @@
           <EntitySet Name="TravelRequestView" EntityType="Self.TravelRequestView" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TravelRequestView_Archive" EntityType="Self.TravelRequestView_Archive" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TRHotelInfo" EntityType="Self.TRHotelInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TRHotelInfoView" EntityType="Self.TRHotelInfoView" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TRHotelInfoView_Archive" EntityType="Self.TRHotelInfoView_Archive" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Trips" EntityType="Self.Trips" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TripsView" EntityType="Self.TripsView" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TripsView_Archive" EntityType="Self.TripsView_Archive" Schema="dbo" store:Type="Tables" />
@@ -2400,6 +2432,8 @@
           <EntitySet Name="NonTripsView_Archive" EntityType="CIDvNEXtModel.NonTripsView_Archive" />
           <EntitySet Name="TravelRequestViews" EntityType="CIDvNEXtModel.TravelRequestView" />
           <EntitySet Name="TravelRequestView_Archive" EntityType="CIDvNEXtModel.TravelRequestView_Archive" />
+          <EntitySet Name="TRHotelInfoViews" EntityType="CIDvNEXtModel.TRHotelInfoView" />
+          <EntitySet Name="TRHotelInfoView_Archive" EntityType="CIDvNEXtModel.TRHotelInfoView_Archive" />
         </EntityContainer>
         <EntityType Name="EmployeesView">
           <Key>
@@ -3595,6 +3629,36 @@
           <Property Name="OperationsNotes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TripType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="TRHotelInfoView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TRID" Type="Int32" />
+          <Property Name="Country" Type="String" MaxLength="400" FixedLength="true" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="HotelRate" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentMethod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CheckInDate" Type="DateTime" Precision="7" />
+          <Property Name="CheckOutDate" Type="DateTime" Precision="7" />
+          <Property Name="Hotel" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TRHotelInfoView_Archive">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TRID" Type="Int32" />
+          <Property Name="Country" Type="String" MaxLength="400" FixedLength="true" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="HotelRate" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentMethod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CheckInDate" Type="DateTime" Precision="7" />
+          <Property Name="CheckOutDate" Type="DateTime" Precision="7" />
+          <Property Name="Hotel" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4328,7 +4392,39 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="TRHotelInfoViews">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.TRHotelInfoView">
+              <MappingFragment StoreEntitySet="TRHotelInfoView">
+                <ScalarProperty Name="Hotel" ColumnName="Hotel" />
+                <ScalarProperty Name="CheckOutDate" ColumnName="CheckOutDate" />
+                <ScalarProperty Name="CheckInDate" ColumnName="CheckInDate" />
+                <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="HotelRate" ColumnName="HotelRate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="TRID" ColumnName="TRID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TRHotelInfoView_Archive">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.TRHotelInfoView_Archive">
+              <MappingFragment StoreEntitySet="TRHotelInfoView_Archive">
+                <ScalarProperty Name="Hotel" ColumnName="Hotel" />
+                <ScalarProperty Name="CheckOutDate" ColumnName="CheckOutDate" />
+                <ScalarProperty Name="CheckInDate" ColumnName="CheckInDate" />
+                <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="HotelRate" ColumnName="HotelRate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="TRID" ColumnName="TRID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

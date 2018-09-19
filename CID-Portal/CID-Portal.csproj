@@ -262,6 +262,12 @@
     <Compile Include="Models\TRHotelInfo.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TRHotelInfoView.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TRHotelInfoView_Archive.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Trip.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
@@ -638,6 +644,7 @@
     <Content Include="Views\Trips\Archive.cshtml" />
     <Content Include="Views\NonTrips\Archive.cshtml" />
     <Content Include="Views\TravelRequests\Archive.cshtml" />
+    <Content Include="Views\TRHotelInfos\Archive.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
