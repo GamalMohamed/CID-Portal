@@ -310,6 +310,9 @@
     <Compile Include="Models\VacationType.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\VisasView.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Workload.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>

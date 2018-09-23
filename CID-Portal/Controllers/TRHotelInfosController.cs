@@ -34,6 +34,7 @@ namespace VacationsPortal.Controllers
             {
                 var trHotelInfoV = new TRHotelInfoView
                 {
+                    Id = trHotelInfo.Id,
                     CheckInDate = trHotelInfo.CheckInDate,
                     CheckOutDate = trHotelInfo.CheckOutDate,
                     TRID = trHotelInfo.TRID,

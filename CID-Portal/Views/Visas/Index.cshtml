@@ -1,4 +1,4 @@
-﻿@model IEnumerable<VacationsPortal.Models.Route>
+﻿@model IEnumerable<VacationsPortal.Models.VisasView>
 
 @{
     ViewBag.Title = "Visa";
@@ -12,6 +12,21 @@
 </style>
 
 <h2>Visas</h2>
+<p>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index","Trips")'">
+        Trips
+    </button>
+    <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Index", "NonTrips")'">
+        Non-Trips
+    </button>
+    <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Index", "TravelRequests")'">
+        Travel Requests
+    </button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index","TRHotelInfos")'">
+        Hotels
+    </button>
+</p>
+
 <table class="mdl-data-table" id="tb">
     <thead>
         <tr>
@@ -38,22 +53,22 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Trip.TRID)
+                    @Html.DisplayFor(modelItem => item.TRID)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Trip.Employee.contact.FullName)
+                    @Html.DisplayFor(modelItem => item.Employee)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Country.CountryName)
+                    @Html.DisplayFor(modelItem => item.Country)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.VisaCost)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Currency.CurrencyName)
+                    @Html.DisplayFor(modelItem => item.Currency)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.routeId })
+                    @Html.ActionLink("Edit", "Edit", new { id = item.RouteId })
                 </td>
             </tr>
         }

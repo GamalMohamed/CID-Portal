@@ -12,14 +12,14 @@ namespace VacationsPortal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Audit
+    public partial class VisasView
     {
         public int Id { get; set; }
-        public System.DateTime Timestamp { get; set; }
-        public string Ref_Table { get; set; }
-        public int RecordID { get; set; }
-        public string Operation { get; set; }
-        public Nullable<int> TripID { get; set; }
-        public string Remark { get; set; }
+        public Nullable<int> TRID { get; set; }
+        public string Employee { get; set; }
+        public string Country { get; set; }
+        public Nullable<double> VisaCost { get; set; }
+        public string Currency { get; set; }
+        public Nullable<int> RouteId { get; set; }
     }
 }

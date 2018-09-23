@@ -44,7 +44,7 @@ namespace VacationsPortal.Controllers
                 switch (privilege)
                 {
                     case Privilege.Admin:
-                        return RedirectToAction("Index", "TRHotelInfos");
+                        return RedirectToAction("Index", "Visas");
                     case Privilege.Vacations:
                         return RedirectToAction("Index", "Employees");
                     case Privilege.Travel:

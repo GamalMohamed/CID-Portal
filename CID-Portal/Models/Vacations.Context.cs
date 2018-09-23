@@ -61,7 +61,6 @@ namespace VacationsPortal.Models
         public virtual DbSet<TRItemsStatu> TRItemsStatus { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
         public virtual DbSet<TripsView> TripsViews { get; set; }
-        public virtual DbSet<Audit> Audits { get; set; }
         public virtual DbSet<TripsView_Archive> TripsView_Archive { get; set; }
         public virtual DbSet<NonTripsView> NonTripsViews { get; set; }
         public virtual DbSet<NonTripsView_Archive> NonTripsView_Archive { get; set; }
@@ -69,5 +68,7 @@ namespace VacationsPortal.Models
         public virtual DbSet<TravelRequestView_Archive> TravelRequestView_Archive { get; set; }
         public virtual DbSet<TRHotelInfoView> TRHotelInfoViews { get; set; }
         public virtual DbSet<TRHotelInfoView_Archive> TRHotelInfoView_Archive { get; set; }
+        public virtual DbSet<VisasView> VisasViews { get; set; }
+        public virtual DbSet<Audit> Audits { get; set; }
     }
 }

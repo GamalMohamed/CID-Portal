@@ -14,6 +14,8 @@
           <Property Name="Ref_Table" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="RecordID" Type="int" Nullable="false" />
           <Property Name="Operation" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TripID" Type="int" />
+          <Property Name="Remark" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="AuthUsers">
           <Key>
@@ -546,7 +548,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="TRID" Type="int" />
           <Property Name="Country" Type="nchar" MaxLength="400" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
@@ -561,7 +563,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="TRID" Type="int" />
           <Property Name="Country" Type="nchar" MaxLength="400" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
@@ -713,6 +715,18 @@
           <Property Name="DisplayName" Type="nvarchar" MaxLength="50" />
           <Property Name="IconSymbol" Type="nvarchar" MaxLength="100" />
           <Property Name="IconSymbolResourceName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="VisasView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TRID" Type="int" />
+          <Property Name="Employee" Type="nvarchar" MaxLength="150" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="VisaCost" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="50" />
+          <Property Name="RouteId" Type="int" />
         </EntityType>
         <EntityType Name="Workloads">
           <Key>
@@ -1545,6 +1559,7 @@
           <EntitySet Name="VacationsLog" EntityType="Self.VacationsLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VacationStatusTypes" EntityType="Self.VacationStatusTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VacationTypes" EntityType="Self.VacationTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VisasView" EntityType="Self.VisasView" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Workloads" EntityType="Self.Workloads" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="DirectLineManagerRelation" Association="Self.DirectLineManagerRelation">
             <End Role="Employees" EntitySet="Employees" />
@@ -2426,7 +2441,6 @@
             <End Role="TRHotelInfo" EntitySet="TRHotelInfoes" />
           </AssociationSet>
           <EntitySet Name="TripsViews" EntityType="CIDvNEXtModel.TripsView" />
-          <EntitySet Name="Audits" EntityType="CIDvNEXtModel.Audit" />
           <EntitySet Name="TripsView_Archive" EntityType="CIDvNEXtModel.TripsView_Archive" />
           <EntitySet Name="NonTripsViews" EntityType="CIDvNEXtModel.NonTripsView" />
           <EntitySet Name="NonTripsView_Archive" EntityType="CIDvNEXtModel.NonTripsView_Archive" />
@@ -2434,7 +2448,9 @@
           <EntitySet Name="TravelRequestView_Archive" EntityType="CIDvNEXtModel.TravelRequestView_Archive" />
           <EntitySet Name="TRHotelInfoViews" EntityType="CIDvNEXtModel.TRHotelInfoView" />
           <EntitySet Name="TRHotelInfoView_Archive" EntityType="CIDvNEXtModel.TRHotelInfoView_Archive" />
-        </EntityContainer>
+          <EntitySet Name="VisasViews" EntityType="CIDvNEXtModel.VisasView" />
+          <EntitySet Name="Audits" EntityType="CIDvNEXtModel.Audit" />
+          </EntityContainer>
         <EntityType Name="EmployeesView">
           <Key>
             <PropertyRef Name="Id" />
@@ -3455,16 +3471,6 @@
           <Property Name="RemainingBalance" Type="Decimal" Precision="18" Scale="4" />
           <Property Name="OperationsComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Audit">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="Ref_Table" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="RecordID" Type="Int32" Nullable="false" />
-          <Property Name="Operation" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="TripsView_Archive">
           <Key>
             <PropertyRef Name="Id" />
@@ -3633,7 +3639,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="TRID" Type="Int32" />
           <Property Name="Country" Type="String" MaxLength="400" FixedLength="true" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -3648,7 +3654,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="TRID" Type="Int32" />
           <Property Name="Country" Type="String" MaxLength="400" FixedLength="true" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -3659,7 +3665,31 @@
           <Property Name="CheckOutDate" Type="DateTime" Precision="7" />
           <Property Name="Hotel" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
-      </Schema>
+        <EntityType Name="VisasView">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TRID" Type="Int32" />
+          <Property Name="Employee" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VisaCost" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RouteId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Audit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="Ref_Table" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RecordID" Type="Int32" Nullable="false" />
+          <Property Name="Operation" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TripID" Type="Int32" />
+          <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -4212,17 +4242,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Audits">
-            <EntityTypeMapping TypeName="CIDvNEXtModel.Audit">
-              <MappingFragment StoreEntitySet="Audit">
-                <ScalarProperty Name="Operation" ColumnName="Operation" />
-                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
-                <ScalarProperty Name="Ref_Table" ColumnName="Ref_Table" />
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="TripsView_Archive">
             <EntityTypeMapping TypeName="CIDvNEXtModel.TripsView_Archive">
               <MappingFragment StoreEntitySet="TripsView_Archive">
@@ -4420,6 +4439,32 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Country" ColumnName="Country" />
                 <ScalarProperty Name="TRID" ColumnName="TRID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VisasViews">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.VisasView">
+              <MappingFragment StoreEntitySet="VisasView">
+                <ScalarProperty Name="RouteId" ColumnName="RouteId" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="VisaCost" ColumnName="VisaCost" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Employee" ColumnName="Employee" />
+                <ScalarProperty Name="TRID" ColumnName="TRID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Audits">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.Audit">
+              <MappingFragment StoreEntitySet="Audit">
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="TripID" ColumnName="TripID" />
+                <ScalarProperty Name="Operation" ColumnName="Operation" />
+                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
+                <ScalarProperty Name="Ref_Table" ColumnName="Ref_Table" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

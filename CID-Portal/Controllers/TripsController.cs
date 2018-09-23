@@ -206,31 +206,31 @@ namespace VacationsPortal.Controllers
         }
 
         // IMP NOTE: THESE ROUTES ARE FOR DEVELOPMENT PURPOSES ONLY!!
-        //public ActionResult FillTripsView()
-        //{
-        //    List<Trip> trips;
-        //    if (DateTime.Now.Month > 6)
-        //    {
-        //        trips = _db.Trips.Where(t =>
-        //            (t.StartDate.Value.Year == DateTime.Now.Year - 1 && t.StartDate.Value.Month > 6) ||
-        //            (t.StartDate.Value.Year == DateTime.Now.Year)
-        //            ).ToList();
-        //    }
-        //    else
-        //    {
-        //        trips = _db.Trips.Where(t =>
-        //            (t.StartDate.Value.Year == DateTime.Now.Year - 2 && t.StartDate.Value.Month > 6) ||
-        //            (t.StartDate.Value.Year == DateTime.Now.Year - 1) ||
-        //            (t.StartDate.Value.Year == DateTime.Now.Year)
-        //            ).ToList();
-        //    }
+        public ActionResult FillTripsView()
+        {
+            List<Trip> trips;
+            if (DateTime.Now.Month > 6)
+            {
+                trips = _db.Trips.Where(t =>
+                    (t.StartDate.Value.Year == DateTime.Now.Year - 1 && t.StartDate.Value.Month > 6) ||
+                    (t.StartDate.Value.Year == DateTime.Now.Year)
+                    ).ToList();
+            }
+            else
+            {
+                trips = _db.Trips.Where(t =>
+                    (t.StartDate.Value.Year == DateTime.Now.Year - 2 && t.StartDate.Value.Month > 6) ||
+                    (t.StartDate.Value.Year == DateTime.Now.Year - 1) ||
+                    (t.StartDate.Value.Year == DateTime.Now.Year)
+                    ).ToList();
+            }
 
-        //    var tripViews = SetTripsViewList(trips.OrderByDescending(t => t.StartDate).ToList());
-        //    _db.TripsViews.AddRange(tripViews);
-        //    _db.SaveChanges();
+            var tripViews = SetTripsViewList(trips.OrderByDescending(t => t.StartDate).ToList());
+            _db.TripsViews.AddRange(tripViews);
+            _db.SaveChanges();
 
-        //    return RedirectToAction("Index");
-        //}
+            return RedirectToAction("Index");
+        }
 
         //public ActionResult FillTripsViewArchive()
         //{
@@ -295,7 +295,7 @@ namespace VacationsPortal.Controllers
                                 }
                                 else
                                 {
-                                    auditsClone.Remove(audit);
+                                    auditsClone.Remove(audit); //Non-trip cia
                                 }
                             }
                             else if (audit.Ref_Table == "ExpensesReport")
@@ -320,18 +320,31 @@ namespace VacationsPortal.Controllers
                             else if (audit.Ref_Table == "Route")
                             {
                                 // Same code as in the insert or the update!
-                                var trip = _db.Routes.Find(audit.RecordID)?.Trip;
-                                if (trip != null)
+                                if (audit.TripID != null)
                                 {
-                                    var tripV = _db.TripsViews.Where(t => t.TripID == trip.Id).ToList();
-                                    if (tripV.Count > 0)
+                                    var trip = _db.Trips.Find(audit.TripID);
+                                    if (trip != null)
                                     {
-                                        foreach (var trv in tripV)
+                                        // Update TripView
+                                        var tripV = _db.TripsViews.Where(t => t.TripID == trip.Id).ToList();
+                                        if (tripV.Count > 0)
                                         {
-                                            trv.Country = trip.Routes.ToList()[trip.Routes.Count - 2].Country.CountryName;
+                                            foreach (var trv in tripV)
+                                            {
+                                                trv.Country = trip.Routes.ToList()[trip.Routes.Count - 2].Country.CountryName;
+                                            }
+                                        }
+                                        _db.SaveChanges();
+
+                                        // Sign!
+                                        var aud = _db.Audits.Find(audit.Id);
+                                        if (aud != null)
+                                        {
+                                            var remark = aud.Remark;
+                                            aud.Remark = "T" + remark[1] + remark[2];
+                                            _db.SaveChanges();
                                         }
                                     }
-                                    _db.SaveChanges();
                                 }
                             }
                         }
@@ -341,25 +354,38 @@ namespace VacationsPortal.Controllers
                             {
                                 if (audit.Operation == "Update")
                                 {
-                                    var trip = _db.Trips.Find(audit.RecordID);
-                                    if (trip != null)
+                                    if (audit.Remark[0] == 'X')
                                     {
-                                        var tripV = _db.TripsViews.Where(t => t.TripID == audit.RecordID).ToList();
-                                        if (tripV.Count > 0)
+                                        var trip = _db.Trips.Find(audit.RecordID);
+                                        if (trip != null)
                                         {
-                                            foreach (var trv in tripV)
+                                            // Update TripView
+                                            var tripV = _db.TripsViews.Where(t => t.TripID == audit.RecordID).ToList();
+                                            if (tripV.Count > 0)
                                             {
-                                                if (trip.StartDate != null)
+                                                foreach (var trv in tripV)
                                                 {
-                                                    trv.StartDate = trip.StartDate.Value;
-                                                }
-                                                if (trip.EndDate != null)
-                                                {
-                                                    trv.EndDate = trip.EndDate.Value;
+                                                    if (trip.StartDate != null)
+                                                    {
+                                                        trv.StartDate = trip.StartDate.Value;
+                                                    }
+                                                    if (trip.EndDate != null)
+                                                    {
+                                                        trv.EndDate = trip.EndDate.Value;
+                                                    }
                                                 }
                                             }
+                                            _db.SaveChanges();
+
+                                            // Sign!
+                                            var aud = _db.Audits.Find(audit.Id);
+                                            if (aud != null)
+                                            {
+                                                var remark = aud.Remark;
+                                                aud.Remark = "T" + remark[1] + remark[2];
+                                                _db.SaveChanges();
+                                            }
                                         }
-                                        _db.SaveChanges();
                                     }
                                 }
                                 else if (audit.Operation == "Insert")
@@ -382,7 +408,7 @@ namespace VacationsPortal.Controllers
                                     var tripV = _db.TripsViews.Where(t => t.TripID == cia.TripID).ToList();
                                     _db.TripsViews.RemoveRange(tripV);
                                     _db.SaveChanges();
-                                    
+
                                     // Re-create the tripView again
                                     _db.TripsViews.AddRange(SetTripsViewList(new List<Trip>() { cia.Trip }));
                                     _db.SaveChanges();
@@ -400,7 +426,7 @@ namespace VacationsPortal.Controllers
                                     var tripV = _db.TripsViews.Where(t => t.TripID == exp.TripID).ToList();
                                     _db.TripsViews.RemoveRange(tripV);
                                     _db.SaveChanges();
-                                    
+
                                     _db.TripsViews.AddRange(SetTripsViewList(new List<Trip>() { exp.Trip }));
                                     _db.SaveChanges();
                                 }
@@ -411,18 +437,34 @@ namespace VacationsPortal.Controllers
                             }
                             else if (audit.Ref_Table == "Route")
                             {
-                                var trip = _db.Routes.Find(audit.RecordID)?.Trip;
-                                if (trip != null)
+                                if (audit.Remark[0] == 'X')
                                 {
-                                    var tripV = _db.TripsViews.Where(t => t.TripID == trip.Id).ToList();
-                                    if (tripV.Count > 0)
+                                    if (audit.TripID != null)
                                     {
-                                        foreach (var trv in tripV)
+                                        var trip = _db.Trips.Find(audit.TripID);
+                                        if (trip != null)
                                         {
-                                            trv.Country = trip.Routes.ToList()[trip.Routes.Count - 2].Country.CountryName;
+                                            // Update TripView
+                                            var tripV = _db.TripsViews.Where(t => t.TripID == trip.Id).ToList();
+                                            if (tripV.Count > 0)
+                                            {
+                                                foreach (var trv in tripV)
+                                                {
+                                                    trv.Country = trip.Routes.ToList()[trip.Routes.Count - 2].Country.CountryName;
+                                                }
+                                            }
+                                            _db.SaveChanges();
+
+                                            // Sign!
+                                            var aud = _db.Audits.Find(audit.Id);
+                                            if (aud != null)
+                                            {
+                                                var remark = aud.Remark;
+                                                aud.Remark = "T" + remark[1] + remark[2];
+                                                _db.SaveChanges();
+                                            }
                                         }
                                     }
-                                    _db.SaveChanges();
                                 }
                             }
                         }

@@ -275,30 +275,30 @@ namespace VacationsPortal.Controllers
 
 
         // IMP NOTE: THESE ROUTES ARE FOR DEVELOPMENT PURPOSES ONLY!!
-        //public ActionResult FillTravelRequestsView()
-        //{
-        //    List<TravelRequest> travelRequests;
-        //    if (DateTime.Now.Month > 6)
-        //    {
-        //        travelRequests = _db.TravelRequests.Where(t =>
-        //            (t.RequestedOn.Year == DateTime.Now.Year - 1 && t.RequestedOn.Month > 6) ||
-        //            (t.RequestedOn.Year == DateTime.Now.Year)
-        //            ).ToList();
-        //    }
-        //    else
-        //    {
-        //        travelRequests = _db.TravelRequests.Where(t =>
-        //            (t.RequestedOn.Year == DateTime.Now.Year - 2 && t.RequestedOn.Month > 6) ||
-        //            (t.RequestedOn.Year == DateTime.Now.Year - 1) ||
-        //            (t.RequestedOn.Year == DateTime.Now.Year)
-        //            ).ToList();
-        //    }
-        //    var trViews = SetTRvmList(travelRequests);
-        //    _db.TravelRequestViews.AddRange(trViews);
-        //    _db.SaveChanges();
+        public ActionResult FillTravelRequestsView()
+        {
+            List<TravelRequest> travelRequests;
+            if (DateTime.Now.Month > 6)
+            {
+                travelRequests = _db.TravelRequests.Where(t =>
+                    (t.RequestedOn.Year == DateTime.Now.Year - 1 && t.RequestedOn.Month > 6) ||
+                    (t.RequestedOn.Year == DateTime.Now.Year)
+                    ).ToList();
+            }
+            else
+            {
+                travelRequests = _db.TravelRequests.Where(t =>
+                    (t.RequestedOn.Year == DateTime.Now.Year - 2 && t.RequestedOn.Month > 6) ||
+                    (t.RequestedOn.Year == DateTime.Now.Year - 1) ||
+                    (t.RequestedOn.Year == DateTime.Now.Year)
+                    ).ToList();
+            }
+            var trViews = SetTRvmList(travelRequests);
+            _db.TravelRequestViews.AddRange(trViews);
+            _db.SaveChanges();
 
-        //    return RedirectToAction("Index");
-        //}
+            return RedirectToAction("Index");
+        }
 
         //public ActionResult FillTravelRequestsViewArchive()
         //{
@@ -310,7 +310,7 @@ namespace VacationsPortal.Controllers
         //            ((t.RequestedOn.Year.ToString() == startYear && t.RequestedOn.Month > 6) ||
         //            (t.RequestedOn.Year.ToString() == endYear && t.RequestedOn.Month < 7))
         //            ).OrderByDescending(t => t.TRID).ToList();
-            
+
         //    _db.TravelRequestView_Archive.AddRange(SetTRvmListArchive(travelRequests));
         //    _db.SaveChanges();
 
@@ -345,34 +345,38 @@ namespace VacationsPortal.Controllers
                             }
                             else if (audit.Ref_Table == "Route")
                             {
-                                var trip = _db.Routes.Find(audit.RecordID)?.Trip;
-                                if (trip != null)
+                                if (audit.Remark[1] == 'X')
                                 {
-                                    // Update TravelRequestView
-                                    var trV = _db.TravelRequestViews.Where(t => t.Id == trip.TRID).ToList();
-                                    if (trV.Count > 0)
+                                    if (audit.TripID != null)
                                     {
-                                        foreach (var trv in trV)
+                                        var trip = _db.Trips.Find(audit.TripID);
+                                        if (trip != null)
                                         {
-                                            trv.Routes = trip.Routes.ToList()[0].City.Name;
-                                            for (var i = 1; i < trip.Routes.Count; i++)
+                                            // Update TravelRequestView
+                                            var trV = _db.TravelRequestViews.Where(t => t.Id == trip.TRID).ToList();
+                                            if (trV.Count > 0)
                                             {
-                                                trv.Routes += ',' + trip.Routes.ToList()[i].City.Name;
+                                                foreach (var trv in trV)
+                                                {
+                                                    trv.Routes = trip.Routes.ToList()[0].City.Name;
+                                                    for (var i = 1; i < trip.Routes.Count; i++)
+                                                    {
+                                                        trv.Routes += ',' + trip.Routes.ToList()[i].City.Name;
+                                                    }
+                                                }
+                                                _db.SaveChanges();
+                                            }
+
+                                            // Sign!
+                                            var aud = _db.Audits.Find(audit.Id);
+                                            if (aud != null)
+                                            {
+                                                var remark = aud.Remark;
+                                                aud.Remark = remark[0] + "R" + remark[2];
+                                                _db.SaveChanges();
                                             }
                                         }
-                                        _db.SaveChanges();
                                     }
-
-                                    // Update TripView
-                                    var tripV = _db.TripsViews.Where(t => t.TripID == trip.Id).ToList();
-                                    if (tripV.Count > 0)
-                                    {
-                                        foreach (var trv in tripV)
-                                        {
-                                            trv.Country = trip.Routes.ToList()[trip.Routes.Count - 2].Country.CountryName;
-                                        }
-                                    }
-                                    _db.SaveChanges();
                                 }
                             }
                         }
@@ -395,55 +399,48 @@ namespace VacationsPortal.Controllers
                             {
                                 if (audit.Operation == "Update")
                                 {
-                                    var trip = _db.Trips.Find(audit.RecordID);
-                                    if (trip != null)
+                                    if (audit.Remark[1] == 'X')
                                     {
-                                        // Update the TravelRequest record
-                                        var trV = _db.TravelRequestViews.Where(t => t.Id == trip.TRID).ToList();
-                                        if (trV.Count > 0)
+                                        var trip = _db.Trips.Find(audit.RecordID);
+                                        if (trip != null)
                                         {
-                                            foreach (var trv in trV)
+                                            // Update the TravelRequest record
+                                            var trV = _db.TravelRequestViews.Where(t => t.Id == trip.TRID).ToList();
+                                            if (trV.Count > 0)
                                             {
-                                                if (trip.StartDate != null)
+                                                foreach (var trv in trV)
                                                 {
-                                                    trv.StartDate = trip.StartDate.Value;
-                                                }
-                                                if (trip.EndDate != null)
-                                                {
-                                                    trv.EndDate = trip.EndDate.Value;
-                                                }
-                                                trv.NumOfDays = trip.NumberofDays;
-                                                trv.WorkingDays = trip.NumberofWorkingDays;
-                                                trv.ModifiedOn = trip.ModifiedOn;
-                                                trv.IsCanceled = trip.IsCanceled;
+                                                    if (trip.StartDate != null)
+                                                    {
+                                                        trv.StartDate = trip.StartDate.Value;
+                                                    }
+                                                    if (trip.EndDate != null)
+                                                    {
+                                                        trv.EndDate = trip.EndDate.Value;
+                                                    }
+                                                    trv.NumOfDays = trip.NumberofDays;
+                                                    trv.WorkingDays = trip.NumberofWorkingDays;
+                                                    trv.ModifiedOn = trip.ModifiedOn;
+                                                    trv.IsCanceled = trip.IsCanceled;
 
-                                                trv.Routes = trip.Routes.ToList()[0].City.Name;
-                                                for (var i = 1; i < trip.Routes.Count; i++)
-                                                {
-                                                    trv.Routes += ',' + trip.Routes.ToList()[i].City.Name;
+                                                    trv.Routes = trip.Routes.ToList()[0].City.Name;
+                                                    for (var i = 1; i < trip.Routes.Count; i++)
+                                                    {
+                                                        trv.Routes += ',' + trip.Routes.ToList()[i].City.Name;
+                                                    }
                                                 }
                                             }
-                                        }
-                                        _db.SaveChanges();
+                                            _db.SaveChanges();
 
-                                        // Update the tripView record
-                                        var tripV = _db.TripsViews.Where(t => t.TripID == trip.Id).ToList();
-                                        if (tripV.Count > 0)
-                                        {
-                                            foreach (var trv in tripV)
+                                            // Sign!
+                                            var aud = _db.Audits.Find(audit.Id);
+                                            if (aud != null)
                                             {
-                                                if (trip.StartDate != null)
-                                                {
-                                                    trv.StartDate = trip.StartDate.Value;
-                                                }
-                                                if (trip.EndDate != null)
-                                                {
-                                                    trv.EndDate = trip.EndDate.Value;
-                                                }
+                                                var remark = aud.Remark;
+                                                aud.Remark = remark[0] + "R" + remark[2];
+                                                _db.SaveChanges();
                                             }
                                         }
-                                        _db.SaveChanges();
-
                                     }
                                 }
                                 else if(audit.Operation == "Insert")
@@ -453,34 +450,38 @@ namespace VacationsPortal.Controllers
                             }
                             else if (audit.Ref_Table == "Route")
                             {
-                                var trip = _db.Routes.Find(audit.RecordID)?.Trip;
-                                if (trip != null)
+                                if (audit.Remark[1] == 'X')
                                 {
-                                    // Update TravelRequestView
-                                    var trV = _db.TravelRequestViews.Where(t => t.Id == trip.TRID).ToList();
-                                    if (trV.Count > 0)
+                                    if (audit.TripID != null)
                                     {
-                                        foreach (var trv in trV)
+                                        var trip = _db.Trips.Find(audit.TripID);
+                                        if (trip != null)
                                         {
-                                            trv.Routes = trip.Routes.ToList()[0].City.Name;
-                                            for (var i = 1; i < trip.Routes.Count; i++)
+                                            // Update TravelRequestView
+                                            var trV = _db.TravelRequestViews.Where(t => t.Id == trip.TRID).ToList();
+                                            if (trV.Count > 0)
                                             {
-                                                trv.Routes += ',' + trip.Routes.ToList()[i].City.Name;
+                                                foreach (var trv in trV)
+                                                {
+                                                    trv.Routes = trip.Routes.ToList()[0].City.Name;
+                                                    for (var i = 1; i < trip.Routes.Count; i++)
+                                                    {
+                                                        trv.Routes += ',' + trip.Routes.ToList()[i].City.Name;
+                                                    }
+                                                }
+                                                _db.SaveChanges();
+                                            }
+
+                                            // Sign!
+                                            var aud = _db.Audits.Find(audit.Id);
+                                            if (aud != null)
+                                            {
+                                                var remark = aud.Remark;
+                                                aud.Remark = remark[0] + "R" + remark[2];
+                                                _db.SaveChanges();
                                             }
                                         }
-                                        _db.SaveChanges();
                                     }
-
-                                    // Update TripView
-                                    var tripV = _db.TripsViews.Where(t => t.TripID == trip.Id).ToList();
-                                    if (tripV.Count > 0)
-                                    {
-                                        foreach (var trv in tripV)
-                                        {
-                                            trv.Country = trip.Routes.ToList()[trip.Routes.Count - 2].Country.CountryName;
-                                        }
-                                    }
-                                    _db.SaveChanges();
                                 }
                             }
                         }
