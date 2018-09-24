@@ -327,6 +327,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\EmployeeViewModel.cs" />
     <Compile Include="ViewModels\SettlementViewModel.cs" />
+    <Compile Include="ViewModels\VacationInquiryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -671,6 +672,8 @@
     <Content Include="Views\PublicVacations\Create.cshtml" />
     <Content Include="Views\PublicVacations\Edit.cshtml" />
     <Content Include="Views\PublicVacations\Index.cshtml" />
+    <Content Include="Views\Employees\VacationInquiryResult.cshtml" />
+    <Content Include="Views\Employees\VacationInquiry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

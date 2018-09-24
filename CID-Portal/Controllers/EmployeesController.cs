@@ -23,7 +23,7 @@ namespace VacationsPortal.Controllers
             //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
             var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
             if (authUser?.Privilege != null && (Privilege.Admin == (Privilege)authUser.Privilege ||
-                                                Privilege.Travel == (Privilege)authUser.Privilege))
+                                                Privilege.Vacations == (Privilege)authUser.Privilege))
             {
                 return true;
             }
@@ -58,6 +58,39 @@ namespace VacationsPortal.Controllers
         {
             _db.Database.ExecuteSqlCommand("UPDATE dbo.EmployeesView SET VacationsCarryOver = 0");
             _db.Database.ExecuteSqlCommand("UPDATE dbo.Employees SET VacationsCarryOver = 0");
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult VacationInquiry()
+        {
+            return View();
+        }
+
+        public ActionResult VacationInquiryResult(VacationInquiryViewModel vim)
+        {
+            //var d = "12/23/2018-12/25/2018";
+            if (vim != null)
+            {
+                List<VacationsHistory> empsVac;
+                if (vim.StartDate != vim.EndDate)
+                {
+                    empsVac = _db.VacationsHistories.Where(
+                                                        v => !(v.fromdate > vim.StartDate && v.todate > vim.EndDate
+                                                        || v.fromdate < vim.StartDate && v.todate < vim.EndDate)
+                                                        ).Include(v => v.Employee.contact)
+                                                        .ToList();
+                }
+                else
+                {
+                    empsVac = _db.VacationsHistories.Where(v => v.fromdate <= vim.StartDate
+                                                               && v.todate >= vim.EndDate)
+                                                               .Include(v => v.Employee.contact)
+                                                               .ToList();
+                }
+
+                return View(empsVac);
+            }
+
             return RedirectToAction("Index");
         }
 

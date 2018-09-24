@@ -11,10 +11,10 @@
         + New Employee
     </button>
     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Resigned")'">
-        View Resigned
+        Resigned
     </button>
     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("NullResigned")'">
-        View NullResigned
+        NullResigned
     </button>
     <a class="btn btn-primary" href="@("/Employees/ClearCarryOver/")"
        onclick="return confirm('Are you sure that you want to clear CarryOver for ALL employees?');">
@@ -22,6 +22,9 @@
     </a>
     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index","PublicVacations")'">
         Public Vacations
+    </button>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("VacationInquiry","Employees")'">
+        Vacation Inquiry
     </button>
 </p>
 
@@ -136,6 +139,7 @@
                 "order": false
             });
         });
+
     </script>
 
 }
