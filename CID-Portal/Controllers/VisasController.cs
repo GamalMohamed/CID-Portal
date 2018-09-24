@@ -105,6 +105,7 @@ namespace VacationsPortal.Controllers
                                     var remark = aud.Remark;
                                     aud.Remark = remark[0] + remark[1] + "V";
                                     _db.SaveChanges();
+                                    auditsClone.Remove(aud);
                                 }
                             }
                         }
@@ -131,6 +132,7 @@ namespace VacationsPortal.Controllers
                                     var remark = aud.Remark;
                                     aud.Remark = remark[0] + remark[1] + "V";
                                     _db.SaveChanges();
+                                    auditsClone.Remove(aud);
                                 }
                             }
                         }

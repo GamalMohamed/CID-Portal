@@ -12,52 +12,53 @@ namespace VacationsPortal.Controllers
 {
     public class CitiesController : Controller
     {
-        private CIDvNEXtEntities db = new CIDvNEXtEntities();
+        private readonly CIDvNEXtEntities _db = new CIDvNEXtEntities();
+
+        public bool IsAuthorized()
+        {
+            var loggedUserEmail = "v-gamoha@microsoft.com";
+            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
+            if (authUser?.Privilege != null && (Privilege.Admin == (Privilege)authUser.Privilege ||
+                                                Privilege.Travel == (Privilege)authUser.Privilege))
+            {
+                return true;
+            }
+            return false;
+        }
 
         // GET: Cities
         public ActionResult Index()
         {
-            var cities = db.Cities.Include(c => c.Country);
-            return View(cities.ToList());
-        }
-
-        // GET: Cities/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            if (IsAuthorized())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var cities = _db.Cities.Include(c => c.Country);
+                return View(cities.ToList());
             }
-            City city = db.Cities.Find(id);
-            if (city == null)
-            {
-                return HttpNotFound();
-            }
-            return View(city);
+            ViewBag.ErrorMsg = "Not authenticated user.";
+            return View("Error");
         }
 
         // GET: Cities/Create
         public ActionResult Create()
         {
-            ViewBag.CountryID = new SelectList(db.Countries, "Id", "CountryCode");
+            ViewBag.CountryID = new SelectList(_db.Countries, "Id", "CountryName");
             return View();
         }
 
         // POST: Cities/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,CountryID")] City city)
+        public ActionResult Create(City city)
         {
             if (ModelState.IsValid)
             {
-                db.Cities.Add(city);
-                db.SaveChanges();
+                _db.Cities.Add(city);
+                _db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CountryID = new SelectList(db.Countries, "Id", "CountryCode", city.CountryID);
+            ViewBag.CountryID = new SelectList(_db.Countries, "Id", "CountryName", city.CountryID);
             return View(city);
         }
 
@@ -68,29 +69,28 @@ namespace VacationsPortal.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            City city = db.Cities.Find(id);
+            var city = _db.Cities.Find(id);
             if (city == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CountryID = new SelectList(db.Countries, "Id", "CountryCode", city.CountryID);
+            ViewBag.CountryID = new SelectList(_db.Countries, "Id", "CountryName", city.CountryID);
             return View(city);
         }
 
         // POST: Cities/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,CountryID")] City city)
+        public ActionResult Edit(City city)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(city).State = EntityState.Modified;
-                db.SaveChanges();
+                _db.Entry(city).State = EntityState.Modified;
+                _db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CountryID = new SelectList(db.Countries, "Id", "CountryCode", city.CountryID);
+
+            ViewBag.CountryID = new SelectList(_db.Countries, "Id", "CountryName", city.CountryID);
             return View(city);
         }
 
@@ -101,22 +101,13 @@ namespace VacationsPortal.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            City city = db.Cities.Find(id);
+            var city = _db.Cities.Find(id);
             if (city == null)
             {
                 return HttpNotFound();
             }
-            return View(city);
-        }
-
-        // POST: Cities/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            City city = db.Cities.Find(id);
-            db.Cities.Remove(city);
-            db.SaveChanges();
+            _db.Cities.Remove(city);
+            _db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -124,7 +115,7 @@ namespace VacationsPortal.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
