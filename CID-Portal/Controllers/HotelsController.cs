@@ -10,7 +10,7 @@ using VacationsPortal.Models;
 
 namespace VacationsPortal.Controllers
 {
-    public class CurrenciesController : Controller
+    public class HotelsController : Controller
     {
         private readonly CIDvNEXtEntities _db = new CIDvNEXtEntities();
 
@@ -27,81 +27,85 @@ namespace VacationsPortal.Controllers
             return false;
         }
 
-        // GET: Currencies
+        // GET: Hotels
         public ActionResult Index()
         {
             if (IsAuthorized())
             {
-                return View(_db.Currencies.ToList());
+                var hotels = _db.Hotels.Include(h => h.City).Include(c => c.City.Country);
+                return View(hotels.ToList());
             }
             ViewBag.ErrorMsg = "Not authenticated user.";
             return View("Error");
         }
 
-        // GET: Currencies/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
+        // GET: Hotels/Create
+        public ActionResult Create()
+        {
+            ViewBag.CityID = new SelectList(_db.Cities, "Id", "Name");
+            return View();
+        }
 
-        //// POST: Currencies/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create(Currency currency)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _db.Currencies.Add(currency);
-        //        _db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
+        // POST: Hotels/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Hotel hotel)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Hotels.Add(hotel);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
 
-        //    return View(currency);
-        //}
+            ViewBag.CityID = new SelectList(_db.Cities, "Id", "Name", hotel.CityID);
+            return View(hotel);
+        }
 
-        // GET: Currencies/Edit/5
-
+        // GET: Hotels/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var currency = _db.Currencies.Find(id);
-            if (currency == null)
+            var hotel = _db.Hotels.Find(id);
+            if (hotel == null)
             {
                 return HttpNotFound();
             }
-            return View(currency);
+            ViewBag.CityID = new SelectList(_db.Cities, "Id", "Name", hotel.CityID);
+            return View(hotel);
         }
 
-        // POST: Currencies/Edit/5
+        // POST: Hotels/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Currency currency)
+        public ActionResult Edit(Hotel hotel)
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(currency).State = EntityState.Modified;
+                _db.Entry(hotel).State = EntityState.Modified;
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(currency);
+            ViewBag.CityID = new SelectList(_db.Cities, "Id", "Name", hotel.CityID);
+            return View(hotel);
         }
 
-        // GET: Currencies/Delete/5
+        // GET: Hotels/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var currency = _db.Currencies.Find(id);
-            if (currency == null)
+            var hotel = _db.Hotels.Find(id);
+            if (hotel == null)
             {
                 return HttpNotFound();
             }
-            _db.Currencies.Remove(currency);
+            _db.Hotels.Remove(hotel);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
