@@ -241,8 +241,10 @@
 
         function GetArchiveYears() {
             var id = prompt("Enter Fiscal Year (e.g. 2016-2017)");
-            var url = '@Url.Action("Archive", "NonTrips", new { id = "__id__" })';
+            if (id !== null) {
+                var url = '@Url.Action("Archive", "NonTrips", new { id = "__id__" })';
             location.href = url.replace('__id__', id);
+            }       
         }
 
     </script>

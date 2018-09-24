@@ -256,17 +256,18 @@ namespace VacationsPortal.Controllers
             if (id != "")
             {
                 var seY = id.Split('-'); // e.g. 2018-2019
-                var startYear = seY[0];
-                var endYear = seY[1];
-                var tRHotelInfoes = _db.TRHotelInfoView_Archive.Where(t =>
-                    (t.CheckInDate.Value.Year.ToString() == startYear && t.CheckInDate.Value.Month > 6) ||
-                    (t.CheckInDate.Value.Year.ToString() == endYear && t.CheckInDate.Value.Month < 7)
-                ).ToList();
+                if (seY.Length == 2)
+                {
+                    var startYear = seY[0];
+                    var endYear = seY[1];
+                    var tRHotelInfoes = _db.TRHotelInfoView_Archive.Where(t =>
+                        (t.CheckInDate.Value.Year.ToString() == startYear && t.CheckInDate.Value.Month > 6) ||
+                        (t.CheckInDate.Value.Year.ToString() == endYear && t.CheckInDate.Value.Month < 7)
+                    ).ToList();
 
-                return View(tRHotelInfoes);
-
+                    return View(tRHotelInfoes);
+                }
             }
-
             return RedirectToAction("Index");
         }
 

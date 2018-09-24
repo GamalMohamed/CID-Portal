@@ -638,19 +638,22 @@ namespace VacationsPortal.Controllers
             if (id != "")
             {
                 var seY = id.Split('-'); // e.g. 2018-2019
-                var startYear = seY[0];
-                var endYear = seY[1];
+                if (seY.Length == 2)
+                {
+                    var startYear = seY[0];
+                    var endYear = seY[1];
 
-                var nontripsView = _db.NonTripsView_Archive.Where(e =>
-                        (e.SubmissionDate.Year.ToString() == startYear && e.SubmissionDate.Month > 6) ||
-                        (e.SubmissionDate.Year.ToString() == endYear && e.SubmissionDate.Month < 7) ||
-                        (e.OperationsApprovalDate.Value.Year.ToString() == startYear &&
-                         e.OperationsApprovalDate.Value.Month > 5) ||
-                        (e.OperationsApprovalDate.Value.Year.ToString() == endYear &&
-                         e.OperationsApprovalDate.Value.Month < 8))
-                    .ToList();
+                    var nontripsView = _db.NonTripsView_Archive.Where(e =>
+                            (e.SubmissionDate.Year.ToString() == startYear && e.SubmissionDate.Month > 6) ||
+                            (e.SubmissionDate.Year.ToString() == endYear && e.SubmissionDate.Month < 7) ||
+                            (e.OperationsApprovalDate.Value.Year.ToString() == startYear &&
+                             e.OperationsApprovalDate.Value.Month > 5) ||
+                            (e.OperationsApprovalDate.Value.Year.ToString() == endYear &&
+                             e.OperationsApprovalDate.Value.Month < 8))
+                        .ToList();
 
-                return View(nontripsView);
+                    return View(nontripsView);
+                }
             }
             return RedirectToAction("Index");
         }
