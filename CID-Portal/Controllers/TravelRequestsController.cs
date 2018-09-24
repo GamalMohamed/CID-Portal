@@ -628,15 +628,20 @@ namespace VacationsPortal.Controllers
 
         public ActionResult Archive(string id)
         {
-            var seY = id.Split('-'); // e.g. 2018-2019
-            var startYear = seY[0];
-            var endYear = seY[1];
-            var travelRequests = _db.TravelRequestView_Archive.Where(t =>
+            if (id != "")
+            {
+                var seY = id.Split('-'); // e.g. 2018-2019
+                var startYear = seY[0];
+                var endYear = seY[1];
+                var travelRequests = _db.TravelRequestView_Archive.Where(t =>
                     ((t.StartDate.Value.Year.ToString() == startYear && t.StartDate.Value.Month > 6) ||
-                    (t.StartDate.Value.Year.ToString() == endYear && t.StartDate.Value.Month < 7))
-                    ).ToList();
+                     (t.StartDate.Value.Year.ToString() == endYear && t.StartDate.Value.Month < 7))
+                ).ToList();
 
-            return View(travelRequests);
+                return View(travelRequests);
+            }
+
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

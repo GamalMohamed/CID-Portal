@@ -253,15 +253,21 @@ namespace VacationsPortal.Controllers
 
         public ActionResult Archive(string id)
         {
-            var seY = id.Split('-'); // e.g. 2018-2019
-            var startYear = seY[0];
-            var endYear = seY[1];
-            var tRHotelInfoes = _db.TRHotelInfoView_Archive.Where(t =>
+            if (id != "")
+            {
+                var seY = id.Split('-'); // e.g. 2018-2019
+                var startYear = seY[0];
+                var endYear = seY[1];
+                var tRHotelInfoes = _db.TRHotelInfoView_Archive.Where(t =>
                     (t.CheckInDate.Value.Year.ToString() == startYear && t.CheckInDate.Value.Month > 6) ||
                     (t.CheckInDate.Value.Year.ToString() == endYear && t.CheckInDate.Value.Month < 7)
-                    ).ToList();
+                ).ToList();
 
-            return View(tRHotelInfoes);
+                return View(tRHotelInfoes);
+
+            }
+
+            return RedirectToAction("Index");
         }
 
 

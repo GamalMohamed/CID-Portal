@@ -566,15 +566,19 @@ namespace VacationsPortal.Controllers
 
         public ActionResult Archive(string id)
         {
-            var seY = id.Split('-'); // e.g. 2018-2019
-            var startYear = seY[0];
-            var endYear = seY[1];
-            var trips = _db.TripsView_Archive.Where(t =>
-                    (t.StartDate.Value.Year.ToString() == startYear && t.StartDate.Value.Month > 6) ||
-                    (t.StartDate.Value.Year.ToString() == endYear && t.StartDate.Value.Month < 7)
-                    ).ToList();
+            if (id != "")
+            {
+                var seY = id.Split('-'); // e.g. 2018-2019
+                var startYear = seY[0];
+                var endYear = seY[1];
+                var trips = _db.TripsView_Archive.Where(t =>
+                        (t.StartDate.Value.Year.ToString() == startYear && t.StartDate.Value.Month > 6) ||
+                        (t.StartDate.Value.Year.ToString() == endYear && t.StartDate.Value.Month < 7)
+                        ).ToList();
 
-            return View(trips);
+                return View(trips);
+            }
+            return RedirectToAction("Index");
         }
 
         //// GET: Trips/Delete/5
