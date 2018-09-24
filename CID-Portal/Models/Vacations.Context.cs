@@ -70,5 +70,6 @@ namespace VacationsPortal.Models
         public virtual DbSet<TRHotelInfoView_Archive> TRHotelInfoView_Archive { get; set; }
         public virtual DbSet<VisasView> VisasViews { get; set; }
         public virtual DbSet<Audit> Audits { get; set; }
+        public virtual DbSet<PublicVacation> PublicVacations { get; set; }
     }
 }

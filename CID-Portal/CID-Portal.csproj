@@ -163,6 +163,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HotelsController.cs" />
     <Compile Include="Controllers\NonTripsController.cs" />
+    <Compile Include="Controllers\PublicVacationsController.cs" />
     <Compile Include="Controllers\TravelRequestsController.cs" />
     <Compile Include="Controllers\TRHotelInfosController.cs" />
     <Compile Include="Controllers\TripsController.cs" />
@@ -240,6 +241,9 @@
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PaymentMethod.cs">
+      <DependentUpon>Vacations.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PublicVacation.cs">
       <DependentUpon>Vacations.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Role.cs">
@@ -664,6 +668,9 @@
     <Content Include="Views\Hotels\Create.cshtml" />
     <Content Include="Views\Hotels\Edit.cshtml" />
     <Content Include="Views\Hotels\Index.cshtml" />
+    <Content Include="Views\PublicVacations\Create.cshtml" />
+    <Content Include="Views\PublicVacations\Edit.cshtml" />
+    <Content Include="Views\PublicVacations\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

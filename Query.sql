@@ -1,1 +1,1 @@
-﻿SELECT * FROM Audit
+﻿SELECT * FROM PublicVacations

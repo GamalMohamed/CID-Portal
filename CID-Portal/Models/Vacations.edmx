@@ -353,6 +353,15 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MethodName" Type="nvarchar" MaxLength="200" Nullable="false" />
         </EntityType>
+        <EntityType Name="PublicVacations">
+          <Key>
+            <PropertyRef Name="VacationID" />
+          </Key>
+          <Property Name="VacationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+        </EntityType>
         <EntityType Name="Roles">
           <Key>
             <PropertyRef Name="Id" />
@@ -1540,6 +1549,7 @@
           <EntitySet Name="NonTripsView" EntityType="Self.NonTripsView" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NonTripsView_Archive" EntityType="Self.NonTripsView_Archive" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentMethods" EntityType="Self.PaymentMethods" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PublicVacations" EntityType="Self.PublicVacations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Route" EntityType="Self.Route" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subsidaries" EntityType="Self.Subsidaries" Schema="dbo" store:Type="Tables" />
@@ -2450,6 +2460,7 @@
           <EntitySet Name="TRHotelInfoView_Archive" EntityType="CIDvNEXtModel.TRHotelInfoView_Archive" />
           <EntitySet Name="VisasViews" EntityType="CIDvNEXtModel.VisasView" />
           <EntitySet Name="Audits" EntityType="CIDvNEXtModel.Audit" />
+          <EntitySet Name="PublicVacations" EntityType="CIDvNEXtModel.PublicVacation" />
           </EntityContainer>
         <EntityType Name="EmployeesView">
           <Key>
@@ -3689,6 +3700,15 @@
           <Property Name="TripID" Type="Int32" />
           <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="PublicVacation">
+          <Key>
+            <PropertyRef Name="VacationID" />
+          </Key>
+          <Property Name="VacationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4466,6 +4486,16 @@
                 <ScalarProperty Name="Ref_Table" ColumnName="Ref_Table" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PublicVacations">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.PublicVacation">
+              <MappingFragment StoreEntitySet="PublicVacations">
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="VacationID" ColumnName="VacationID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
