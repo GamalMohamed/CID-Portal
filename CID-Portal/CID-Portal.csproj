@@ -164,10 +164,12 @@
     <Compile Include="Controllers\HotelsController.cs" />
     <Compile Include="Controllers\NonTripsController.cs" />
     <Compile Include="Controllers\PublicVacationsController.cs" />
+    <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\TravelRequestsController.cs" />
     <Compile Include="Controllers\TRHotelInfosController.cs" />
     <Compile Include="Controllers\TripsController.cs" />
     <Compile Include="Controllers\VisasController.cs" />
+    <Compile Include="Controllers\WorkloadsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -674,6 +676,12 @@
     <Content Include="Views\PublicVacations\Index.cshtml" />
     <Content Include="Views\Employees\VacationInquiryResult.cshtml" />
     <Content Include="Views\Employees\VacationInquiry.cshtml" />
+    <Content Include="Views\Roles\Create.cshtml" />
+    <Content Include="Views\Roles\Edit.cshtml" />
+    <Content Include="Views\Roles\Index.cshtml" />
+    <Content Include="Views\Workloads\Create.cshtml" />
+    <Content Include="Views\Workloads\Edit.cshtml" />
+    <Content Include="Views\Workloads\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
