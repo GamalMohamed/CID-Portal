@@ -50,7 +50,9 @@ namespace VacationsPortal.Controllers
                     case Privilege.Travel:
                         return RedirectToAction("Index", "Trips");
                 }
-                return RedirectToAction("Index", "Visas");
+
+                ViewBag.ErrorMsg = "Not authenticated user.";
+                return View("Error");
             }
 
             ViewBag.ErrorMsg = "Not authenticated user.";
