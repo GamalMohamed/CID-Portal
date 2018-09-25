@@ -99,6 +99,53 @@ namespace VacationsPortal.Controllers
         {
             if (IsAuthorized())
             {
+                var audits = _db.Audits.Where(a => a.Ref_Table == "Employees" ||
+                                                   a.Ref_Table == "contact").ToList();
+                if (audits.Count > 0)
+                {
+                    foreach (var audit in audits)
+                    {
+                        if (audit.Operation == "Update")
+                        {
+                            if (audit.Ref_Table == "Employees")
+                            {
+                                var employee = _db.Employees.FirstOrDefault(e => e.Id == audit.RecordID);
+                                if (employee != null)
+                                {
+                                    var employeeView = _db.EmployeesViews.FirstOrDefault(e => e.Id == employee.Id);
+                                    if (employeeView != null)
+                                    {
+                                        employeeView.HiringDate = employee.hiringDate;
+                                        employeeView.Role = employee.Role?.roleName;
+                                        employeeView.Workload = employee.Workload1?.WorkloadName;
+                                        employeeView.DirectLine = _db.EmployeesViews.FirstOrDefault(e => e.Id == employee.directLine)?.DirectLine;
+                                        employeeView.DottedLine = _db.EmployeesViews.FirstOrDefault(e => e.Id == employee.dottedLine)?.DottedLine;
+                                        _db.SaveChanges();
+                                    }
+                                }
+                            }
+                            else if (audit.Ref_Table == "contact")
+                            {
+                                var contact = _db.contacts.FirstOrDefault(c => c.Id == audit.RecordID);
+                                if (contact != null)
+                                {
+                                    var employeeView = _db.EmployeesViews.FirstOrDefault(e => e.Id == contact.Id);
+                                    if (employeeView != null)
+                                    {
+                                        employeeView.Name = contact.FirstName + " " + contact.LastName;
+                                        employeeView.Email = contact.Email;
+                                        employeeView.PhoneNumber = contact.PhoneNumber;
+                                        _db.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Clear the related audit table records after syncing
+                    _db.Audits.RemoveRange(audits);
+                    _db.SaveChanges();
+                }
                 return View(_db.EmployeesViews.Where(e => e.Resigned.Value == false).ToList());
             }
 
@@ -129,64 +176,64 @@ namespace VacationsPortal.Controllers
         }
 
         // IMP NOTE: THIS ROUTE IS FOR DEVELOPMENT PURPOSES ONLY!!
-        //public ActionResult FillEmployeesView()
-        //{
-        //    var emps = _db.Employees.ToList();
-        //    foreach (var emp in emps)
-        //    {
-        //        string directlineName = "", dottedlineName = "";
-        //        if (emp.directLine != null)
-        //        {
-        //            var dirline = emps.FirstOrDefault(e => e.Id == emp.directLine);
-        //            if (dirline != null)
-        //            {
-        //                directlineName = dirline.contact.FullName;
-        //            }
-        //        }
+        public ActionResult FillEmployeesView()
+        {
+            var emps = _db.Employees.ToList();
+            foreach (var emp in emps)
+            {
+                string directlineName = "", dottedlineName = "";
+                if (emp.directLine != null)
+                {
+                    var dirline = emps.FirstOrDefault(e => e.Id == emp.directLine);
+                    if (dirline != null)
+                    {
+                        directlineName = dirline.contact.FullName;
+                    }
+                }
 
-        //        if (emp.dottedLine != null)
-        //        {
-        //            var dotline = emps.FirstOrDefault(e => e.Id == emp.dottedLine);
-        //            if (dotline != null)
-        //            {
-        //                dottedlineName = dotline.contact.FullName;
-        //            }
-        //        }
+                if (emp.dottedLine != null)
+                {
+                    var dotline = emps.FirstOrDefault(e => e.Id == emp.dottedLine);
+                    if (dotline != null)
+                    {
+                        dottedlineName = dotline.contact.FullName;
+                    }
+                }
 
-        //        string role = "", workload = "";
-        //        if (emp.Role != null)
-        //        {
-        //            role = emp.Role.roleName;
-        //        }
-        //        if (emp.Workload != null)
-        //        {
-        //            workload = emp.Workload1.WorkloadName;
-        //        }
+                string role = "", workload = "";
+                if (emp.Role != null)
+                {
+                    role = emp.Role.roleName;
+                }
+                if (emp.Workload != null)
+                {
+                    workload = emp.Workload1.WorkloadName;
+                }
 
-        //        var empvw = new EmployeesView
-        //        {
-        //            Id = emp.Id,
-        //            BasedOut = emp.contact.BasedOut,
-        //            Email = emp.contact.Email,
-        //            HiringDate = emp.hiringDate,
-        //            Name = emp.contact.FirstName + ' ' + emp.contact.LastName,
-        //            PhoneNumber = emp.contact.PhoneNumber,
-        //            VacationBalance = emp.VacationBalance,
-        //            VacationsCarryOver = emp.VacationsCarryOver,
-        //            Role = role,
-        //            Workload = workload,
-        //            DirectLine = directlineName,
-        //            DottedLine = dottedlineName,
-        //            Resigned = emp.Resigned
-        //        };
+                var empvw = new EmployeesView
+                {
+                    Id = emp.Id,
+                    BasedOut = emp.contact.BasedOut,
+                    Email = emp.contact.Email,
+                    HiringDate = emp.hiringDate,
+                    Name = emp.contact.FirstName + ' ' + emp.contact.LastName,
+                    PhoneNumber = emp.contact.PhoneNumber,
+                    VacationBalance = emp.VacationBalance,
+                    VacationsCarryOver = emp.VacationsCarryOver,
+                    Role = role,
+                    Workload = workload,
+                    DirectLine = directlineName,
+                    DottedLine = dottedlineName,
+                    Resigned = emp.Resigned
+                };
 
-        //        _db.EmployeesViews.Add(empvw);
+                _db.EmployeesViews.Add(empvw);
 
-        //        _db.SaveChanges();
-        //    }
+                _db.SaveChanges();
+            }
 
-        //    return RedirectToAction("Index");
-        //}
+            return RedirectToAction("Index");
+        }
 
         // GET: Employees/Details/5
 
@@ -472,6 +519,13 @@ namespace VacationsPortal.Controllers
                         empview.DottedLine = dottedlineName;
                         empview.Resigned = contact.Employee.Resigned;
                     }
+                    _db.SaveChanges();
+
+                    // TODO: Remove the update audit record
+                    _db.Audits.RemoveRange(_db.Audits.Where(a => a.RecordID == contact.Id 
+                                                     && (a.Ref_Table == "Employees" ||
+                                                         a.Ref_Table == "contact"))
+                                                         .ToList());
                     _db.SaveChanges();
                 }
                 return RedirectToAction("Index");
