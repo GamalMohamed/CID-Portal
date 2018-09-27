@@ -33,7 +33,6 @@
         <EntityTypeShape EntityType="CIDvNEXtModel.EmployeesView" Width="1.5" PointX="10.375" PointY="0.75" />
         <EntityTypeShape EntityType="CIDvNEXtModel.Country" Width="1.5" PointX="5" PointY="21" />
         <AssociationConnector Association="CIDvNEXtModel.FK_Countries_Countries" />
-        <EntityTypeShape EntityType="CIDvNEXtModel.AuthUser" Width="1.5" PointX="10.375" PointY="5.75" />
         <EntityTypeShape EntityType="CIDvNEXtModel.City" Width="1.5" PointX="7.25" PointY="21.375" />
         <AssociationConnector Association="CIDvNEXtModel.FK_Cities_Countries" />
         <AssociationConnector Association="CIDvNEXtModel.FK_Contact_Cities" />
@@ -113,6 +112,7 @@
         <EntityTypeShape EntityType="CIDvNEXtModel.VisasView" Width="1.5" PointX="21.375" PointY="16.75" />
         <EntityTypeShape EntityType="CIDvNEXtModel.Audit" Width="1.5" PointX="23.375" PointY="9.75" />
         <EntityTypeShape EntityType="CIDvNEXtModel.PublicVacation" Width="1.5" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CIDvNEXtModel.AuthUser" Width="1.5" PointX="10.375" PointY="5.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

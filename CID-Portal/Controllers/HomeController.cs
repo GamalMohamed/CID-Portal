@@ -10,7 +10,7 @@ namespace VacationsPortal.Controllers
 {
     public enum Privilege
     {
-        Na,
+        NA,
         Admin,
         Vacations,
         Travel
@@ -38,7 +38,7 @@ namespace VacationsPortal.Controllers
 
         public ActionResult Index()
         {
-            var privilege = Privilege.Na;
+            var privilege = Privilege.NA;
             if (IsUserAuthenticated(ref privilege))
             {
                 switch (privilege)

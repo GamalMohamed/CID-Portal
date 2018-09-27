@@ -156,6 +156,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AuthUsersController.cs" />
     <Compile Include="Controllers\CitiesController.cs" />
     <Compile Include="Controllers\CountriesController.cs" />
     <Compile Include="Controllers\CurrenciesController.cs" />
@@ -682,6 +683,9 @@
     <Content Include="Views\Workloads\Create.cshtml" />
     <Content Include="Views\Workloads\Edit.cshtml" />
     <Content Include="Views\Workloads\Index.cshtml" />
+    <Content Include="Views\AuthUsers\Create.cshtml" />
+    <Content Include="Views\AuthUsers\Edit.cshtml" />
+    <Content Include="Views\AuthUsers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

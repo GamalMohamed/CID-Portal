@@ -21,7 +21,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="Privilege" Type="int" />
@@ -2234,7 +2234,6 @@
             <End Role="Subsidary" EntitySet="Subsidaries" />
             <End Role="Country" EntitySet="Countries" />
           </AssociationSet>
-          <EntitySet Name="AuthUsers" EntityType="CIDvNEXtModel.AuthUser" />
           <EntitySet Name="Cities" EntityType="CIDvNEXtModel.City" />
           <AssociationSet Name="FK_Cities_Countries" Association="CIDvNEXtModel.FK_Cities_Countries">
             <End Role="Country" EntitySet="Countries" />
@@ -2461,6 +2460,7 @@
           <EntitySet Name="VisasViews" EntityType="CIDvNEXtModel.VisasView" />
           <EntitySet Name="Audits" EntityType="CIDvNEXtModel.Audit" />
           <EntitySet Name="PublicVacations" EntityType="CIDvNEXtModel.PublicVacation" />
+          <EntitySet Name="AuthUsers" EntityType="CIDvNEXtModel.AuthUser" />
           </EntityContainer>
         <EntityType Name="EmployeesView">
           <Key>
@@ -2511,15 +2511,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="AuthUser">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Privilege" Type="Int32" />
-        </EntityType>
         <EntityType Name="City">
           <Key>
             <PropertyRef Name="Id" />
@@ -3709,6 +3700,15 @@
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
         </EntityType>
+        <EntityType Name="AuthUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Privilege" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3911,16 +3911,6 @@
                 <ScalarProperty Name="SubsidaryID" ColumnName="SubsidaryID" />
                 <ScalarProperty Name="CountryName" ColumnName="CountryName" />
                 <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AuthUsers">
-            <EntityTypeMapping TypeName="CIDvNEXtModel.AuthUser">
-              <MappingFragment StoreEntitySet="AuthUsers">
-                <ScalarProperty Name="Privilege" ColumnName="Privilege" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -4496,6 +4486,16 @@
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="VacationID" ColumnName="VacationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AuthUsers">
+            <EntityTypeMapping TypeName="CIDvNEXtModel.AuthUser">
+              <MappingFragment StoreEntitySet="AuthUsers">
+                <ScalarProperty Name="Privilege" ColumnName="Privilege" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

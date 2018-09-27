@@ -40,7 +40,6 @@ namespace VacationsPortal.Models
         public virtual DbSet<Workload> Workloads { get; set; }
         public virtual DbSet<EmployeesView> EmployeesViews { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
-        public virtual DbSet<AuthUser> AuthUsers { get; set; }
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<CIDW8RoleTypes> CIDW8RoleTypes { get; set; }
         public virtual DbSet<CashInAdvance> CashInAdvances { get; set; }
@@ -71,5 +70,6 @@ namespace VacationsPortal.Models
         public virtual DbSet<VisasView> VisasViews { get; set; }
         public virtual DbSet<Audit> Audits { get; set; }
         public virtual DbSet<PublicVacation> PublicVacations { get; set; }
+        public virtual DbSet<AuthUser> AuthUsers { get; set; }
     }
 }
