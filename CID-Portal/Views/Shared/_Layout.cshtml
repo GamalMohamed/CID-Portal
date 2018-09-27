@@ -25,8 +25,8 @@
                     </ul>*@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        @*@Html.ActionLink("Welcome " + @ClaimsPrincipal.Current.FindFirst(ClaimTypes.GivenName).Value + "!", null, null, null)*@
-                        @Html.ActionLink("Welcome " + "Gamal" + "!", null, null, null)
+                        @Html.ActionLink("Welcome " + ClaimsPrincipal.Current.FindFirst(ClaimTypes.GivenName).Value + "!", null, null, null)
+                        @*@Html.ActionLink("Welcome " + "Gamal" + "!", null, null, null)*@
                     </li>
                 </ul>
             </div>
