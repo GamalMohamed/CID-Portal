@@ -1,1 +1,1 @@
-﻿SELECT * FROM AuthUsers
+﻿SELECT * FROM Audit

@@ -35,6 +35,7 @@ namespace VacationsPortal.Controllers
             {
                 foreach (var cashInAdvance in cashInAdvances)
                 {
+                    // Add basic non-trip data: 1. CIA
                     var nontripvm = new NonTripsView
                     {
                         EmployeeName = cashInAdvance.Employee.contact.FullName,
@@ -50,23 +51,37 @@ namespace VacationsPortal.Controllers
                         nontripvm.CIA_Amount_InEGP = nontripvm.CIA_Amount_InCurrency *
                                                      (decimal)nontripvm.CIA_ExchangeRate;
 
+                    // 2. Expenses
                     if (cashInAdvance.ExpensesReports.Count > 0)
                     {
                         foreach (var ciaExpensesReport in cashInAdvance.ExpensesReports)
                         {
-                            var nontripvm2 = nontripvm;
-                            nontripvm2.ExpenseReportId = ciaExpensesReport.ID;
-                            nontripvm2.SubmissionDate = ciaExpensesReport.SubmissionDate;
-                            nontripvm2.Title = ciaExpensesReport.Title;
-                            nontripvm2.ApprovalDate = ciaExpensesReport.ApprovalDate;
-                            nontripvm2.ExpenseReportStatus = ciaExpensesReport.ExpenseReportStatu.StatusName;
-                            nontripvm2.TotalAmountInEGP = ciaExpensesReport.TotalAmountInUSD ?? 0;
-                            nontripvm2.CIAExpenseReport = ciaExpensesReport.CashInAdvance ?? 0; //(double)nontripvm2.CIA_Amount_InEGP;
+                            var nontripvm2 = new NonTripsView
+                            {
+                                EmployeeName = nontripvm.EmployeeName,
+                                CIA_Id = nontripvm.CIA_Id,
+                                CIA_Status = nontripvm.CIA_Status,
+                                CIA_Reason = nontripvm.CIA_Reason,
+                                OperationsApprovalDate = nontripvm.OperationsApprovalDate,
+                                CurrencyName = nontripvm.CurrencyName,
+                                CIA_Amount_InCurrency = nontripvm.CIA_Amount_InCurrency,
+                                CIA_ExchangeRate = nontripvm.CIA_ExchangeRate,
+                                ExpenseReportId = ciaExpensesReport.ID,
+                                SubmissionDate = ciaExpensesReport.SubmissionDate,
+                                Title = ciaExpensesReport.Title,
+                                ApprovalDate = ciaExpensesReport.ApprovalDate,
+                                ExpenseReportStatus = ciaExpensesReport.ExpenseReportStatu.StatusName,
+                                TotalAmountInEGP = ciaExpensesReport.TotalAmountInUSD ?? 0,
+                                CIAExpenseReport = ciaExpensesReport.CashInAdvance ?? 0,
+                                SettledAmount = ciaExpensesReport.SettledAmount ?? 0,
+                                SettlementDate = ciaExpensesReport.SettlementDate,
+                                OperationsComment = ciaExpensesReport.OperationsComment
+                            };
+                            if (nontripvm2.CIA_ExchangeRate != null)
+                                nontripvm2.CIA_Amount_InEGP = nontripvm2.CIA_Amount_InCurrency *
+                                                             (decimal)nontripvm2.CIA_ExchangeRate;
                             nontripvm2.AmountToEmployeeInEGP = (nontripvm2.TotalAmountInEGP - nontripvm2.CIAExpenseReport) ?? 0;
-                            nontripvm2.SettledAmount = ciaExpensesReport.SettledAmount ?? 0;
-                            nontripvm2.SettlementDate = ciaExpensesReport.SettlementDate;
                             nontripvm2.RemainingBalance = Math.Abs((decimal)nontripvm2.AmountToEmployeeInEGP) - nontripvm2.SettledAmount;
-                            nontripvm2.OperationsComment = ciaExpensesReport.OperationsComment;
 
                             nonTripsvm.Add(nontripvm2); // CIA + Expenses
                         }
@@ -82,8 +97,10 @@ namespace VacationsPortal.Controllers
             {
                 foreach (var expense in expenses)
                 {
+                    // For syncing purpose, add expenses and their related CIA
                     if (expCia)
                     {
+                        // Add CIA data
                         var nontripvm3 = new NonTripsView
                         {
                             EmployeeName = expense.Employee.contact.FullName,
@@ -103,13 +120,24 @@ namespace VacationsPortal.Controllers
                         nontripvm3.RemainingBalance = (decimal)nontripvm3.AmountToEmployeeInEGP -
                                                       nontripvm3.SettledAmount;
 
+                        // Add expense data, if exists
                         if (expense.CashInAdvances.Count > 0)
                         {
                             foreach (var cashInAdvance in expense.CashInAdvances)
                             {
                                 var nontripvm4 = new NonTripsView
                                 {
-                                    EmployeeName = cashInAdvance.Employee.contact.FullName,
+                                    EmployeeName = nontripvm3.EmployeeName,
+                                    ExpenseReportId = nontripvm3.ExpenseReportId,
+                                    Title = nontripvm3.Title,
+                                    SubmissionDate = nontripvm3.SubmissionDate,
+                                    ApprovalDate = nontripvm3.ApprovalDate,
+                                    ExpenseReportStatus = nontripvm3.ExpenseReportStatus,
+                                    TotalAmountInEGP = nontripvm3.TotalAmountInEGP,
+                                    CIAExpenseReport = nontripvm3.CIAExpenseReport,
+                                    OperationsComment = nontripvm3.OperationsComment,
+                                    SettledAmount = nontripvm3.SettledAmount,
+                                    SettlementDate = nontripvm3.SettlementDate,
                                     CIA_Id = cashInAdvance.Id,
                                     CIA_Status = cashInAdvance.CashInAdvanceStatu.CashInAdvanceStatus,
                                     CIA_Reason = cashInAdvance.Reason,
@@ -118,6 +146,11 @@ namespace VacationsPortal.Controllers
                                     CIA_Amount_InCurrency = cashInAdvance.Amount ?? 0,
                                     CIA_ExchangeRate = cashInAdvance.ExchangeRate ?? 0
                                 };
+                                nontripvm4.AmountToEmployeeInEGP = (nontripvm4.TotalAmountInEGP -
+                                                            nontripvm4.CIAExpenseReport) ?? 0;
+                                nontripvm4.RemainingBalance = (decimal)nontripvm4.AmountToEmployeeInEGP -
+                                                              nontripvm4.SettledAmount;
+
                                 if (nontripvm4.CIA_ExchangeRate != null)
                                     nontripvm4.CIA_Amount_InEGP = nontripvm4.CIA_Amount_InCurrency *
                                                                   (decimal)nontripvm4.CIA_ExchangeRate;
@@ -127,7 +160,7 @@ namespace VacationsPortal.Controllers
                         }
                         else
                         {
-                            nonTripsvm.Add(nontripvm3); // Expense only
+                            nonTripsvm.Add(nontripvm3); // Expense only without CIA
                         }
                     }
                     else
@@ -170,6 +203,7 @@ namespace VacationsPortal.Controllers
             {
                 foreach (var cashInAdvance in cashInAdvances)
                 {
+                    // Add basic non-trip data: 1. CIA
                     var nontripvm = new NonTripsView_Archive
                     {
                         EmployeeName = cashInAdvance.Employee.contact.FullName,
@@ -185,23 +219,37 @@ namespace VacationsPortal.Controllers
                         nontripvm.CIA_Amount_InEGP = nontripvm.CIA_Amount_InCurrency *
                                                      (decimal)nontripvm.CIA_ExchangeRate;
 
+                    // 2. Expenses
                     if (cashInAdvance.ExpensesReports.Count > 0)
                     {
                         foreach (var ciaExpensesReport in cashInAdvance.ExpensesReports)
                         {
-                            var nontripvm2 = nontripvm;
-                            nontripvm2.ExpenseReportId = ciaExpensesReport.ID;
-                            nontripvm2.SubmissionDate = ciaExpensesReport.SubmissionDate;
-                            nontripvm2.Title = ciaExpensesReport.Title;
-                            nontripvm2.ApprovalDate = ciaExpensesReport.ApprovalDate;
-                            nontripvm2.ExpenseReportStatus = ciaExpensesReport.ExpenseReportStatu.StatusName;
-                            nontripvm2.TotalAmountInEGP = ciaExpensesReport.TotalAmountInUSD ?? 0;
-                            nontripvm2.CIAExpenseReport = ciaExpensesReport.CashInAdvance ?? 0; //(double)nontripvm2.CIA_Amount_InEGP;
+                            var nontripvm2 = new NonTripsView_Archive
+                            {
+                                EmployeeName = nontripvm.EmployeeName,
+                                CIA_Id = nontripvm.CIA_Id,
+                                CIA_Status = nontripvm.CIA_Status,
+                                CIA_Reason = nontripvm.CIA_Reason,
+                                OperationsApprovalDate = nontripvm.OperationsApprovalDate,
+                                CurrencyName = nontripvm.CurrencyName,
+                                CIA_Amount_InCurrency = nontripvm.CIA_Amount_InCurrency,
+                                CIA_ExchangeRate = nontripvm.CIA_ExchangeRate,
+                                ExpenseReportId = ciaExpensesReport.ID,
+                                SubmissionDate = ciaExpensesReport.SubmissionDate,
+                                Title = ciaExpensesReport.Title,
+                                ApprovalDate = ciaExpensesReport.ApprovalDate,
+                                ExpenseReportStatus = ciaExpensesReport.ExpenseReportStatu.StatusName,
+                                TotalAmountInEGP = ciaExpensesReport.TotalAmountInUSD ?? 0,
+                                CIAExpenseReport = ciaExpensesReport.CashInAdvance ?? 0,
+                                SettledAmount = ciaExpensesReport.SettledAmount ?? 0,
+                                SettlementDate = ciaExpensesReport.SettlementDate,
+                                OperationsComment = ciaExpensesReport.OperationsComment
+                            };
+                            if (nontripvm2.CIA_ExchangeRate != null)
+                                nontripvm2.CIA_Amount_InEGP = nontripvm2.CIA_Amount_InCurrency *
+                                                             (decimal)nontripvm2.CIA_ExchangeRate;
                             nontripvm2.AmountToEmployeeInEGP = (nontripvm2.TotalAmountInEGP - nontripvm2.CIAExpenseReport) ?? 0;
-                            nontripvm2.SettledAmount = ciaExpensesReport.SettledAmount ?? 0;
-                            nontripvm2.SettlementDate = ciaExpensesReport.SettlementDate;
                             nontripvm2.RemainingBalance = Math.Abs((decimal)nontripvm2.AmountToEmployeeInEGP) - nontripvm2.SettledAmount;
-                            nontripvm2.OperationsComment = ciaExpensesReport.OperationsComment;
 
                             nonTripsvm.Add(nontripvm2); // CIA + Expenses
                         }
@@ -217,8 +265,10 @@ namespace VacationsPortal.Controllers
             {
                 foreach (var expense in expenses)
                 {
+                    // For syncing purpose, add expenses and their related CIA
                     if (expCia)
                     {
+                        // Add CIA data
                         var nontripvm3 = new NonTripsView_Archive
                         {
                             EmployeeName = expense.Employee.contact.FullName,
@@ -238,13 +288,24 @@ namespace VacationsPortal.Controllers
                         nontripvm3.RemainingBalance = (decimal)nontripvm3.AmountToEmployeeInEGP -
                                                       nontripvm3.SettledAmount;
 
+                        // Add expense data, if exists
                         if (expense.CashInAdvances.Count > 0)
                         {
                             foreach (var cashInAdvance in expense.CashInAdvances)
                             {
                                 var nontripvm4 = new NonTripsView_Archive
                                 {
-                                    EmployeeName = cashInAdvance.Employee.contact.FullName,
+                                    EmployeeName = nontripvm3.EmployeeName,
+                                    ExpenseReportId = nontripvm3.ExpenseReportId,
+                                    Title = nontripvm3.Title,
+                                    SubmissionDate = nontripvm3.SubmissionDate,
+                                    ApprovalDate = nontripvm3.ApprovalDate,
+                                    ExpenseReportStatus = nontripvm3.ExpenseReportStatus,
+                                    TotalAmountInEGP = nontripvm3.TotalAmountInEGP,
+                                    CIAExpenseReport = nontripvm3.CIAExpenseReport,
+                                    OperationsComment = nontripvm3.OperationsComment,
+                                    SettledAmount = nontripvm3.SettledAmount,
+                                    SettlementDate = nontripvm3.SettlementDate,
                                     CIA_Id = cashInAdvance.Id,
                                     CIA_Status = cashInAdvance.CashInAdvanceStatu.CashInAdvanceStatus,
                                     CIA_Reason = cashInAdvance.Reason,
@@ -253,6 +314,11 @@ namespace VacationsPortal.Controllers
                                     CIA_Amount_InCurrency = cashInAdvance.Amount ?? 0,
                                     CIA_ExchangeRate = cashInAdvance.ExchangeRate ?? 0
                                 };
+                                nontripvm4.AmountToEmployeeInEGP = (nontripvm4.TotalAmountInEGP -
+                                                            nontripvm4.CIAExpenseReport) ?? 0;
+                                nontripvm4.RemainingBalance = (decimal)nontripvm4.AmountToEmployeeInEGP -
+                                                              nontripvm4.SettledAmount;
+
                                 if (nontripvm4.CIA_ExchangeRate != null)
                                     nontripvm4.CIA_Amount_InEGP = nontripvm4.CIA_Amount_InCurrency *
                                                                   (decimal)nontripvm4.CIA_ExchangeRate;
@@ -262,7 +328,7 @@ namespace VacationsPortal.Controllers
                         }
                         else
                         {
-                            nonTripsvm.Add(nontripvm3); // Expense only
+                            nonTripsvm.Add(nontripvm3); // Expense only without CIA
                         }
                     }
                     else
@@ -298,7 +364,7 @@ namespace VacationsPortal.Controllers
             return nonTripsvm;
         }
 
-        // IMP NOTE: THESE ROUTES ARE FOR DEVELOPMENT PURPOSES ONLY!!
+        // CAUTION: THESE ROUTES ARE FOR DEVELOPMENT PURPOSES ONLY!!
         public ActionResult FillNonTripsView()
         {
             // Get all CIAs and Expenses
@@ -309,11 +375,13 @@ namespace VacationsPortal.Controllers
                 cashInAdvances = _db.CashInAdvances.Where(c =>
                     ((c.RequestDate.Value.Year == DateTime.Now.Year - 1 && c.RequestDate.Value.Month > 6) ||
                     (c.RequestDate.Value.Year == DateTime.Now.Year)) && c.TripID == null
-                    ).ToList();
+                    ).Include(c => c.Employee.contact)
+                    .ToList();
                 expenses = _db.ExpensesReports.Where(e =>
                     ((e.SubmissionDate.Year == DateTime.Now.Year - 1 && e.SubmissionDate.Month > 6) ||
                     (e.SubmissionDate.Year == DateTime.Now.Year)) && e.TripID == null
-                    ).ToList();
+                    ).Include(e => e.Employee.contact)
+                    .ToList();
             }
             else
             {
@@ -321,13 +389,15 @@ namespace VacationsPortal.Controllers
                     ((c.RequestDate.Value.Year == DateTime.Now.Year - 2 && c.RequestDate.Value.Month > 6) ||
                     (c.RequestDate.Value.Year == DateTime.Now.Year - 1) ||
                     (c.RequestDate.Value.Year == DateTime.Now.Year)) && c.TripID == null
-                    ).ToList();
+                    ).Include(c => c.Employee.contact)
+                    .ToList();
 
                 expenses = _db.ExpensesReports.Where(e =>
                     ((e.SubmissionDate.Year == DateTime.Now.Year - 2 && e.SubmissionDate.Month > 6) ||
                     (e.SubmissionDate.Year == DateTime.Now.Year - 1) ||
                     (e.SubmissionDate.Year == DateTime.Now.Year)) && e.TripID == null
-                    ).ToList();
+                    ).Include(e => e.Employee.contact)
+                    .ToList();
             }
 
             var nonTripViews = SetNonTripsViewList(cashInAdvances, expenses);
@@ -338,31 +408,30 @@ namespace VacationsPortal.Controllers
             return RedirectToAction("Index", "NonTrips");
         }
 
+        public ActionResult FillNonTripsViewArchive()
+        {
+            var id = "2013-2014";
+            var seY = id.Split('-'); // e.g. 2018-2019
+            var startYear = seY[0];
+            var endYear = seY[1];
+            var cashInAdvances = _db.CashInAdvances.Where(c =>
+                    ((c.RequestDate.Value.Year.ToString() == startYear && c.RequestDate.Value.Month > 6) ||
+                    (c.RequestDate.Value.Year.ToString() == endYear && c.RequestDate.Value.Month < 7))
+                    && c.TripID == null
+                    ).ToList();
+            var expenses = _db.ExpensesReports.Where(e =>
+                ((e.SubmissionDate.Year.ToString() == startYear && e.SubmissionDate.Month > 6) ||
+                 (e.SubmissionDate.Year.ToString() == endYear && e.SubmissionDate.Month < 7))
+                 && e.TripID == null
+                ).ToList();
 
-        //public ActionResult FillNonTripsViewArchive()
-        //{
-        //    var id = "2013-2014";
-        //    var seY = id.Split('-'); // e.g. 2018-2019
-        //    var startYear = seY[0];
-        //    var endYear = seY[1];
-        //    var cashInAdvances = _db.CashInAdvances.Where(c =>
-        //            ((c.RequestDate.Value.Year.ToString() == startYear && c.RequestDate.Value.Month > 6) ||
-        //            (c.RequestDate.Value.Year.ToString() == endYear && c.RequestDate.Value.Month < 7))
-        //            && c.TripID == null
-        //            ).ToList();
-        //    var expenses = _db.ExpensesReports.Where(e =>
-        //        ((e.SubmissionDate.Year.ToString() == startYear && e.SubmissionDate.Month > 6) ||
-        //         (e.SubmissionDate.Year.ToString() == endYear && e.SubmissionDate.Month < 7))
-        //         && e.TripID == null
-        //        ).ToList();
+            var nonTripViews = SetNonTripsViewListArchive(cashInAdvances, expenses);
 
-        //    var nonTripViews = SetNonTripsViewListArchive(cashInAdvances,expenses);
+            _db.NonTripsView_Archive.AddRange(nonTripViews);
+            _db.SaveChanges();
 
-        //    _db.NonTripsView_Archive.AddRange(nonTripViews);
-        //    _db.SaveChanges();
-
-        //    return RedirectToAction("Index", "NonTrips");
-        //}
+            return RedirectToAction("Index", "NonTrips");
+        }
 
         // GET: NonTrips
         public ActionResult Index()
@@ -407,7 +476,7 @@ namespace VacationsPortal.Controllers
                                 }
                                 else
                                 {
-                                    auditsClone.Remove(audit);
+                                    auditsClone.Remove(audit); // Trip CIA
                                 }
                             }
                             else if (audit.Ref_Table == "ExpensesReport")
@@ -442,7 +511,7 @@ namespace VacationsPortal.Controllers
                                 }
                                 else
                                 {
-                                    auditsClone.Remove(audit);
+                                    auditsClone.Remove(audit); // Trip expense
                                 }
                             }
                         }
@@ -451,42 +520,45 @@ namespace VacationsPortal.Controllers
                             if (audit.Ref_Table == "CIA")
                             {
                                 var cia = _db.CashInAdvances.Find(audit.RecordID);
-                                if (cia?.TripID == null)
+                                if (cia != null)
                                 {
-                                    if (audit.Operation == "Update")
+                                    if (cia.TripID == null)
                                     {
-                                        // Update CIA 
-                                        var nontripV = _db.NonTripsViews.Where(t => t.CIA_Id == cia.Id).ToList();
-                                        _db.NonTripsViews.RemoveRange(nontripV);
-                                        _db.SaveChanges();
+                                        if (audit.Operation == "Update")
+                                        {
+                                            // Update CIA 
+                                            var nontripV = _db.NonTripsViews.Where(t => t.CIA_Id == cia.Id).ToList();
+                                            _db.NonTripsViews.RemoveRange(nontripV);
+                                            _db.SaveChanges();
 
-                                        //Insert new CIA
-                                        _db.NonTripsViews.AddRange(SetNonTripsViewList(new List<CashInAdvance>() { cia }));
-                                        _db.SaveChanges();
+                                            //Insert new CIA
+                                            _db.NonTripsViews.AddRange(SetNonTripsViewList(new List<CashInAdvance>() { cia }));
+                                            _db.SaveChanges();
+                                        }
+                                        else
+                                        {
+                                            // Insert case 1: cia with existing Expenses (rare case, insert cia after expense!)
+                                            if (cia.ExpensesReports.Count > 0)
+                                            {
+                                                // Remove first all existing expenses records, then insert cia normally
+                                                var expsIds = cia.ExpensesReports.Select(exp => exp.ID).ToList();
+                                                foreach (var expsId in expsIds)
+                                                {
+                                                    var nontripsVExp =
+                                                        _db.NonTripsViews.Where(t => t.ExpenseReportId == expsId).ToList();
+                                                    _db.NonTripsViews.RemoveRange(nontripsVExp);
+                                                    _db.SaveChanges();
+                                                }
+                                            }
+                                            // Insert case 2: cia without existing expenses (Normal case, new Non-Trip view)
+                                            _db.NonTripsViews.AddRange(SetNonTripsViewList(new List<CashInAdvance> { cia }));
+                                            _db.SaveChanges();
+                                        }
                                     }
                                     else
                                     {
-                                        // Insert case 1: cia with existing Expenses
-                                        if (cia?.ExpensesReports.Count > 0)
-                                        {
-                                            // Remove first all existing expenses records, then insert cia normally
-                                            var expsIds = cia.ExpensesReports.Select(exp => exp.ID).ToList();
-                                            foreach (var expsId in expsIds)
-                                            {
-                                                var nontripsVExp =
-                                                    _db.NonTripsViews.Where(t => t.ExpenseReportId == expsId).ToList();
-                                                _db.NonTripsViews.RemoveRange(nontripsVExp);
-                                                _db.SaveChanges();
-                                            }
-                                        }
-                                        // Insert case 2: cia without existing expenses
-                                        _db.NonTripsViews.AddRange(SetNonTripsViewList(new List<CashInAdvance>() { cia }));
-                                        _db.SaveChanges();
+                                        auditsClone.Remove(audit); // Trip CIA
                                     }
-                                }
-                                else
-                                {
-                                    auditsClone.Remove(audit);
                                 }
                             }
                             else if (audit.Ref_Table == "ExpensesReport")
@@ -511,7 +583,7 @@ namespace VacationsPortal.Controllers
                                         // Insert case 1: Expense with existing CIA
                                         if (exp.CashInAdvances.Count > 0)
                                         {
-                                            // Remove first all existing expenses records, then insert cia normally
+                                            // Remove first all existing cia records, then insert expense normally
                                             var ciaIds = exp.CashInAdvances.Select(e => e.Id).ToList();
                                             foreach (var ciaId in ciaIds)
                                             {
@@ -523,7 +595,7 @@ namespace VacationsPortal.Controllers
                                         }
 
                                         // Inserting Expense without existing CIA
-                                        _db.NonTripsViews.AddRange(SetNonTripsViewList(null, new List<ExpensesReport> { exp }));
+                                        _db.NonTripsViews.AddRange(SetNonTripsViewList(null, new List<ExpensesReport> { exp }, true));
                                         _db.SaveChanges();
                                     }
                                 }

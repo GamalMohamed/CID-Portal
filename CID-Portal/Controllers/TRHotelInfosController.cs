@@ -141,13 +141,15 @@ namespace VacationsPortal.Controllers
                         }
                         else if (audit.Operation == "Insert" || audit.Operation == "Update")
                         {
-                            var trHotelInfo = _db.TRHotelInfoes.Where(h => h.Id == audit.RecordID).ToList();
+                            var trHotelInfoView = _db.TRHotelInfoViews.Where(h => h.Id == audit.RecordID).ToList();
                             if (audit.Operation == "Update")
                             {
-                                _db.TRHotelInfoes.RemoveRange(trHotelInfo);
+                                _db.TRHotelInfoViews.RemoveRange(trHotelInfoView);
                                 _db.SaveChanges();
                             }
+
                             // Re-insert record
+                            var trHotelInfo = _db.TRHotelInfoes.Where(h => h.Id == audit.RecordID).ToList();
                             _db.TRHotelInfoViews.AddRange(SetTrHotelInfoView(trHotelInfo));
                             _db.SaveChanges();
                         }
@@ -158,7 +160,7 @@ namespace VacationsPortal.Controllers
                     _db.SaveChanges();
                 }
 
-                return View(_db.TRHotelInfoViews.ToList());
+                return View(_db.TRHotelInfoViews.OrderByDescending(h => h.CheckInDate).ToList());
             }
 
             ViewBag.ErrorMsg = "Not authenticated user.";

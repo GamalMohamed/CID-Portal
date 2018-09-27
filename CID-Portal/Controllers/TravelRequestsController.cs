@@ -274,7 +274,7 @@ namespace VacationsPortal.Controllers
         }
 
 
-        // IMP NOTE: THESE ROUTES ARE FOR DEVELOPMENT PURPOSES ONLY!!
+        // CAUTION: THESE ROUTES ARE FOR DEVELOPMENT PURPOSES ONLY!!
         public ActionResult FillTravelRequestsView()
         {
             List<TravelRequest> travelRequests;
@@ -283,7 +283,8 @@ namespace VacationsPortal.Controllers
                 travelRequests = _db.TravelRequests.Where(t =>
                     (t.RequestedOn.Year == DateTime.Now.Year - 1 && t.RequestedOn.Month > 6) ||
                     (t.RequestedOn.Year == DateTime.Now.Year)
-                    ).ToList();
+                    ).Include(t => t.Trips)
+                    .ToList();
             }
             else
             {
@@ -291,7 +292,8 @@ namespace VacationsPortal.Controllers
                     (t.RequestedOn.Year == DateTime.Now.Year - 2 && t.RequestedOn.Month > 6) ||
                     (t.RequestedOn.Year == DateTime.Now.Year - 1) ||
                     (t.RequestedOn.Year == DateTime.Now.Year)
-                    ).ToList();
+                    ).Include(t => t.Trips)
+                    .ToList();
             }
             var trViews = SetTRvmList(travelRequests);
             _db.TravelRequestViews.AddRange(trViews);
@@ -300,22 +302,22 @@ namespace VacationsPortal.Controllers
             return RedirectToAction("Index");
         }
 
-        //public ActionResult FillTravelRequestsViewArchive()
-        //{
-        //    var id = "2013-2014";
-        //    var seY = id.Split('-'); // e.g. 2018-2019
-        //    var startYear = seY[0];
-        //    var endYear = seY[1];
-        //    var travelRequests = _db.TravelRequests.Where(t =>
-        //            ((t.RequestedOn.Year.ToString() == startYear && t.RequestedOn.Month > 6) ||
-        //            (t.RequestedOn.Year.ToString() == endYear && t.RequestedOn.Month < 7))
-        //            ).OrderByDescending(t => t.TRID).ToList();
+        public ActionResult FillTravelRequestsViewArchive()
+        {
+            var id = "2013-2014";
+            var seY = id.Split('-'); // e.g. 2018-2019
+            var startYear = seY[0];
+            var endYear = seY[1];
+            var travelRequests = _db.TravelRequests.Where(t =>
+                    ((t.RequestedOn.Year.ToString() == startYear && t.RequestedOn.Month > 6) ||
+                    (t.RequestedOn.Year.ToString() == endYear && t.RequestedOn.Month < 7))
+                    ).OrderByDescending(t => t.TRID).ToList();
 
-        //    _db.TravelRequestView_Archive.AddRange(SetTRvmListArchive(travelRequests));
-        //    _db.SaveChanges();
+            _db.TravelRequestView_Archive.AddRange(SetTRvmListArchive(travelRequests));
+            _db.SaveChanges();
 
-        //    return RedirectToAction("Index");
-        //}
+            return RedirectToAction("Index");
+        }
 
         // GET: TravelRequests
         public ActionResult Index()
@@ -341,7 +343,7 @@ namespace VacationsPortal.Controllers
                             }
                             else if (audit.Ref_Table == "Trips")
                             {
-                                auditsClone.Remove(audit); // Leave it to be consumed by the tripView table
+                                auditsClone.Remove(audit); // Ignore, leave it to be consumed by the tripView table
                             }
                             else if (audit.Ref_Table == "Route")
                             {
@@ -372,9 +374,12 @@ namespace VacationsPortal.Controllers
                                             if (aud != null)
                                             {
                                                 var remark = aud.Remark;
-                                                aud.Remark = remark[0] + "R" + remark[2];
+                                                aud.Remark = remark[0].ToString() + "R" + remark[2].ToString();
                                                 _db.SaveChanges();
-                                                auditsClone.Remove(aud);
+                                                if (aud.Remark != "TRV")
+                                                {
+                                                    auditsClone.Remove(aud);
+                                                }
                                             }
                                         }
                                     }
@@ -393,7 +398,7 @@ namespace VacationsPortal.Controllers
                                     _db.SaveChanges();
                                 }
 
-                                _db.TravelRequestViews.AddRange(SetTRvmList(new List<TravelRequest>() { tr }));
+                                _db.TravelRequestViews.AddRange(SetTRvmList(new List<TravelRequest> { tr }));
                                 _db.SaveChanges();
                             }
                             else if (audit.Ref_Table == "Trips")
@@ -438,16 +443,19 @@ namespace VacationsPortal.Controllers
                                             if (aud != null)
                                             {
                                                 var remark = aud.Remark;
-                                                aud.Remark = remark[0] + "R" + remark[2];
+                                                aud.Remark = remark[0].ToString() + "R" + remark[2].ToString();
                                                 _db.SaveChanges();
-                                                auditsClone.Remove(aud);
+                                                if (aud.Remark != "TRV")
+                                                {
+                                                    auditsClone.Remove(aud);
+                                                }
                                             }
                                         }
                                     }
                                 }
                                 else if(audit.Operation == "Insert")
                                 {
-                                    auditsClone.Remove(audit); // Leave it to be consumed by the tripView table
+                                    auditsClone.Remove(audit); // ignore, leave it to be consumed by the tripView table
                                 }
                             }
                             else if (audit.Ref_Table == "Route")
@@ -479,9 +487,12 @@ namespace VacationsPortal.Controllers
                                             if (aud != null)
                                             {
                                                 var remark = aud.Remark;
-                                                aud.Remark = remark[0] + "R" + remark[2];
+                                                aud.Remark = remark[0].ToString() + "R" + remark[2].ToString();
                                                 _db.SaveChanges();
-                                                auditsClone.Remove(aud);
+                                                if (aud.Remark != "TRV")
+                                                {
+                                                    auditsClone.Remove(aud);
+                                                }
                                             }
                                         }
                                     }

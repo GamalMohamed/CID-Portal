@@ -45,7 +45,7 @@ namespace VacationsPortal.Controllers
                         Employee = route.Trip?.Employee?.contact?.FullName,
                         RouteId = route.routeId
                     };
-                    visaViews.Add(visaV); 
+                    visaViews.Add(visaV);
                 }
             }
 
@@ -71,7 +71,11 @@ namespace VacationsPortal.Controllers
             //        ).ToList();
             //}
 
-            var visas = SetVisasView(_db.Routes.Where(r => r.requireVisa.Value).ToList());
+            var visas = SetVisasView(_db.Routes.Where(r => r.requireVisa.Value)
+                                                    .Include(v => v.Trip)
+                                                    .Include(v => v.Currency)
+                                                    .Include(v=>v.Country)
+                                                    .ToList());
             _db.VisasViews.AddRange(visas);
             _db.SaveChanges();
 
@@ -95,17 +99,23 @@ namespace VacationsPortal.Controllers
                             if (audit.Remark[2] == 'X')
                             {
                                 var visasView = _db.VisasViews.Where(v => v.RouteId == audit.RecordID).ToList();
-                                _db.VisasViews.RemoveRange(visasView);
-                                _db.SaveChanges();
-
-                                // Sign!
-                                var aud = _db.Audits.Find(audit.Id);
-                                if (aud != null)
+                                if (visasView.Count > 0)
                                 {
-                                    var remark = aud.Remark;
-                                    aud.Remark = remark[0] + remark[1] + "V";
+                                    _db.VisasViews.RemoveRange(visasView);
                                     _db.SaveChanges();
-                                    auditsClone.Remove(aud);
+
+                                    // Sign!
+                                    var aud = _db.Audits.Find(audit.Id);
+                                    if (aud != null)
+                                    {
+                                        var remark = aud.Remark;
+                                        aud.Remark = remark[0].ToString() + remark[1].ToString() + "V";
+                                        _db.SaveChanges();
+                                        if (aud.Remark != "TRV")
+                                        {
+                                            auditsClone.Remove(aud);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -113,7 +123,6 @@ namespace VacationsPortal.Controllers
                         {
                             if (audit.Remark[2] == 'X')
                             {
-                                var visaRoutes = _db.Routes.Where(h => h.routeId == audit.RecordID).ToList();
                                 if (audit.Operation == "Update")
                                 {
                                     var visaView = _db.VisasViews.Where(v => v.RouteId == audit.RecordID).ToList();
@@ -122,6 +131,7 @@ namespace VacationsPortal.Controllers
                                 }
 
                                 // Re-insert record
+                                var visaRoutes = _db.Routes.Where(h => h.routeId == audit.RecordID).ToList();
                                 _db.VisasViews.AddRange(SetVisasView(visaRoutes));
                                 _db.SaveChanges();
 
@@ -130,9 +140,12 @@ namespace VacationsPortal.Controllers
                                 if (aud != null)
                                 {
                                     var remark = aud.Remark;
-                                    aud.Remark = remark[0] + remark[1] + "V";
+                                    aud.Remark = remark[0].ToString() + remark[1].ToString() + "V";
                                     _db.SaveChanges();
-                                    auditsClone.Remove(aud);
+                                    if (aud.Remark != "TRV")
+                                    {
+                                        auditsClone.Remove(aud);
+                                    }
                                 }
                             }
                         }
@@ -196,7 +209,7 @@ namespace VacationsPortal.Controllers
                         rT.Currency =
                             _db.Currencies.FirstOrDefault(c => c.CurrencyName == route.Currency.CurrencyName);
                     else
-                        rT.VisaCostCurrencyID = null;
+                        rT.VisaCostCurrencyID = null; // Kill the relation!
 
                     _db.SaveChanges();
                     return RedirectToAction("Index");

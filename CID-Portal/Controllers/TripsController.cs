@@ -49,34 +49,59 @@ namespace VacationsPortal.Controllers
                     // Fill Trip CIA, plus its Expenses (if exist)
                     foreach (var cia in trip.CashInAdvances)
                     {
-                        var tripvm2 = tripvm;
-                        tripvm2.CIA_Id = cia.Id;
-                        tripvm2.CIA_Status = cia.CashInAdvanceStatu.CashInAdvanceStatus;
-                        tripvm2.CurrencyName = cia.Currency.CurrencyName;
-                        tripvm2.CIA_Amount_InCurrency = cia.Amount ?? 0;
-                        tripvm2.CIA_ExchangeRate = cia.ExchangeRate ?? 0;
-                        tripvm2.CIA_Amount_InEGP = tripvm2.CIA_Amount_InCurrency *
+                        var tripvm2 = new TripsView
+                        {
+                            TripID = tripvm.TripID,
+                            EmployeeName = tripvm.EmployeeName,
+                            StartDate = tripvm.StartDate,
+                            EndDate = tripvm.EndDate,
+                            Country = tripvm.Country,
+                            CIA_Id = cia.Id,
+                            CIA_Status = cia.CashInAdvanceStatu.CashInAdvanceStatus,
+                            CurrencyName = cia.Currency.CurrencyName,
+                            CIA_Amount_InCurrency = cia.Amount ?? 0,
+                            CIA_ExchangeRate = cia.ExchangeRate ?? 0,
+                            CIA_Reason = cia.Reason,
+                            OperationsApprovalDate = cia.OperationApprovalDate
+                        };
+                        if (tripvm2.CIA_ExchangeRate != null)
+                            tripvm2.CIA_Amount_InEGP = tripvm2.CIA_Amount_InCurrency *
                                                        (decimal)tripvm2.CIA_ExchangeRate;
-                        tripvm2.CIA_Reason = cia.Reason;
-                        tripvm2.OperationsApprovalDate = cia.OperationApprovalDate;
 
 
                         if (cia.ExpensesReports.Count > 0)
                         {
                             foreach (var ciaExpensesReport in cia.ExpensesReports)
                             {
-                                var tripvm3 = tripvm2;
-                                tripvm3.ExpenseReportId = ciaExpensesReport.ID;
-                                tripvm3.SubmissionDate = ciaExpensesReport.SubmissionDate;
-                                tripvm3.ApprovalDate = ciaExpensesReport.ApprovalDate;
-                                tripvm3.ExpenseReportStatus = ciaExpensesReport.ExpenseReportStatu.StatusName;
-                                tripvm3.TotalAmountInEGP = ciaExpensesReport.TotalAmountInUSD ?? 0;
-                                tripvm3.CIAExpenseReport = ciaExpensesReport.CashInAdvance ?? 0; //(double)tripvm3.CIA_Amount_InEGP;
+                                var tripvm3 = new TripsView
+                                {
+                                    TripID = tripvm2.TripID,
+                                    EmployeeName = tripvm2.EmployeeName,
+                                    StartDate = tripvm2.StartDate,
+                                    EndDate = tripvm2.EndDate,
+                                    Country = tripvm2.Country,
+                                    CIA_Id = tripvm2.CIA_Id,
+                                    CIA_Status = tripvm2.CIA_Status,
+                                    CurrencyName = tripvm2.CurrencyName,
+                                    CIA_Amount_InCurrency = tripvm2.CIA_Amount_InCurrency ?? 0,
+                                    CIA_ExchangeRate = tripvm2.CIA_ExchangeRate ?? 0,
+                                    CIA_Reason = tripvm2.CIA_Reason,
+                                    OperationsApprovalDate = tripvm2.OperationsApprovalDate,
+                                    ExpenseReportId = ciaExpensesReport.ID,
+                                    SubmissionDate = ciaExpensesReport.SubmissionDate,
+                                    ApprovalDate = ciaExpensesReport.ApprovalDate,
+                                    ExpenseReportStatus = ciaExpensesReport.ExpenseReportStatu.StatusName,
+                                    TotalAmountInEGP = ciaExpensesReport.TotalAmountInUSD ?? 0,
+                                    CIAExpenseReport = ciaExpensesReport.CashInAdvance ?? 0,
+                                    SettledAmount = ciaExpensesReport.SettledAmount ?? 0,
+                                    SettlementDate = ciaExpensesReport.SettlementDate,
+                                    OperationsComment = ciaExpensesReport.OperationsComment
+                                };
+                                if (tripvm3.CIA_ExchangeRate != null)
+                                    tripvm3.CIA_Amount_InEGP = tripvm3.CIA_Amount_InCurrency *
+                                                               (decimal)tripvm3.CIA_ExchangeRate;
                                 tripvm3.AmountToEmployeeInEGP = (tripvm3.TotalAmountInEGP - tripvm3.CIAExpenseReport) ?? 0;
-                                tripvm3.SettledAmount = ciaExpensesReport.SettledAmount ?? 0;
-                                tripvm3.SettlementDate = ciaExpensesReport.SettlementDate;
                                 tripvm3.RemainingBalance = Math.Abs((decimal)tripvm3.AmountToEmployeeInEGP) - tripvm3.SettledAmount;
-                                tripvm3.OperationsComment = ciaExpensesReport.OperationsComment;
 
                                 tripsvm.Add(tripvm3); // Trip with CIA and expenses
                             }
@@ -137,34 +162,59 @@ namespace VacationsPortal.Controllers
                     // Fill Trip CIA, plus its Expenses (if exist)
                     foreach (var cia in trip.CashInAdvances)
                     {
-                        var tripvm2 = tripvm;
-                        tripvm2.CIA_Id = cia.Id;
-                        tripvm2.CIA_Status = cia.CashInAdvanceStatu.CashInAdvanceStatus;
-                        tripvm2.CurrencyName = cia.Currency.CurrencyName;
-                        tripvm2.CIA_Amount_InCurrency = cia.Amount ?? 0;
-                        tripvm2.CIA_ExchangeRate = cia.ExchangeRate ?? 0;
-                        tripvm2.CIA_Amount_InEGP = tripvm2.CIA_Amount_InCurrency *
+                        var tripvm2 = new TripsView_Archive
+                        {
+                            TripID = tripvm.TripID,
+                            EmployeeName = tripvm.EmployeeName,
+                            StartDate = tripvm.StartDate,
+                            EndDate = tripvm.EndDate,
+                            Country = tripvm.Country,
+                            CIA_Id = cia.Id,
+                            CIA_Status = cia.CashInAdvanceStatu.CashInAdvanceStatus,
+                            CurrencyName = cia.Currency.CurrencyName,
+                            CIA_Amount_InCurrency = cia.Amount ?? 0,
+                            CIA_ExchangeRate = cia.ExchangeRate ?? 0,
+                            CIA_Reason = cia.Reason,
+                            OperationsApprovalDate = cia.OperationApprovalDate
+                        };
+                        if (tripvm2.CIA_ExchangeRate != null)
+                            tripvm2.CIA_Amount_InEGP = tripvm2.CIA_Amount_InCurrency *
                                                        (decimal)tripvm2.CIA_ExchangeRate;
-                        tripvm2.CIA_Reason = cia.Reason;
-                        tripvm2.OperationsApprovalDate = cia.OperationApprovalDate;
 
 
                         if (cia.ExpensesReports.Count > 0)
                         {
                             foreach (var ciaExpensesReport in cia.ExpensesReports)
                             {
-                                var tripvm3 = tripvm2;
-                                tripvm3.ExpenseReportId = ciaExpensesReport.ID;
-                                tripvm3.SubmissionDate = ciaExpensesReport.SubmissionDate;
-                                tripvm3.ApprovalDate = ciaExpensesReport.ApprovalDate;
-                                tripvm3.ExpenseReportStatus = ciaExpensesReport.ExpenseReportStatu.StatusName;
-                                tripvm3.TotalAmountInEGP = ciaExpensesReport.TotalAmountInUSD ?? 0;
-                                tripvm3.CIAExpenseReport = ciaExpensesReport.CashInAdvance ?? 0; //(double)tripvm3.CIA_Amount_InEGP;
+                                var tripvm3 = new TripsView_Archive
+                                {
+                                    TripID = tripvm2.TripID,
+                                    EmployeeName = tripvm2.EmployeeName,
+                                    StartDate = tripvm2.StartDate,
+                                    EndDate = tripvm2.EndDate,
+                                    Country = tripvm2.Country,
+                                    CIA_Id = tripvm2.CIA_Id,
+                                    CIA_Status = tripvm2.CIA_Status,
+                                    CurrencyName = tripvm2.CurrencyName,
+                                    CIA_Amount_InCurrency = tripvm2.CIA_Amount_InCurrency ?? 0,
+                                    CIA_ExchangeRate = tripvm2.CIA_ExchangeRate ?? 0,
+                                    CIA_Reason = tripvm2.CIA_Reason,
+                                    OperationsApprovalDate = tripvm2.OperationsApprovalDate,
+                                    ExpenseReportId = ciaExpensesReport.ID,
+                                    SubmissionDate = ciaExpensesReport.SubmissionDate,
+                                    ApprovalDate = ciaExpensesReport.ApprovalDate,
+                                    ExpenseReportStatus = ciaExpensesReport.ExpenseReportStatu.StatusName,
+                                    TotalAmountInEGP = ciaExpensesReport.TotalAmountInUSD ?? 0,
+                                    CIAExpenseReport = ciaExpensesReport.CashInAdvance ?? 0,
+                                    SettledAmount = ciaExpensesReport.SettledAmount ?? 0,
+                                    SettlementDate = ciaExpensesReport.SettlementDate,
+                                    OperationsComment = ciaExpensesReport.OperationsComment
+                                };
+                                if (tripvm3.CIA_ExchangeRate != null)
+                                    tripvm3.CIA_Amount_InEGP = tripvm3.CIA_Amount_InCurrency *
+                                                               (decimal)tripvm3.CIA_ExchangeRate;
                                 tripvm3.AmountToEmployeeInEGP = (tripvm3.TotalAmountInEGP - tripvm3.CIAExpenseReport) ?? 0;
-                                tripvm3.SettledAmount = ciaExpensesReport.SettledAmount ?? 0;
-                                tripvm3.SettlementDate = ciaExpensesReport.SettlementDate;
                                 tripvm3.RemainingBalance = Math.Abs((decimal)tripvm3.AmountToEmployeeInEGP) - tripvm3.SettledAmount;
-                                tripvm3.OperationsComment = ciaExpensesReport.OperationsComment;
 
                                 tripsvm.Add(tripvm3); // Trip with CIA and expenses
                             }
@@ -205,7 +255,7 @@ namespace VacationsPortal.Controllers
             return tripsvm;
         }
 
-        // IMP NOTE: THESE ROUTES ARE FOR DEVELOPMENT PURPOSES ONLY!!
+        // CAUTION: THESE ROUTES ARE FOR DEVELOPMENT PURPOSES ONLY!!
         public ActionResult FillTripsView()
         {
             List<Trip> trips;
@@ -214,7 +264,11 @@ namespace VacationsPortal.Controllers
                 trips = _db.Trips.Where(t =>
                     (t.StartDate.Value.Year == DateTime.Now.Year - 1 && t.StartDate.Value.Month > 6) ||
                     (t.StartDate.Value.Year == DateTime.Now.Year)
-                    ).ToList();
+                    ).Include(t => t.Employee.contact)
+                     .Include(t => t.Routes)
+                     .Include(t => t.CashInAdvances)
+                     .Include(t => t.ExpensesReports)
+                     .ToList();
             }
             else
             {
@@ -222,33 +276,37 @@ namespace VacationsPortal.Controllers
                     (t.StartDate.Value.Year == DateTime.Now.Year - 2 && t.StartDate.Value.Month > 6) ||
                     (t.StartDate.Value.Year == DateTime.Now.Year - 1) ||
                     (t.StartDate.Value.Year == DateTime.Now.Year)
-                    ).ToList();
+                    ).Include(t => t.Employee.contact)
+                     .Include(t => t.Routes)
+                     .Include(t => t.CashInAdvances)
+                     .Include(t => t.ExpensesReports)
+                     .ToList();
             }
 
-            var tripViews = SetTripsViewList(trips.OrderByDescending(t => t.StartDate).ToList());
+            var tripViews = SetTripsViewList(trips);
             _db.TripsViews.AddRange(tripViews);
             _db.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
-        //public ActionResult FillTripsViewArchive()
-        //{
-        //    var s = "2013-2014";
-        //    var seY = s.Split('-'); // e.g. 2018-2019
-        //    var startYear = seY[0];
-        //    var endYear = seY[1];
-        //    var trips = _db.Trips.Where(t =>
-        //            (t.StartDate.Value.Year.ToString() == startYear && t.StartDate.Value.Month > 6) ||
-        //            (t.StartDate.Value.Year.ToString() == endYear && t.StartDate.Value.Month < 7)
-        //            ).ToList();
+        public ActionResult FillTripsViewArchive()
+        {
+            var s = "2013-2014";
+            var seY = s.Split('-'); // e.g. 2018-2019
+            var startYear = seY[0];
+            var endYear = seY[1];
+            var trips = _db.Trips.Where(t =>
+                    (t.StartDate.Value.Year.ToString() == startYear && t.StartDate.Value.Month > 6) ||
+                    (t.StartDate.Value.Year.ToString() == endYear && t.StartDate.Value.Month < 7)
+                    ).ToList();
 
-        //    var tripViews = SetTripsViewListArchive(trips.OrderByDescending(t => t.StartDate).ToList());
-        //    _db.TripsView_Archive.AddRange(tripViews);
-        //    _db.SaveChanges();
+            var tripViews = SetTripsViewListArchive(trips.OrderByDescending(t => t.StartDate).ToList());
+            _db.TripsView_Archive.AddRange(tripViews);
+            _db.SaveChanges();
 
-        //    return RedirectToAction("Index");
-        //}
+            return RedirectToAction("Index");
+        }
 
         // GET: Trips
         public ActionResult Index()
@@ -286,16 +344,18 @@ namespace VacationsPortal.Controllers
                                     var trip = _db.Trips.Find(tripVcia[0].TripID);
                                     // Get All tripViews realted to this trip
                                     var tripsVAll = _db.TripsViews.Where(t => t.TripID == tripVcia[0].TripID).ToList();
+                                    
                                     // Remove all tripViews of this trip
                                     _db.TripsViews.RemoveRange(tripsVAll);
                                     _db.SaveChanges();
-                                    //Recreate the tripView again
-                                    _db.TripsViews.AddRange(SetTripsViewList(new List<Trip>() { trip }));
+
+                                    //Recreate the tripViews again
+                                    _db.TripsViews.AddRange(SetTripsViewList(new List<Trip> { trip }));
                                     _db.SaveChanges();
                                 }
                                 else
                                 {
-                                    auditsClone.Remove(audit); //Non-trip cia
+                                    auditsClone.Remove(audit); //Non-trip CIA
                                 }
                             }
                             else if (audit.Ref_Table == "ExpensesReport")
@@ -309,17 +369,17 @@ namespace VacationsPortal.Controllers
                                     _db.TripsViews.RemoveRange(tripsVAll);
                                     _db.SaveChanges();
 
-                                    _db.TripsViews.AddRange(SetTripsViewList(new List<Trip>() { trip }));
+                                    _db.TripsViews.AddRange(SetTripsViewList(new List<Trip> { trip }));
                                     _db.SaveChanges();
                                 }
                                 else
                                 {
-                                    auditsClone.Remove(audit);
+                                    auditsClone.Remove(audit); // Non-trip expense
                                 }
                             }
                             else if (audit.Ref_Table == "Route")
                             {
-                                // Same code as in the insert or the update!
+                                // Same as in the insert/update!
                                 if (audit.TripID != null)
                                 {
                                     var trip = _db.Trips.Find(audit.TripID);
@@ -341,9 +401,12 @@ namespace VacationsPortal.Controllers
                                         if (aud != null)
                                         {
                                             var remark = aud.Remark;
-                                            aud.Remark = "T" + remark[1] + remark[2];
+                                            aud.Remark = "T" + remark[1].ToString() + remark[2].ToString();
                                             _db.SaveChanges();
-                                            auditsClone.Remove(aud);
+                                            if (aud.Remark != "TRV")
+                                            {
+                                                auditsClone.Remove(aud);
+                                            }
                                         }
                                     }
                                 }
@@ -383,9 +446,12 @@ namespace VacationsPortal.Controllers
                                             if (aud != null)
                                             {
                                                 var remark = aud.Remark;
-                                                aud.Remark = "T" + remark[1] + remark[2];
+                                                aud.Remark = "T" + remark[1].ToString() + remark[2].ToString();
                                                 _db.SaveChanges();
-                                                auditsClone.Remove(aud);
+                                                if (aud.Remark != "TRV")
+                                                {
+                                                    auditsClone.Remove(aud);
+                                                }
                                             }
                                         }
                                     }
@@ -404,41 +470,48 @@ namespace VacationsPortal.Controllers
                             else if (audit.Ref_Table == "CIA")
                             {
                                 var cia = _db.CashInAdvances.Find(audit.RecordID);
-                                if (cia?.TripID != null)
+                                if (cia != null)
                                 {
-                                    // Delete Outdated tripView records
-                                    var tripV = _db.TripsViews.Where(t => t.TripID == cia.TripID).ToList();
-                                    _db.TripsViews.RemoveRange(tripV);
-                                    _db.SaveChanges();
+                                    if (cia.TripID != null)
+                                    {
+                                        // Delete Outdated tripView records
+                                        var tripV = _db.TripsViews.Where(t => t.TripID == cia.TripID).ToList();
+                                        _db.TripsViews.RemoveRange(tripV);
+                                        _db.SaveChanges();
 
-                                    // Re-create the tripView again
-                                    _db.TripsViews.AddRange(SetTripsViewList(new List<Trip>() { cia.Trip }));
-                                    _db.SaveChanges();
-                                }
-                                else
-                                {
-                                    auditsClone.Remove(audit);
+                                        // Re-create the tripView again
+                                        _db.TripsViews.AddRange(SetTripsViewList(new List<Trip> { cia.Trip }));
+                                        _db.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        auditsClone.Remove(audit); // Non-trip CIA
+                                    }
                                 }
                             }
                             else if (audit.Ref_Table == "ExpensesReport")
                             {
                                 var exp = _db.ExpensesReports.Find(audit.RecordID);
-                                if (exp?.TripID != null)
+                                if (exp != null)
                                 {
-                                    var tripV = _db.TripsViews.Where(t => t.TripID == exp.TripID).ToList();
-                                    _db.TripsViews.RemoveRange(tripV);
-                                    _db.SaveChanges();
+                                    if (exp.TripID != null)
+                                    {
+                                        var tripV = _db.TripsViews.Where(t => t.TripID == exp.TripID).ToList();
+                                        _db.TripsViews.RemoveRange(tripV);
+                                        _db.SaveChanges();
 
-                                    _db.TripsViews.AddRange(SetTripsViewList(new List<Trip>() { exp.Trip }));
-                                    _db.SaveChanges();
-                                }
-                                else
-                                {
-                                    auditsClone.Remove(audit);
+                                        _db.TripsViews.AddRange(SetTripsViewList(new List<Trip>() { exp.Trip }));
+                                        _db.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        auditsClone.Remove(audit); // Non-Trip expense
+                                    }
                                 }
                             }
                             else if (audit.Ref_Table == "Route")
                             {
+                                // Each of the Trips, Travel Requests and Visas views has its own sign 
                                 if (audit.Remark[0] == 'X')
                                 {
                                     if (audit.TripID != null)
@@ -462,9 +535,12 @@ namespace VacationsPortal.Controllers
                                             if (aud != null)
                                             {
                                                 var remark = aud.Remark;
-                                                aud.Remark = "T" + remark[1] + remark[2];
+                                                aud.Remark = "T" + remark[1].ToString() + remark[2].ToString();
                                                 _db.SaveChanges();
-                                                auditsClone.Remove(aud);
+                                                if (aud.Remark != "TRV")
+                                                {
+                                                    auditsClone.Remove(aud);
+                                                }
                                             }
                                         }
                                     }
@@ -478,23 +554,7 @@ namespace VacationsPortal.Controllers
                     _db.SaveChanges();
                 }
 
-                //if (DateTime.Now.Month > 6)
-                //{
-                //    tripsView = _db.TripsViews.Where(t =>
-                //        (t.StartDate.Value.Year == DateTime.Now.Year - 1 && t.StartDate.Value.Month > 6) ||
-                //        (t.StartDate.Value.Year == DateTime.Now.Year)
-                //        ).ToList();
-                //}
-                //else
-                //{
-                //    tripsView = _db.TripsViews.Where(t =>
-                //        (t.StartDate.Value.Year == DateTime.Now.Year - 2 && t.StartDate.Value.Month > 6) ||
-                //        (t.StartDate.Value.Year == DateTime.Now.Year - 1) ||
-                //        (t.StartDate.Value.Year == DateTime.Now.Year)
-                //        ).ToList();
-                //}
-
-                return View(_db.TripsViews.ToList());
+                return View(_db.TripsViews.OrderByDescending(t => t.Id).ToList());
             }
 
             ViewBag.ErrorMsg = "Not authenticated user.";
