@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit Settlement</h2>
+<h2>Edit Non-trip</h2>
 
 
 @using (Html.BeginForm())
@@ -30,6 +30,13 @@
                     @Html.ValidationMessageFor(model => model.CashInAdvance.OperationsComment, "", new { @class = "text-danger" })
                 </div>
             </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.CashInAdvance.CashInAdvanceStatus, "CIA Status", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.CashInAdvance.CashInAdvanceStatus, ViewBag.CIAStatuses as SelectList, "-select status-", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CashInAdvance.CashInAdvanceStatus, "", new { @class = "text-danger" })
+                </div>
+            </div>
         }
         else
         {
@@ -46,6 +53,24 @@
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.ExpensesReport.OperationsComment, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.ExpensesReport.OperationsComment, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            if (Model.CashInAdvance != null)
+            {
+                @Html.HiddenFor(model => model.CashInAdvance.Id)
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CashInAdvance.CashInAdvanceStatus, "CIA Status", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.CashInAdvance.CashInAdvanceStatus, ViewBag.CIAStatuses as SelectList, "-select status-", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CashInAdvance.CashInAdvanceStatus, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            }
+            <div class="form-group">
+                @Html.LabelFor(model => model.ExpensesReport.ExpenseReportStatu, "Expense Status", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.ExpensesReport.StatusID, ViewBag.ExpenseStatuses as SelectList, "-select status-", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ExpensesReport.ExpenseReportStatu, "", new { @class = "text-danger" })
                 </div>
             </div>
 

@@ -19,8 +19,8 @@ namespace VacationsPortal.Controllers
 
         public bool IsAuthorized()
         {
-            //var loggedUserEmail = "v-gamoha@microsoft.com";
-            var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            var loggedUserEmail = "v-gamoha@microsoft.com";
+            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
             var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
             if (authUser?.Privilege != null && (Privilege.Admin == (Privilege)authUser.Privilege ||
                                                 Privilege.Travel == (Privilege)authUser.Privilege))
@@ -63,7 +63,10 @@ namespace VacationsPortal.Controllers
                             CIA_Amount_InCurrency = cia.Amount ?? 0,
                             CIA_ExchangeRate = cia.ExchangeRate ?? 0,
                             CIA_Reason = cia.Reason,
-                            OperationsApprovalDate = cia.OperationApprovalDate
+                            OperationsApprovalDate = cia.OperationApprovalDate,
+                            SettledAmount = cia.SettledAmount ?? 0,
+                            SettlementDate = cia.SettlementDate,
+                            OperationsComment = cia.OperationsComment
                         };
                         if (tripvm2.CIA_ExchangeRate != null)
                             tripvm2.CIA_Amount_InEGP = tripvm2.CIA_Amount_InCurrency *
@@ -579,7 +582,7 @@ namespace VacationsPortal.Controllers
                     return HttpNotFound();
                 }
                 settlementvm.CashInAdvance = cia;
-                settlementvm.ExpensesReport = null;
+                settlementvm.ExpensesReport = null; // did so for the nullity check in the edit view
             }
             else
             {
@@ -588,9 +591,15 @@ namespace VacationsPortal.Controllers
                 {
                     return HttpNotFound();
                 }
+                if (ciaId != null)
+                {
+                    var cia = _db.CashInAdvances.Find(ciaId);
+                    settlementvm.CashInAdvance = cia;
+                }
                 settlementvm.ExpensesReport = exp;
             }
-
+            ViewBag.CIAStatuses = new SelectList(_db.CashInAdvanceStatus.ToList(), "ID", "CashInAdvanceStatus"); 
+            ViewBag.ExpenseStatuses = new SelectList(_db.ExpenseReportStatus.ToList(), "StatusID", "StatusName"); 
             return View(settlementvm);
         }
 
@@ -609,7 +618,11 @@ namespace VacationsPortal.Controllers
                         return HttpNotFound();
                     }
                     cia.SettledAmount = settlementvm.CashInAdvance.SettledAmount;
+                    cia.SettlementDate = DateTime.Now.Date;
                     cia.OperationsComment = settlementvm.CashInAdvance.OperationsComment;
+                    cia.CashInAdvanceStatu = _db.CashInAdvanceStatus.Find(settlementvm.CashInAdvance.CashInAdvanceStatus);
+
+                    _db.SaveChanges();
                 }
                 else
                 {
@@ -619,10 +632,23 @@ namespace VacationsPortal.Controllers
                         return HttpNotFound();
                     }
                     exp.SettledAmount = settlementvm.ExpensesReport.SettledAmount;
+                    exp.SettlementDate = DateTime.Now.Date;
                     exp.OperationsComment = settlementvm.ExpensesReport.OperationsComment;
+                    exp.ExpenseReportStatu = _db.ExpenseReportStatus.Find(settlementvm.ExpensesReport.StatusID);
+
+                    if (settlementvm.CashInAdvance != null)
+                    {
+                        var cia = _db.CashInAdvances.Find(settlementvm.CashInAdvance.Id);
+                        if (cia != null)
+                        {
+                            cia.CashInAdvanceStatu = _db.CashInAdvanceStatus.Find(settlementvm.CashInAdvance.CashInAdvanceStatus);
+                            _db.SaveChanges();
+                        }
+                    }
+
+                    _db.SaveChanges();
                 }
 
-                _db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(settlementvm);

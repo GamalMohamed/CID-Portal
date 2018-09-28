@@ -117,7 +117,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.OperationsComment)
             </th>
-            @*<th></th>*@
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -217,7 +217,8 @@
                     @if (item.SettledAmount != null)
                     {
                         var s = Math.Round(item.SettledAmount.Value, 2).ToString(CultureInfo.InvariantCulture);
-                        @Html.ActionLink(s, "Edit", new { ExpId = item.ExpenseReportId, CIAId = item.CIA_Id })
+                        @*@Html.ActionLink(s, "Edit", new { ExpId = item.ExpenseReportId, CIAId = item.CIA_Id })*@
+                        @Html.DisplayFor(modelItem => s)
                     }
                 </td>
                 <td>
@@ -236,11 +237,12 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.OperationsComment)
                 </td>
-                @*<td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                    </td>*@
+                <td>
+                    @if (item.ExpenseReportId != null || item.CIA_Id != null)
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { ExpId = item.ExpenseReportId, CIAId = item.CIA_Id })
+                    }
+                </td>
             </tr>
         }
     </tbody>

@@ -108,6 +108,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.OperationsComment)
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -151,7 +152,10 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @item.SubmissionDate.ToShortDateString()
+                @if (item.SubmissionDate.ToShortDateString() != "1/1/0001")
+                {
+                    @item.SubmissionDate.ToShortDateString()
+                }
             </td>
             <td>
                 @if (item.ApprovalDate != null)
@@ -189,7 +193,8 @@
                 @if (item.SettledAmount != null)
                 {
                     var s = Math.Round(item.SettledAmount.Value, 2).ToString(CultureInfo.InvariantCulture);
-                    @Html.ActionLink(s, "Edit", new { ExpId = item.ExpenseReportId, CIAId = item.CIA_Id })
+                    @*@Html.ActionLink(s, "Edit", new { ExpId = item.ExpenseReportId, CIAId = item.CIA_Id })*@
+                    @Html.DisplayFor(modelItem => s)
                 }
             </td>
             <td>
@@ -207,6 +212,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OperationsComment)
+            </td>
+            <td>
+                @if (item.ExpenseReportId != null || item.CIA_Id != null)
+                {
+                    @Html.ActionLink("Edit", "Edit", new { ExpId = item.ExpenseReportId, CIAId = item.CIA_Id })
+                }
             </td>
         </tr>
         }
