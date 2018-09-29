@@ -45,21 +45,30 @@
             @Html.DisplayNameFor(model => model.HotelRate)
         </dt>
         <dd>
-            @Html.DisplayName(Model.HotelRate + " " + Model.Currency.CurrencyName)
+            @if (Model.Currency != null)
+            {
+                @Html.DisplayName(Model.HotelRate + " " + Model.Currency.CurrencyName)
+            }
         </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Hotel)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Hotel.Name)
+            @if (Model.Hotel != null)
+            {
+                @Html.DisplayFor(model => model.Hotel.Name)
+            }
         </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.PaymentMethod)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.PaymentMethod.MethodName)
+            @if (Model.PaymentMethod != null)
+            {
+                @Html.DisplayFor(model => model.PaymentMethod.MethodName)
+            }
         </dd>
     </dl>
 </div>

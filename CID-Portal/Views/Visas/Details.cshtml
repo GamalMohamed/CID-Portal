@@ -14,21 +14,30 @@
             @Html.DisplayName("TRID")
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Trip.TRID)
+            @if (Model.Trip != null)
+            {
+                @Html.DisplayFor(model => model.Trip.TRID)
+            }
         </dd>
 
         <dt>
             @Html.DisplayName("Employeee Name")
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Trip.Employee.contact.FullName)
+            @if (Model.Trip != null)
+            {
+                @Html.DisplayFor(model => model.Trip.Employee.contact.FullName)
+            }
         </dd>
 
         <dt>
             @Html.DisplayName("Country")
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Country.CountryName)
+            @if (Model.Country != null)
+            {
+                @Html.DisplayFor(model => model.Country.CountryName)
+            }
         </dd>
 
         <dt>
@@ -42,7 +51,10 @@
             @Html.DisplayNameFor(model => model.Currency)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Currency.CurrencyName)
+            @if (Model.Currency != null)
+            {
+                @Html.DisplayFor(model => model.Currency.CurrencyName)
+            }
         </dd>
 
     </dl>
