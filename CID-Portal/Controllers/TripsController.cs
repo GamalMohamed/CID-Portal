@@ -19,8 +19,8 @@ namespace VacationsPortal.Controllers
 
         public bool IsAuthorized()
         {
-            var loggedUserEmail = "v-gamoha@microsoft.com";
-            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            //var loggedUserEmail = "v-gamoha@microsoft.com";
+            var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
             var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
             if (authUser?.Privilege != null && (Privilege.Admin == (Privilege)authUser.Privilege ||
                                                 Privilege.Travel == (Privilege)authUser.Privilege))

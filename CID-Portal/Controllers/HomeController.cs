@@ -22,8 +22,8 @@ namespace VacationsPortal.Controllers
         
         private bool IsUserAuthenticated(ref Privilege privilege)
         {
-            var loggedUserEmail = "v-gamoha@microsoft.com";
-            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            //var loggedUserEmail = "v-gamoha@microsoft.com";
+            var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
             var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
             if (authUser?.Privilege != null)
             {
@@ -44,7 +44,7 @@ namespace VacationsPortal.Controllers
                 switch (privilege)
                 {
                     case Privilege.Admin:
-                        return RedirectToAction("Index", "TRHotelInfos");
+                        return RedirectToAction("Index", "AuthUsers");
                     case Privilege.Vacations:
                         return RedirectToAction("Index", "Employees");
                     case Privilege.Travel:
