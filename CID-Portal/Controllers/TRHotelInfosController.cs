@@ -17,8 +17,8 @@ namespace VacationsPortal.Controllers
 
         public bool IsAuthorized()
         {
-            // var loggedUserEmail = "v-gamoha@microsoft.com";
-            var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            var loggedUserEmail = "v-gamoha@microsoft.com";
+            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
             var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
             if (authUser?.Privilege != null && (Privilege.Admin == (Privilege)authUser.Privilege ||
                                                 Privilege.Travel == (Privilege)authUser.Privilege))
@@ -45,11 +45,11 @@ namespace VacationsPortal.Controllers
                     Currency = trHotelInfo.Currency?.CurrencyName,
                     PaymentMethod = trHotelInfo.PaymentMethod?.MethodName
                 };
-                if (trHotelInfo.TravelRequest?.Trips.Count > 0)
+                if (trHotelInfo.TravelRequest?.Trips?.Count > 0)
                 {
-                    trHotelInfoV.Name = trHotelInfo.TravelRequest?.Trips.ToList()[0].Employee.contact.FullName;
+                    trHotelInfoV.Name = trHotelInfo.TravelRequest.Trips.ToList()[0].Employee?.contact?.FullName;
+                    trHotelInfoes.Add(trHotelInfoV);
                 }
-                trHotelInfoes.Add(trHotelInfoV);
             }
             return trHotelInfoes;
         }
@@ -61,6 +61,7 @@ namespace VacationsPortal.Controllers
             {
                 var trHotelInfoV = new TRHotelInfoView_Archive()
                 {
+                    Id = trHotelInfo.Id,
                     CheckInDate = trHotelInfo.CheckInDate,
                     CheckOutDate = trHotelInfo.CheckOutDate,
                     TRID = trHotelInfo.TRID,
@@ -73,8 +74,8 @@ namespace VacationsPortal.Controllers
                 if (trHotelInfo.TravelRequest?.Trips.Count > 0)
                 {
                     trHotelInfoV.Name = trHotelInfo.TravelRequest?.Trips.ToList()[0].Employee.contact.FullName;
+                    trHotelInfoes.Add(trHotelInfoV);
                 }
-                trHotelInfoes.Add(trHotelInfoV);
             }
             return trHotelInfoes;
         }
@@ -87,7 +88,10 @@ namespace VacationsPortal.Controllers
                 tRHotelInfoes = _db.TRHotelInfoes.Where(h =>
                     (h.CheckInDate.Year == DateTime.Now.Year - 1 && h.CheckInDate.Month > 6) ||
                     (h.CheckInDate.Year == DateTime.Now.Year)
-                    ).ToList();
+                    ).Include(h => h.Hotel)
+                     .Include(h => h.Currency)
+                     .Include(h => h.PaymentMethod)
+                    .ToList();
             }
             else
             {
@@ -95,7 +99,10 @@ namespace VacationsPortal.Controllers
                     (h.CheckInDate.Year == DateTime.Now.Year - 2 && h.CheckInDate.Month > 6) ||
                     (h.CheckInDate.Year == DateTime.Now.Year - 1) ||
                     (h.CheckInDate.Year == DateTime.Now.Year)
-                    ).ToList();
+                    ).Include(h => h.Hotel)
+                     .Include(h => h.Currency)
+                     .Include(h => h.PaymentMethod)
+                     .ToList();
             }
 
             var trViews = SetTrHotelInfoView(tRHotelInfoes);
@@ -107,17 +114,23 @@ namespace VacationsPortal.Controllers
 
         public ActionResult FillTRHotelInfoViewArchive()
         {
-            var id = "2016-2017";
-            var seY = id.Split('-'); // e.g. 2018-2019
-            var startYear = seY[0];
-            var endYear = seY[1];
-            var tRHotelInfoes = _db.TRHotelInfoes.Where(t =>
+            var sl = new List<string> { "2016-2017", "2015-2016", "2014-2015", "2013-2014" };
+            foreach (var s in sl)
+            {
+                var seY = s.Split('-'); // e.g. 2018-2019
+                var startYear = seY[0];
+                var endYear = seY[1];
+                var tRHotelInfoes = _db.TRHotelInfoes.Where(t =>
                     (t.CheckInDate.Year.ToString() == startYear && t.CheckInDate.Month > 6) ||
-                    (t.CheckInDate.Year.ToString() == endYear && t.CheckInDate.Month < 7)
-                    ).ToList();
+                    (t.CheckInDate.Year.ToString() == endYear && t.CheckInDate.Month < 7))
+                     .Include(h => h.Hotel)
+                     .Include(h => h.Currency)
+                     .Include(h => h.PaymentMethod)
+                     .ToList();
 
-            _db.TRHotelInfoViews.AddRange(SetTrHotelInfoView(tRHotelInfoes));
-            _db.SaveChanges();
+                _db.TRHotelInfoView_Archive.AddRange(SetTrHotelInfoViewArchive(tRHotelInfoes));
+                _db.SaveChanges();
+            }
 
             return RedirectToAction("Index");
         }
@@ -142,9 +155,9 @@ namespace VacationsPortal.Controllers
                         }
                         else if (audit.Operation == "Insert" || audit.Operation == "Update")
                         {
-                            var trHotelInfoView = _db.TRHotelInfoViews.Where(h => h.Id == audit.RecordID).ToList();
                             if (audit.Operation == "Update")
                             {
+                                var trHotelInfoView = _db.TRHotelInfoViews.Where(h => h.Id == audit.RecordID).ToList();
                                 _db.TRHotelInfoViews.RemoveRange(trHotelInfoView);
                                 _db.SaveChanges();
                             }
@@ -161,7 +174,7 @@ namespace VacationsPortal.Controllers
                     _db.SaveChanges();
                 }
 
-                return View(_db.TRHotelInfoViews.OrderByDescending(h => h.CheckInDate).ToList());
+                return View(_db.TRHotelInfoViews.OrderByDescending(h => h.TRID).ToList());
             }
 
             ViewBag.ErrorMsg = "Not authenticated user.";
@@ -266,7 +279,8 @@ namespace VacationsPortal.Controllers
                     var tRHotelInfoes = _db.TRHotelInfoView_Archive.Where(t =>
                         (t.CheckInDate.Value.Year.ToString() == startYear && t.CheckInDate.Value.Month > 6) ||
                         (t.CheckInDate.Value.Year.ToString() == endYear && t.CheckInDate.Value.Month < 7)
-                    ).ToList();
+                    ).OrderByDescending(h => h.TRID)
+                     .ToList();
 
                     return View(tRHotelInfoes);
                 }

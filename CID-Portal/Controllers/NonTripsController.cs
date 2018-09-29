@@ -217,7 +217,10 @@ namespace VacationsPortal.Controllers
                         OperationsApprovalDate = cashInAdvance.OperationApprovalDate,
                         CurrencyName = cashInAdvance.Currency.CurrencyName,
                         CIA_Amount_InCurrency = cashInAdvance.Amount ?? 0,
-                        CIA_ExchangeRate = cashInAdvance.ExchangeRate ?? 0
+                        CIA_ExchangeRate = cashInAdvance.ExchangeRate ?? 0,
+                        SettledAmount = cashInAdvance.SettledAmount ?? 0,
+                        SettlementDate = cashInAdvance.SettlementDate,
+                        OperationsComment = cashInAdvance.OperationsComment
                     };
                     if (nontripvm.CIA_ExchangeRate != null)
                         nontripvm.CIA_Amount_InEGP = nontripvm.CIA_Amount_InCurrency *
@@ -414,26 +417,28 @@ namespace VacationsPortal.Controllers
 
         public ActionResult FillNonTripsViewArchive()
         {
-            var id = "2013-2014";
-            var seY = id.Split('-'); // e.g. 2018-2019
-            var startYear = seY[0];
-            var endYear = seY[1];
-            var cashInAdvances = _db.CashInAdvances.Where(c =>
-                    ((c.RequestDate.Value.Year.ToString() == startYear && c.RequestDate.Value.Month > 6) ||
-                    (c.RequestDate.Value.Year.ToString() == endYear && c.RequestDate.Value.Month < 7))
-                    && c.TripID == null
+            var sl = new List<string> { "2016-2017", "2015-2016", "2014-2015", "2013-2014" };
+            foreach (var s in sl)
+            {
+                var seY = s.Split('-'); // e.g. 2018-2019
+                var startYear = seY[0];
+                var endYear = seY[1];
+                var cashInAdvances = _db.CashInAdvances.Where(c =>
+                        ((c.RequestDate.Value.Year.ToString() == startYear && c.RequestDate.Value.Month > 6) ||
+                        (c.RequestDate.Value.Year.ToString() == endYear && c.RequestDate.Value.Month < 7))
+                        && c.TripID == null
+                        ).ToList();
+                var expenses = _db.ExpensesReports.Where(e =>
+                    ((e.SubmissionDate.Year.ToString() == startYear && e.SubmissionDate.Month > 6) ||
+                     (e.SubmissionDate.Year.ToString() == endYear && e.SubmissionDate.Month < 7))
+                     && e.TripID == null
                     ).ToList();
-            var expenses = _db.ExpensesReports.Where(e =>
-                ((e.SubmissionDate.Year.ToString() == startYear && e.SubmissionDate.Month > 6) ||
-                 (e.SubmissionDate.Year.ToString() == endYear && e.SubmissionDate.Month < 7))
-                 && e.TripID == null
-                ).ToList();
 
-            var nonTripViews = SetNonTripsViewListArchive(cashInAdvances, expenses);
+                var nonTripViews = SetNonTripsViewListArchive(cashInAdvances, expenses);
 
-            _db.NonTripsView_Archive.AddRange(nonTripViews);
-            _db.SaveChanges();
-
+                _db.NonTripsView_Archive.AddRange(nonTripViews);
+                _db.SaveChanges();
+            }
             return RedirectToAction("Index", "NonTrips");
         }
 
@@ -749,7 +754,9 @@ namespace VacationsPortal.Controllers
                              e.OperationsApprovalDate.Value.Month > 5) ||
                             (e.OperationsApprovalDate.Value.Year.ToString() == endYear &&
                              e.OperationsApprovalDate.Value.Month < 8))
-                        .ToList();
+                            .OrderByDescending(t => t.ExpenseReportId)
+                            .ThenByDescending(t => t.CIA_Id)
+                            .ToList();
 
                     return View(nontripsView);
                 }

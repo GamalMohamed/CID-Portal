@@ -179,7 +179,10 @@ namespace VacationsPortal.Controllers
                             CIA_Amount_InCurrency = cia.Amount ?? 0,
                             CIA_ExchangeRate = cia.ExchangeRate ?? 0,
                             CIA_Reason = cia.Reason,
-                            OperationsApprovalDate = cia.OperationApprovalDate
+                            OperationsApprovalDate = cia.OperationApprovalDate,
+                            SettledAmount = cia.SettledAmount ?? 0,
+                            SettlementDate = cia.SettlementDate,
+                            OperationsComment = cia.OperationsComment
                         };
                         if (tripvm2.CIA_ExchangeRate != null)
                             tripvm2.CIA_Amount_InEGP = tripvm2.CIA_Amount_InCurrency *
@@ -296,19 +299,21 @@ namespace VacationsPortal.Controllers
 
         public ActionResult FillTripsViewArchive()
         {
-            var s = "2013-2014";
-            var seY = s.Split('-'); // e.g. 2018-2019
-            var startYear = seY[0];
-            var endYear = seY[1];
-            var trips = _db.Trips.Where(t =>
-                    (t.StartDate.Value.Year.ToString() == startYear && t.StartDate.Value.Month > 6) ||
-                    (t.StartDate.Value.Year.ToString() == endYear && t.StartDate.Value.Month < 7)
-                    ).ToList();
+            var sl = new List<string> { "2016-2017", "2015-2016", "2014-2015" };
+            foreach (var s in sl)
+            {
+                var seY = s.Split('-'); // e.g. 2018-2019
+                var startYear = seY[0];
+                var endYear = seY[1];
+                var trips = _db.Trips.Where(t =>
+                        (t.StartDate.Value.Year.ToString() == startYear && t.StartDate.Value.Month > 6) ||
+                        (t.StartDate.Value.Year.ToString() == endYear && t.StartDate.Value.Month < 7)
+                        ).ToList();
 
-            var tripViews = SetTripsViewListArchive(trips.OrderByDescending(t => t.StartDate).ToList());
-            _db.TripsView_Archive.AddRange(tripViews);
-            _db.SaveChanges();
-
+                var tripViews = SetTripsViewListArchive(trips.OrderByDescending(t => t.StartDate).ToList());
+                _db.TripsView_Archive.AddRange(tripViews);
+                _db.SaveChanges();
+            }
             return RedirectToAction("Index");
         }
 
@@ -348,7 +353,7 @@ namespace VacationsPortal.Controllers
                                     var trip = _db.Trips.Find(tripVcia[0].TripID);
                                     // Get All tripViews realted to this trip
                                     var tripsVAll = _db.TripsViews.Where(t => t.TripID == tripVcia[0].TripID).ToList();
-                                    
+
                                     // Remove all tripViews of this trip
                                     _db.TripsViews.RemoveRange(tripsVAll);
                                     _db.SaveChanges();
@@ -598,8 +603,8 @@ namespace VacationsPortal.Controllers
                 }
                 settlementvm.ExpensesReport = exp;
             }
-            ViewBag.CIAStatuses = new SelectList(_db.CashInAdvanceStatus.ToList(), "ID", "CashInAdvanceStatus"); 
-            ViewBag.ExpenseStatuses = new SelectList(_db.ExpenseReportStatus.ToList(), "StatusID", "StatusName"); 
+            ViewBag.CIAStatuses = new SelectList(_db.CashInAdvanceStatus.ToList(), "ID", "CashInAdvanceStatus");
+            ViewBag.ExpenseStatuses = new SelectList(_db.ExpenseReportStatus.ToList(), "StatusID", "StatusName");
             return View(settlementvm);
         }
 
@@ -659,14 +664,15 @@ namespace VacationsPortal.Controllers
             if (id != "")
             {
                 var seY = id.Split('-'); // e.g. 2018-2019
-                if (seY.Length == 2 )
+                if (seY.Length == 2)
                 {
                     var startYear = seY[0];
                     var endYear = seY[1];
                     var trips = _db.TripsView_Archive.Where(t =>
                             (t.StartDate.Value.Year.ToString() == startYear && t.StartDate.Value.Month > 6) ||
                             (t.StartDate.Value.Year.ToString() == endYear && t.StartDate.Value.Month < 7)
-                            ).ToList();
+                            ).OrderByDescending(t => t.Id)
+                            .ToList();
 
                     return View(trips);
                 }

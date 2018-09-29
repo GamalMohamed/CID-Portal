@@ -17,8 +17,8 @@ namespace VacationsPortal.Controllers
 
         public bool IsAuthorized()
         {
-            // var loggedUserEmail = "v-gamoha@microsoft.com";
-            var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            var loggedUserEmail = "v-gamoha@microsoft.com";
+            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
             var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
             if (authUser?.Privilege != null && (Privilege.Admin == (Privilege)authUser.Privilege ||
                                                 Privilege.Travel == (Privilege)authUser.Privilege))
@@ -34,8 +34,8 @@ namespace VacationsPortal.Controllers
             foreach (var route in routes)
             {
                 // HACK: so as not to return the return route country
-                if (route.Country.CountryName !=
-                            route.Trip.Routes.ToList()[route.Trip.Routes.Count - 1].Country.CountryName)
+                if (route.Country?.CountryName !=
+                            route.Trip?.Routes?.ToList()[route.Trip.Routes.Count - 1].Country?.CountryName)
                 {
                     var visaV = new VisasView
                     {

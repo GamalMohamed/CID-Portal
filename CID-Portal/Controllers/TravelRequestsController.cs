@@ -18,8 +18,8 @@ namespace VacationsPortal.Controllers
 
         public bool IsAuthorized()
         {
-            //var loggedUserEmail = "v-gamoha@microsoft.com";
-            var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
+            var loggedUserEmail = "v-gamoha@microsoft.com";
+            //var loggedUserEmail = ClaimsPrincipal.Current.FindFirst(ClaimTypes.Name).Value;
             var authUser = _db.AuthUsers.FirstOrDefault(u => u.Email == loggedUserEmail);
             if (authUser?.Privilege != null && (Privilege.Admin == (Privilege)authUser.Privilege ||
                                                 Privilege.Travel == (Privilege)authUser.Privilege))
@@ -305,18 +305,20 @@ namespace VacationsPortal.Controllers
 
         public ActionResult FillTravelRequestsViewArchive()
         {
-            var id = "2013-2014";
-            var seY = id.Split('-'); // e.g. 2018-2019
-            var startYear = seY[0];
-            var endYear = seY[1];
-            var travelRequests = _db.TravelRequests.Where(t =>
+            var sl = new List<string> { "2016-2017", "2015-2016", "2014-2015", "2013-2014" };
+            foreach (var s in sl)
+            {
+                var seY = s.Split('-'); // e.g. 2018-2019
+                var startYear = seY[0];
+                var endYear = seY[1];
+                var travelRequests = _db.TravelRequests.Where(t =>
                     ((t.RequestedOn.Year.ToString() == startYear && t.RequestedOn.Month > 6) ||
-                    (t.RequestedOn.Year.ToString() == endYear && t.RequestedOn.Month < 7))
-                    ).OrderByDescending(t => t.TRID).ToList();
+                     (t.RequestedOn.Year.ToString() == endYear && t.RequestedOn.Month < 7))
+                ).ToList();
 
-            _db.TravelRequestView_Archive.AddRange(SetTRvmListArchive(travelRequests));
-            _db.SaveChanges();
-
+                _db.TravelRequestView_Archive.AddRange(SetTRvmListArchive(travelRequests));
+                _db.SaveChanges();
+            }
             return RedirectToAction("Index");
         }
 
@@ -653,7 +655,7 @@ namespace VacationsPortal.Controllers
                     var travelRequests = _db.TravelRequestView_Archive.Where(t =>
                         ((t.StartDate.Value.Year.ToString() == startYear && t.StartDate.Value.Month > 6) ||
                          (t.StartDate.Value.Year.ToString() == endYear && t.StartDate.Value.Month < 7))
-                    ).ToList();
+                    ).OrderByDescending(t => t.Id).ToList();
 
                     return View(travelRequests);
                 }
