@@ -172,7 +172,7 @@ namespace VacationsPortal.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var route = _db.Routes.FirstOrDefault(v => v.Trip.TRID == id);
-            if (route == null)
+            if (route == null || route.requireVisa != true)
             {
                 return HttpNotFound();
             }
