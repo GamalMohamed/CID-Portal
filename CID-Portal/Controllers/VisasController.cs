@@ -34,8 +34,8 @@ namespace VacationsPortal.Controllers
             foreach (var route in routes)
             {
                 // HACK: so as not to return the return route country
-                if (route.Country?.CountryName !=
-                            route.Trip?.Routes?.ToList()[route.Trip.Routes.Count - 1].Country?.CountryName)
+                if (route.Country.CountryName !=
+                            route.Trip.Routes.ToList()[route.Trip.Routes.Count - 1].Country.CountryName)
                 {
                     var visaV = new VisasView
                     {

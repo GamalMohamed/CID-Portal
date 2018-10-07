@@ -20,9 +20,9 @@
     <button type="button" class="btn btn-primary" onclick="location.href = '@Url.Action("Index", "Hotels")'">
         Hotels
     </button>
-    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index","Visas")'">
+    @*<button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index","Visas")'">
         Visas
-    </button>
+    </button>*@
     <a class="btn btn-primary" onclick="return GetArchiveYears()">
         Archive
     </a>
@@ -44,86 +44,92 @@
             <th colspan="7">SETTLEMENT</th>
         </tr>
 
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Country)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CIA_Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CIA_Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CIA_Amount_InCurrency)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrencyName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CIA_ExchangeRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CIA_Amount_InEGP)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CIA_Reason)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OperationsApprovalDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ExpenseReportId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SubmissionDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApprovalDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ExpenseReportStatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalAmountInEGP)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CIAExpenseReport)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AmountToEmployeeInEGP)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SettledAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SettlementDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RemainingBalance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OperationsComment)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmployeeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CIA_Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CIA_Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CIA_Amount_InCurrency)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CurrencyName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CIA_ExchangeRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CIA_Amount_InEGP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CIA_Reason)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OperationsApprovalDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExpenseReportId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SubmissionDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApprovalDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExpenseReportStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalAmountInEGP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CIAExpenseReport)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AmountToEmployeeInEGP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SettledAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SettlementDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RemainingBalance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OperationsComment)
+        </th>
+    </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
+                <td>
+                    @if (item.ExpenseReportId != null || item.CIA_Id != null)
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { ExpId = item.ExpenseReportId, CIAId = item.CIA_Id })
+                    }
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.TripID)
                 </td>
@@ -195,7 +201,8 @@
                     @if (item.TotalAmountInEGP != null)
                     {
                         var x = Math.Round(item.TotalAmountInEGP.Value, 2);
-                        @Html.DisplayFor(modelItem => x);
+                        @Html.DisplayFor(modelItem => x)
+                        ;
                     }
 
                 </td>
@@ -203,14 +210,16 @@
                     @if (item.CIAExpenseReport != null)
                     {
                         var x = Math.Round(item.CIAExpenseReport.Value, 2);
-                        @Html.DisplayFor(modelItem => x);
+                        @Html.DisplayFor(modelItem => x)
+                        ;
                     }
                 </td>
                 <td>
                     @if (item.AmountToEmployeeInEGP != null)
                     {
                         var x = Math.Round(item.AmountToEmployeeInEGP.Value, 2);
-                        @Html.DisplayFor(modelItem => x);
+                        @Html.DisplayFor(modelItem => x)
+                        ;
                     }
                 </td>
                 <td>
@@ -231,17 +240,12 @@
                     @if (item.RemainingBalance != null)
                     {
                         var x = Math.Round(item.RemainingBalance.Value, 2);
-                        @Html.DisplayFor(modelItem => x);
+                        @Html.DisplayFor(modelItem => x)
+                        ;
                     }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.OperationsComment)
-                </td>
-                <td>
-                    @if (item.ExpenseReportId != null || item.CIA_Id != null)
-                    {
-                        @Html.ActionLink("Edit", "Edit", new { ExpId = item.ExpenseReportId, CIAId = item.CIA_Id })
-                    }
                 </td>
             </tr>
         }
@@ -270,7 +274,7 @@
                     }
                 ],
                 fixedHeader: true,
-                "order": [[0, "desc"]]
+                "order": [[1, "desc"]]
             });
         });
 
