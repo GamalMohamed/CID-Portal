@@ -373,8 +373,9 @@ namespace VacationsPortal.Controllers
                                 var tripVexp = _db.TripsViews.Where(t => t.ExpenseReportId == audit.RecordID).ToList();
                                 if (tripVexp.Count > 0)
                                 {
-                                    var trip = _db.Trips.Find(tripVexp[0].TripID);
-                                    var tripsVAll = _db.TripsViews.Where(t => t.TripID == tripVexp[0].TripID).ToList();
+                                    var tripId = tripVexp[0].TripID;
+                                    var trip = _db.Trips.Find(tripId);
+                                    var tripsVAll = _db.TripsViews.Where(t => t.TripID == tripId).ToList();
                                     _db.TripsViews.RemoveRange(tripsVAll);
                                     _db.SaveChanges();
 
